@@ -1,10 +1,30 @@
-import React, { useState } from 'react';
-import { View, TextInput, Alert, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, Alert, StyleSheet, Text, TouchableOpacity, Vibration } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import for secure storage
 import userData from '../db.json';
-
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me" checkbox
+
+  useEffect(() => {
+    const retrieveCredentials = async () => {
+      try {
+        const storedUsername = await AsyncStorage.getItem('username');
+        const storedPassword = await AsyncStorage.getItem('password');
+
+        if (storedUsername && storedPassword) {
+          setUsername(storedUsername);
+          setPassword(storedPassword);
+          setRememberMe(true); // Set checkbox to checked on retrieval
+        }
+      } catch (error) {
+        console.error('Error retrieving credentials:', error);
+      }
+    };
+
+    retrieveCredentials(); // Call on component mount
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -12,8 +32,23 @@ const LoginScreen = ({ navigation }) => {
 
       if (user) {
         Alert.alert('Success', 'Login successful');
+        navigation.navigate('Application');
+
+        if (rememberMe) {
+          try {
+            await AsyncStorage.setItem('username', username);
+            await AsyncStorage.setItem('password', password); // **WARNING: Consider hashing password before storing**
+          } catch (error) {
+            console.error('Error storing credentials:', error);
+          }
+        } else {
+          // Clear storage if "Remember Me" is not checked
+          await AsyncStorage.removeItem('username');
+          await AsyncStorage.removeItem('password');
+        }
       } else {
         Alert.alert('Error', 'Invalid username or password');
+        Vibration.vibrate(500);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -38,11 +73,17 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={text => setPassword(text)}
       />
 
+      <View style={styles.rememberMeContainer}>
+        <TouchableOpacity style={styles.checkbox} onPress={() => setRememberMe(!rememberMe)}>
+          {rememberMe && <View style={styles.checkedCheckbox} />}
+        </TouchableOpacity>
+        <Text style={styles.rememberMeText}>Remember Me</Text>
+      </View>
+
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
 
-      
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
         <Text style={styles.buttonText}>Back</Text>
       </TouchableOpacity>
@@ -82,6 +123,31 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-});
+  rememberMeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  checkbox: {
+    marginRight: 10,
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkedCheckbox: {
+    width: 10,
+    height: 10,
+    backgroundColor: '#2196F3', // Same color as button
+    borderRadius: 5,
+  },
+  rememberMeText: {
+    fontSize: 16,
+  },
+})
+
 
 export default LoginScreen;
