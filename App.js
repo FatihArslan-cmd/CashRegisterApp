@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import Application from './screens/Application';
+import FingerprintScreen from './screens/FingerPrint';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -24,6 +25,11 @@ export default function App() {
           name="Application"
           component={Application}
           options={{ headerShown: false }} 
+        />
+        <Stack.Screen
+          name="finger"
+          component={FingerprintScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

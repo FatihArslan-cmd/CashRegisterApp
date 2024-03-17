@@ -11,19 +11,17 @@ const Application = ({ navigation }) => {
   };
 
   const handleLogout = () => {
-    // Kullanıcıyı çıkış yapmak için ana ekranına yönlendir
     navigation.navigate('Home');
   };
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>React Native Uygulaması</Text>
-      <Text>Sayaç Değeri: {counter}</Text>
-      <Button title="Artır" onPress={incrementCounter} />
+      <Text>React Native</Text>
+      <Text>Counter value: {counter}</Text>
+      <Button title="increase" onPress={incrementCounter} />
 
-      {/* Hesaptan çık düğmesi */}
       <TouchableOpacity style={{ marginTop: 20 }} onPress={handleLogout}>
-        <Text style={{ color: 'red', fontSize: 18 }}>Hesaptan Çık</Text>
+        <Text style={{ color: 'red', fontSize: 18 }}>Leave the account</Text>
       </TouchableOpacity>
     </View>
   );

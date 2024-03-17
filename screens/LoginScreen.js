@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, Alert, StyleSheet, Text, TouchableOpacity, Vibration } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import for secure storage
 import userData from '../db.json';
+
 const LoginScreen = ({ navigation }) => {
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me" checkbox
@@ -16,14 +18,14 @@ const LoginScreen = ({ navigation }) => {
         if (storedUsername && storedPassword) {
           setUsername(storedUsername);
           setPassword(storedPassword);
-          setRememberMe(true); // Set checkbox to checked on retrieval
+          setRememberMe(true);
         }
       } catch (error) {
         console.error('Error retrieving credentials:', error);
       }
     };
 
-    retrieveCredentials(); // Call on component mount
+    retrieveCredentials(); 
   }, []);
 
   const handleLogin = async () => {
@@ -37,12 +39,11 @@ const LoginScreen = ({ navigation }) => {
         if (rememberMe) {
           try {
             await AsyncStorage.setItem('username', username);
-            await AsyncStorage.setItem('password', password); // **WARNING: Consider hashing password before storing**
+            await AsyncStorage.setItem('password', password); 
           } catch (error) {
             console.error('Error storing credentials:', error);
           }
         } else {
-          // Clear storage if "Remember Me" is not checked
           await AsyncStorage.removeItem('username');
           await AsyncStorage.removeItem('password');
         }
