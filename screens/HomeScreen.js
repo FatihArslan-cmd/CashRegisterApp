@@ -1,23 +1,40 @@
-
 import React from 'react';
-import { View, Button } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import AnimatedTyping from '../functions/AnimatedTypewriterText';
+
 export default function HomeScreen({ navigation }) {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={styles.container}>
       <AnimatedTyping />
-      <Button
-        title="Email"
-        onPress={() => navigation.navigate('Login')}
-      />
-      <Button
-        title="Finger ID"
-        onPress={() => navigation.navigate('Finger')}
-      />
-      <Button
-        title="Face ID"
-        onPress={() => navigation.navigate('Face')}
-      />
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LoginMethods')}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginBottom: 300, // Adjust the margin according to your preference
+  },
+  button: {
+    backgroundColor: 'black',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    marginHorizontal: 10, // Adjust the spacing between buttons
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});

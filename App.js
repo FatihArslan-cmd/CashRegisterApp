@@ -6,6 +6,7 @@ import HomeScreen from './screens/HomeScreen';
 import Application from './screens/Application';
 import FingerprintScreen from './screens/FingerPrint';
 import FaceIDScreen from './screens/FaceId';
+import Swiper5 from './screens/LoginMethods';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -35,6 +36,11 @@ export default function App() {
         <Stack.Screen
           name="Face"
           component={FaceIDScreen}
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen
+          name="LoginMethods"
+          component={Swiper5}
           options={{ headerShown: false }} 
         />
       </Stack.Navigator>
