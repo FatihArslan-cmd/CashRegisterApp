@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: '#2196F3',
+    backgroundColor: 'black',
     paddingVertical: 10,
     paddingHorizontal: 30,
     borderRadius: 10,
