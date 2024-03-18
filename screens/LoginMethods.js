@@ -9,10 +9,10 @@ const padding = (width - itemWidth) / 2;
 const offset = itemWidth;
 
 const data = [
-    { color: 'violet', route: 'Login' },
-    { color: 'indigo', route: 'Finger' },
+    { color: 'green', route: 'Login' },
+    { color: 'red', route: 'Finger' },
     { color: 'blue', route: 'Face' },
-    { color: 'orange', route: 'Application' }
+    { color: 'yellow', route: 'Application' }
 ];
 
 export default function Swiper5() {

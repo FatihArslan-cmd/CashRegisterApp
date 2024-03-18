@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import AnimatedTyping from '../functions/AnimatedTypewriterText';
-
+import ShareEg from '../functions/ShareButton';
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -10,6 +10,7 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LoginMethods')}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
+        <ShareEg></ShareEg>
       </View>
     </View>
   );
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'black',
-    paddingVertical: 10,
+    paddingVertical: 30,
     paddingHorizontal: 30,
     borderRadius: 10,
     marginHorizontal: 10, // Adjust the spacing between buttons
