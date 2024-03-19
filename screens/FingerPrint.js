@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Button, Alert } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 
-export default function FingerprintScreen({ navigation }) {
+const FingerprintScreen = ({ navigation }) => {
   const handleAuthentication = async () => {
     const compatible = await LocalAuthentication.hasHardwareAsync();
 
@@ -32,9 +32,16 @@ export default function FingerprintScreen({ navigation }) {
     }
   };
 
+  useEffect(() => {
+    handleAuthentication(); // Automatically initiate fingerprint scanning when the page loads
+  }, []); // Passing an empty dependency array ensures this runs only once.
+
   return (
-    <View style={{marginTop:100}}>
+    <View style={{ marginTop: 100 }}>
+      {/* Instead of password entry, here could be a button initiating fingerprint scanning */}
       <Button title="Scan the Fingerprint" onPress={handleAuthentication} />
     </View>
   );
 }
+
+export default FingerprintScreen;

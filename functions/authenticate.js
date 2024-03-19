@@ -10,7 +10,7 @@ const authenticate = async () => {
     return false;
   }
 
-  // Cihazda Face ID veya Touch ID (biyometrik kimlik bilgileri) var mı?
+ 
   const isEnrolled = await LocalAuthentication.isEnrolledAsync();
   if (!isEnrolled) {
     console.warn("No biometric credentials found on this device.");

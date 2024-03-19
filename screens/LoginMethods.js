@@ -9,13 +9,13 @@ const padding = (width - itemWidth) / 2;
 const offset = itemWidth;
 
 const data = [
-    { color: 'green', route: 'Login' },
-    { color: 'red', route: 'Finger' },
-    { color: 'blue', route: 'Face' },
-    { color: 'yellow', route: 'Application' }
+    { color: 'green', route: 'Login', text: 'Email ' },
+    { color: 'red', route: 'Finger', text: 'TouchID ' },
+    { color: 'blue', route: 'Face', text: 'FaceID ' },
+    { color: 'yellow', route: 'Application', text: 'Barcode ' }
 ];
 
-export default function Swiper5() {
+const Swiper5 = () => {
     const [activeIndex, setActiveIndex] = useState({ current: 0, previous: null })
     const scale = useRef(new Animated.Value(0)).current;
     const scrollX = useRef(new Animated.Value(0)).current;
@@ -75,7 +75,7 @@ export default function Swiper5() {
     );
 }
 
-function Item({ i, data, scrollX, navigation }) {
+const Item = ({ i, data, scrollX, navigation }) => {
     const scale = scrollX.interpolate({
         inputRange: [-offset + i * offset, i * offset, offset + i * offset],
         outputRange: [0.9, 1, 0.9],
@@ -83,7 +83,7 @@ function Item({ i, data, scrollX, navigation }) {
     return (
         <Animated.View style={[styles.item, { transform: [{ scale }] }]}>
             <TouchableOpacity onPress={() => navigation.navigate(data.route)} style={styles.button}>
-                <Text style={styles.buttonText}>{data.color}</Text>
+                <Text >{data.text}</Text>
             </TouchableOpacity>
         </Animated.View>
     );
@@ -153,3 +153,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
+
+export default Swiper5;

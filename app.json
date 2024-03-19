@@ -21,11 +21,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff",
-        "permissions": ["USE_BIOMETRIC"]
-      }
+        "permissions": [
+          "USE_BIOMETRIC"
+        ]
+      },
+      "package": "com.fatiharslan.project"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e75a308b-7702-479d-a615-972a6a6ce8b5"
+      }
     }
   }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import AuthenticationScreen from "../functions/AuthenticationScreen";
 
-export default function App() {
+const FaceIDScreen = () => {
   return (
     <View style={styles.container}>
       <AuthenticationScreen />
@@ -16,3 +16,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default FaceIDScreen;
