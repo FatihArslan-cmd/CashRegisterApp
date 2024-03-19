@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Alert, StyleSheet, Text, TouchableOpacity, Vibration } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import for secure storage
-import userData from '../db.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me" checkbox
+  const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
     const retrieveCredentials = async () => {
@@ -30,9 +29,9 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      const user = userData.find(user => user.username === username && user.password === password);
+      const savedUser = JSON.parse(await AsyncStorage.getItem(username));
 
-      if (user) {
+      if (savedUser && savedUser.password === password) {
         Alert.alert('Success', 'Login successful');
         navigation.navigate('Application');
 
@@ -59,7 +58,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login </Text>
+      <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
         placeholder=" Enter Username"
@@ -142,13 +141,12 @@ const styles = StyleSheet.create({
   checkedCheckbox: {
     width: 10,
     height: 10,
-    backgroundColor: '#2196F3', // Same color as button
+    backgroundColor: '#2196F3',
     borderRadius: 5,
   },
   rememberMeText: {
     fontSize: 16,
   },
-})
-
+});
 
 export default LoginScreen;

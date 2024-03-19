@@ -3,14 +3,19 @@ import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import AnimatedTyping from '../functions/AnimatedTypewriterText';
 import ShareEg from '../functions/ShareButton';
 import ContactMe from '../functions/ContactButton';
-
+import RegisterScreen from './RegisterScreen';
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <AnimatedTyping />
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LoginMethods')}>
           <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+          
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
         <ShareEg />
         <ContactMe />
@@ -26,7 +31,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonContainer: {
-    flexDirection: 'row',
+    
     marginBottom: 300, // Adjust the margin according to your preference
   },
   button: {
