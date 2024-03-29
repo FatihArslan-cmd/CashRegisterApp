@@ -1,13 +1,13 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import Application from './screens/Application';
 import FingerprintScreen from './screens/FingerPrint';
 import FaceIDScreen from './screens/FaceId';
-import Swiper5 from './screens/LoginMethods';
-import RegisterScreen from './screens/RegisterScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import SignUpScreen from './screens/SignUpScreen';
+import Swiper5 from './screens/LoginMethodsScreen';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -19,11 +19,7 @@ export default function App() {
           component={HomeScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }} 
-        />
+        
         <Stack.Screen
           name="Application"
           component={Application}
@@ -45,10 +41,17 @@ export default function App() {
           options={{ headerShown: false }} 
         />
          <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
+          name="SignUp"
+          component={SignUpScreen}
           options={{ headerShown: false }}
         />
+       
+        <Stack.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{ headerShown: false }}
+        />
+       
       </Stack.Navigator>
     </NavigationContainer>
   );

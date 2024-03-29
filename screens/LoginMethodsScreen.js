@@ -9,10 +9,11 @@ const padding = (width - itemWidth) / 2;
 const offset = itemWidth;
 
 const data = [
-    { color: 'green', route: 'Login', text: 'Email ' },
-    { color: 'red', route: 'Finger', text: 'TouchID ' },
-    { color: 'blue', route: 'Face', text: 'FaceID ' },
-    { color: 'yellow', route: 'Application', text: 'Barcode ' }
+    
+    { color: 'purple', route: 'Finger', text: 'TouchID ' },
+    { color: 'red', route: 'Face', text: 'FaceID ' },
+    { color: 'orange', route: 'Application', text: 'Barcode ' },
+    { color: 'yellow', route: 'Application', text: 'NFC ' }
 ];
 
 const Swiper5 = () => {

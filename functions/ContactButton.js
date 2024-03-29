@@ -58,10 +58,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22
+        
     },
     modalView: {
-        margin: 20,
+        
         backgroundColor: "white",
         borderRadius: 20,
         padding: 25,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     button: {
-        margin:15,
+       
         borderRadius: 20,
         padding: 10,
         elevation: 2
