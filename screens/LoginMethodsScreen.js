@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { width, height } = Dimensions.get('window');
 const itemWidth = width / 5 * 4;
@@ -9,11 +12,10 @@ const padding = (width - itemWidth) / 2;
 const offset = itemWidth;
 
 const data = [
-    
-    { color: 'purple', route: 'Finger', text: 'TouchID ' },
-    { color: 'red', route: 'Face', text: 'FaceID ' },
-    { color: 'orange', route: 'Application', text: 'Barcode ' },
-    { color: 'yellow', route: 'Application', text: 'NFC ' }
+    { color: 'purple', route: 'Finger', icon: 'fingerprint', text: 'TouchID',description:'TouchID offers fingerprint-based authentication' },
+    { color: 'red', route: 'Face', icon: 'user', text: 'FaceID',description:'FaceID provides facial recognition authentication' },
+    { color: 'orange', route: 'Application', icon: 'barcode', text: 'Barcode',description:'Barcode scanning allows quick retrieval of encoded information using a devices camera' },
+    { color: 'yellow', route: 'Application', icon: 'cellphone-nfc', text: 'NFC',description:'NFC enables contactless data exchange and transactions between devices.' }
 ];
 
 const Swiper5 = () => {
@@ -81,10 +83,29 @@ const Item = ({ i, data, scrollX, navigation }) => {
         inputRange: [-offset + i * offset, i * offset, offset + i * offset],
         outputRange: [0.9, 1, 0.9],
     });
+
+    let iconComponent;
+    switch (i) {
+        case 0:
+        case 1:
+            iconComponent = <Entypo name={data.icon} size={108} />;
+            break;
+        case 2:
+            iconComponent = <AntDesign name={data.icon} size={108} />;
+            break;
+        case 3:
+            iconComponent = <MaterialCommunityIcons name={data.icon} size={108} />;
+            break;
+        default:
+            iconComponent = null;
+    }
+
     return (
         <Animated.View style={[styles.item, { transform: [{ scale }] }]}>
             <TouchableOpacity onPress={() => navigation.navigate(data.route)} style={styles.button}>
-                <Text >{data.text}</Text>
+            <Text style={styles.iconText}>{data.text}</Text>
+                {iconComponent}
+                <Text style={styles.descriptionText}>{data.description}</Text>
             </TouchableOpacity>
         </Animated.View>
     );
@@ -153,6 +174,16 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    iconText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom:33,
+    },
+    descriptionText: {
+        fontSize: 14,
+        marginTop:24,
+        color:'gray'
+    }
 });
 
 export default Swiper5;

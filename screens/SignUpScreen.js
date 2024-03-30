@@ -7,15 +7,39 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
 
   const handleRegister = async () => {
-    if (username.trim() === '' || password.trim() === '' || email.trim() === '') {
-      Alert.alert('Error', 'Please fill in all fields');
+    // Username validation
+    if (username.trim() === '') {
+      Alert.alert('Error', 'Please enter a username');
       return;
     }
-
+    // Password validation
+    if (password.trim() === '') {
+      Alert.alert('Error', 'Please enter a password');
+      return;
+    }
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters long');
+      return;
+    }
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    if (!passwordRegex.test(password)) {
+      Alert.alert('Error', 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+      return;
+    }
+    // Confirm password validation
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
     // Email validation
+    if (email.trim() === '') {
+      Alert.alert('Error', 'Please enter an email address');
+      return;
+    }
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(email)) {
       Alert.alert('Error', 'Please enter a valid email address');
@@ -29,7 +53,12 @@ const SignUpScreen = ({ navigation }) => {
         Alert.alert('Error', 'Username already exists');
         return;
       }
-
+      // Check if the email already exists
+      const existingEmail = await AsyncStorage.getItem(email);
+      if (existingEmail !== null) {
+        Alert.alert('Error', 'Email already exists');
+        return;
+      }
       // Save new user data
       await AsyncStorage.setItem(username, JSON.stringify({ password, email }));
       Alert.alert('Success', 'Account created successfully');
@@ -60,6 +89,12 @@ const SignUpScreen = ({ navigation }) => {
         <FontAwesome name={"lock"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
         <TextInput style={styles.textInput} placeholder='Password' secureTextEntry value={password}
           onChangeText={text => setPassword(text)} />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <FontAwesome name={"lock"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+        <TextInput style={styles.textInput} placeholder='Confirm Password' secureTextEntry value={confirmPassword}
+          onChangeText={text => setConfirmPassword(text)} />
       </View>
 
       <View style={styles.inputContainer}>
