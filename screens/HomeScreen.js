@@ -4,7 +4,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginMethodsButtons from '../functions/LoginMethodsButtons';
-import AnimatedTyping from '../functions/AnimatedTypewriterText';
+
+import Application from './Application';
 const HomeScreen = ({ navigation }) => {
   
   const [username, setUsername] = useState('');
@@ -60,6 +61,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
+    <>
     <View style={styles.container}>
      <View style={styles.topImageContainer}>
       <Image source={require("../assets/topVector.png")} style={styles.topImage}></Image>
@@ -102,8 +104,8 @@ const HomeScreen = ({ navigation }) => {
 
      
     </View>
-    
-    
+   
+    </>
   );
 }
 

@@ -20,6 +20,7 @@
     "expo-face-detector": "^12.6.1",
     "expo-local-authentication": "~13.8.0",
     "expo-status-bar": "~1.11.1",
+    "lottie-react-native": "^6.7.0",
     "native-base": "^3.4.28",
     "react": "18.2.0",
     "react-native": "0.73.5",
