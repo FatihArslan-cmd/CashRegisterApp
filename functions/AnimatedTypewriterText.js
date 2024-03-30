@@ -52,10 +52,7 @@ const AnimatedTyping = () => {
     <View style={styles.container}>
       <AnimatedTypewriterText
         sentences={[
-          'Hi, Welcome to the app.',
-          'To continue,choose one of the login method.',
-          'You can change the language on the setting',
-          'Enjoy your day!',
+          'Hello'
         ]}
         delay={1000}
         speed={70}

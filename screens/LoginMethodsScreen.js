@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -12,10 +12,10 @@ const padding = (width - itemWidth) / 2;
 const offset = itemWidth;
 
 const data = [
-    { color: 'purple', route: 'Finger', icon: 'fingerprint', text: 'TouchID',description:'TouchID offers fingerprint-based authentication' },
-    { color: 'red', route: 'Face', icon: 'user', text: 'FaceID',description:'FaceID provides facial recognition authentication' },
-    { color: 'orange', route: 'Application', icon: 'barcode', text: 'Barcode',description:'Barcode scanning allows quick retrieval of encoded information using a devices camera' },
-    { color: 'yellow', route: 'Application', icon: 'cellphone-nfc', text: 'NFC',description:'NFC enables contactless data exchange and transactions between devices.' }
+    { color: 'purple', route: 'Finger', icon: 'fingerprint', text: 'TouchID', description: 'TouchID offers fingerprint-based authentication' },
+    { color: 'red', route: 'Face', icon: 'user', text: 'FaceID', description: 'FaceID provides facial recognition authentication' },
+    { color: 'orange', route: 'Application', icon: 'barcode', text: 'Barcode', description: 'Barcode scanning allows quick retrieval of encoded information using a devices camera' },
+    { color: 'yellow', route: 'nfc', icon: 'cellphone-nfc', text: 'NFC', description: 'NFC enables contactless data exchange and transactions between devices.' }
 ];
 
 const Swiper5 = () => {
@@ -100,10 +100,18 @@ const Item = ({ i, data, scrollX, navigation }) => {
             iconComponent = null;
     }
 
+    const handlePress = () => {
+        if (data.route === 'nfc') {
+            Alert.alert('404 NOT FOUND', 'Sorry.NFC is unavailable right now');
+        } else {
+            navigation.navigate(data.route);
+        }
+    };
+
     return (
         <Animated.View style={[styles.item, { transform: [{ scale }] }]}>
-            <TouchableOpacity onPress={() => navigation.navigate(data.route)} style={styles.button}>
-            <Text style={styles.iconText}>{data.text}</Text>
+            <TouchableOpacity onPress={handlePress} style={styles.button}>
+                <Text style={styles.iconText}>{data.text}</Text>
                 {iconComponent}
                 <Text style={styles.descriptionText}>{data.description}</Text>
             </TouchableOpacity>
@@ -177,12 +185,12 @@ const styles = StyleSheet.create({
     iconText: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom:33,
+        marginBottom: 33,
     },
     descriptionText: {
         fontSize: 14,
-        marginTop:24,
-        color:'gray'
+        marginTop: 24,
+        color: 'gray'
     }
 });
 

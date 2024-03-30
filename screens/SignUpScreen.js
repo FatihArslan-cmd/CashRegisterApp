@@ -4,6 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 const SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -76,7 +77,7 @@ const SignUpScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.CreateContainer}>
-        <Text style={styles.signInText}>Create Account</Text>
+        <Text style={styles.signInText}>Create an Account</Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -102,9 +103,17 @@ const SignUpScreen = ({ navigation }) => {
         <TextInput style={styles.textInput} placeholder='Email' value={email}
           onChangeText={text => setEmail(text)} />
       </View>
+       
+      <TouchableOpacity style={styles.infoButton} onPress={() => Alert.alert('Information', 'Password field cannot be empty\n- Password must be at least 6 characters long\n- Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character')}>
+  <Antdesign name={"infocirlceo"} size={28} color={"gray"} />
+</TouchableOpacity>
+
+
+         
+      
 
       <View style={styles.signInButtonContainer}>
-        <Text style={styles.signIn}>Create</Text>
+        <Text style={styles.signIn}>Submit</Text>
         <TouchableOpacity style={styles.signInButton} onPress={handleRegister}>
           <Antdesign name={"arrowright"} size={36} color={"white"} />
         </TouchableOpacity>
@@ -152,7 +161,7 @@ const styles = StyleSheet.create({
   },
   signInButtonContainer: {
     flexDirection: 'row',
-    marginTop: 100,
+    marginTop: 45,
     width: "90%",
     justifyContent: "flex-end",
   },
@@ -176,6 +185,9 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 18,
     marginTop: 120,
+  },
+  infoButton: {
+    marginLeft:330,
   }
 });
 

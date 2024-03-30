@@ -1,9 +1,10 @@
-import React,{useState,useEffect} from 'react';
-import { View, StyleSheet, TouchableOpacity, Text ,Image, TextInput,Alert} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text, Image, TextInput, Alert, Vibration } from 'react-native'; // Vibration eklenmeli
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginMethodsButtons from '../functions/LoginMethodsButtons';
+import AnimatedTyping from '../functions/AnimatedTypewriterText';
 const HomeScreen = ({ navigation }) => {
   
   const [username, setUsername] = useState('');
@@ -50,7 +51,7 @@ const HomeScreen = ({ navigation }) => {
         }
       } else {
         Alert.alert('Error', 'Invalid username or password');
-        Vibration.vibrate(500);
+        Vibration.vibrate(500); // Vibration API'sini kullanarak cihazı titreştir
       }
     } catch (error) {
       console.error('Error:', error);
@@ -66,6 +67,7 @@ const HomeScreen = ({ navigation }) => {
 
       <View style={styles.helloContainer}>
        <Text style={styles.helloText}>Hello</Text>
+       
       </View>
 
       <View style={styles.helloContainer}>
