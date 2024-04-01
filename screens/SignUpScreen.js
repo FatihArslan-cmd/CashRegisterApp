@@ -108,10 +108,6 @@ const SignUpScreen = ({ navigation }) => {
   <Antdesign name={"infocirlceo"} size={28} color={"gray"} />
 </TouchableOpacity>
 
-
-         
-      
-
       <View style={styles.signInButtonContainer}>
         <Text style={styles.signIn}>Submit</Text>
         <TouchableOpacity style={styles.signInButton} onPress={handleRegister}>

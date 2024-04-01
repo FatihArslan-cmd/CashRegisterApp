@@ -1,32 +1,64 @@
 import React, { useState } from 'react';
-import { View, Text, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, View, Text, Button } from 'react-native';
+import { getProductPrice } from '../API/GetProductPrice'; // ProductService dosyasını içe aktar
 
-const Application = ({ navigation }) => {
-  const [counter, setCounter] = useState(0);
+const App = () => {
+  const [productId, setProductId] = useState('');
+  const [productData, setProductData] = useState([]);
+  const [subTotal, setSubTotal] = useState(0);
 
-  const incrementCounter = () => {
-    setCounter(prevCounter => prevCounter + 1);
-  };
-
-  const handleLogout = () => {
-    navigation.navigate('Home');
+  const onProductIdChange = (text) => {
+    setProductId(text);
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>React Native</Text>
-      <Text>Counter value: {counter}</Text>
-      <Button title="increase" onPress={incrementCounter} />
-
-      <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-        <Text style={{ color: 'red', fontSize: 18 }}>Settings</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={{ marginTop: 20 }} onPress={handleLogout}>
-        <Text style={{ color: 'red', fontSize: 18 }}>Leave the account</Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <TextInput
+        style={styles.productIdInput}
+        placeholder="Enter Product ID"
+        onChangeText={onProductIdChange}
+      />
+      <Button
+        title="Get Price"
+        onPress={() => getProductPrice(productId, productData, setProductData, subTotal, setSubTotal)}
+      />
+      <View style={styles.productPricesList}>
+        {productData.map((product, index) => (
+          <Text key={index} style={styles.productPrice}>
+            {product.name}: {product.price} TL
+          </Text>
+        ))}
+      </View>
+      <Text style={styles.subTotal}>Sub Total: {subTotal} TL</Text>
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  productIdInput: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 10,
+  },
+  productPricesList: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 10,
+    marginTop: 10,
+  },
+  productPrice: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  subTotal: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+});
 
-export default Application;
+export default App;

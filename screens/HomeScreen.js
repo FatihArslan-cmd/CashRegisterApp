@@ -89,17 +89,17 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.rememberMeContainer}>
+      <Text style={styles.rememberMeText}>Remember Me</Text>
         <TouchableOpacity style={styles.checkbox} onPress={() => setRememberMe(!rememberMe)}>
           {rememberMe && <View style={styles.checkedCheckbox} />}
         </TouchableOpacity>
-        <Text style={styles.rememberMeText}>Remember Me</Text>
       </View>
 
      <View style={styles.signInButtonContainer}>
       <Text style={styles.signIn}>Sign in</Text>
      <TouchableOpacity style={styles.signInButton} onPress={handleLogin}><Antdesign name={"arrowright"} size={36} color={"white"}/></TouchableOpacity>
      </View>
-     <Text style={styles.footerText}>Don't have an account ? <TouchableOpacity  onPress={() => navigation.navigate('SignUp')}><Text style={{textDecorationLine:"underline",fontSize:18}}>Create</Text></TouchableOpacity> </Text>     
+     <Text style={styles.footerText}>Don't have an account ? <TouchableOpacity  onPress={() => navigation.navigate('SignUp')}><Text style={{textDecorationLine:"underline",fontSize:18}}>Createe</Text></TouchableOpacity> </Text>     
      <LoginMethodsButtons/>
 
      
@@ -201,6 +201,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'purple',
     borderRadius: 5,
   },
+  rememberMeText:{
+    fontWeight:'bold',
+    marginRight:5,
+  }
 
 });
 

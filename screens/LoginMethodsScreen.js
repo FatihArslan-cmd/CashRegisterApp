@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
         marginBottom: 33,
     },
     descriptionText: {
+        textAlign:'center',
         fontSize: 14,
         marginTop: 24,
         color: 'gray'
