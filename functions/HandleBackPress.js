@@ -16,11 +16,12 @@ const BackPressHandle = () => {
   const handleBackPress = () => {
     Alert.alert(
       'Exit App?',
-      'Are you sure you want to exit the app?',
+      'Are you sure you want to leave your account?',
       [
         {
           text: 'Yes',
-          onPress: () => BackHandler.exitApp(), // Exits the app completely
+          onPress: () => navigation.navigate('Menu'),
+          
         },
         {
           text: 'No',

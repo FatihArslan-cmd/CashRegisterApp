@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, View, Text, Button } from 'react-native';
-import getProductPrice from '../MockApi/GetProductPrice';
+import getProductPrice from '../../MockApi/GetProductPrice';
 
-const App = () => {
+const Application = () => {
   const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Application;

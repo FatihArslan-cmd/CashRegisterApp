@@ -4,7 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginMethodsButtons from '../functions/LoginMethodsButtons';
-import App from './Application';
+import App from './Menu/Application';
 const HomeScreen = ({ navigation }) => {
   
   const [username, setUsername] = useState('');
@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation }) => {
         }
       } else {
         Alert.alert('Error', 'Invalid username or password');
-        Vibration.vibrate(500); // Vibration API'sini kullanarak cihazı titreştir
+        Vibration.vibrate(500); 
       }
     } catch (error) {
       console.error('Error:', error);

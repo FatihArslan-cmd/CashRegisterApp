@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
 import getAppVersion from '../functions/getAppVersion';
+import loadUserProfile from '../functions/LoadUserProfile';
 
 // Reusable component for displaying information rows
 const InformationRow = ({ label, value, iconName, iconColor, style }) => (
@@ -22,36 +23,20 @@ const LeaveAccountButton = ({ onPress }) => (
 
 const CustomDrawerContent = (props) => {
   const { navigation } = props;
+  const [userProfile, setUserProfile] = useState(null);
 
-  // Function to handle leaving the account
-  const handleLeaveAccount = () => {
-    Alert.alert(
-      'Are you sure?',
-      'Are you sure you want to leave your account?',
-      [
-        {
-          text: 'Yes',
-          onPress: () => {
-            // Here you can add the operations to leave the account.
-            // For example: AsyncStorage.clear() or any other relevant operation.
-            navigation.navigate('Home'); // Navigates to the home screen.
-          },
-        },
-        {
-          text: 'No',
-          onPress: () => console.log('Account stayed'),
-          style: 'cancel',
-        },
-      ],
-      { cancelable: false }
-    );
-  };
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const profile = await loadUserProfile();
+      setUserProfile(profile);
+    };
 
-  const storeNo = '1';
-  const cashRegisterNo = '38462';
-  const ipAddress = '192.168.X.X'; 
-  const version = getAppVersion();
-
+    fetchUserProfile();
+  }, []);
+                const storeNo = '1';
+                const cashRegisterNo = '38462';
+                const ipAddress = '192.168.X.X'; 
+                const version = getAppVersion();
   return (
     <DrawerContentScrollView {...props}>
       <View style={{ alignItems:'center' }}>
@@ -60,10 +45,17 @@ const CustomDrawerContent = (props) => {
 
       <View style={{ flex: 1, marginTop: 5, marginBottom: 40, paddingHorizontal: 16, borderStyle: 'solid', borderColor: 'gray', borderWidth: 1 }}>
         <View style={{ paddingBottom: 10 }}>
-          <InformationRow label="Store No" value={storeNo} iconName="shoppingcart" iconColor="gray" />
-          <InformationRow label="Cash Register No" value={cashRegisterNo} iconName="barcode" iconColor="gray" />
-          <InformationRow label="Cash Register IP"  value={ipAddress} iconName="wifi" iconColor="gray" />
-          <InformationRow label="Version" value={version} iconName="info" iconColor="gray" />
+          {userProfile && (
+            <View>
+             <View style={{ paddingBottom: 10 }}>
+               <InformationRow label="Staff Email" value={userProfile.email} iconName="mail" iconColor="gray" />
+               <InformationRow label="Store No" value={storeNo} iconName="shoppingcart" iconColor="gray" />
+               <InformationRow label="Cash Register No" value={cashRegisterNo} iconName="barcode" iconColor="gray" />
+               <InformationRow label="Cash Register IP"  value={ipAddress} iconName="wifi" iconColor="gray" />
+               <InformationRow label="Version" value={version} iconName="info" iconColor="gray" />
+            </View>
+            </View>
+          )}
         </View>
       </View>
 
@@ -85,7 +77,7 @@ const CustomDrawerContent = (props) => {
         }}
       />
 
-      <LeaveAccountButton  onPress={handleLeaveAccount} />
+      <LeaveAccountButton onPress={() => navigation.navigate('Home')} />
     </DrawerContentScrollView>
   );
 };
