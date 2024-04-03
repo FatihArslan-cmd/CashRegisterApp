@@ -29,6 +29,7 @@
     "react-native": "0.73.5",
     "react-native-camera": "^4.2.1",
     "react-native-camera-kit": "^13.0.0",
+    "react-native-device-info": "^10.13.1",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-local-authentication": "^0.1.1",

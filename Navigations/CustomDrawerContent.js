@@ -1,20 +1,21 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
 import getAppVersion from '../functions/getAppVersion';
+
 // Reusable component for displaying information rows
-const InformationRow = ({ label, value }) => (
+const InformationRow = ({ label, value, iconName, iconColor, style }) => (
   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-    <Text style={{ fontWeight: 'bold' }}>{label}:</Text>
-    <Text style={{ marginLeft: 10 }}>{value}</Text>
+    {iconName && <AntDesign name={iconName} size={20} color={iconColor} />}
+    <Text style={{ marginLeft: iconName ? 10 : 0, fontWeight: 'bold', ...style }}>{label}: {value}</Text>
   </View>
 );
 
 // Reusable component for the leave account button
 const LeaveAccountButton = ({ onPress }) => (
-  <TouchableOpacity onPress={onPress} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, paddingHorizontal: 16 }}>
-    <AntDesign name={"back"} size={24} color={"red"} />
+  <TouchableOpacity onPress={onPress} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 350, paddingHorizontal: 16 }}>
+    <AntDesign name={"back"} size={36} color={"red"} />
     <Text style={{ color: 'red', fontWeight: 'bold', marginLeft: 15 }}>Leave the Account</Text>
   </TouchableOpacity>
 );
@@ -46,24 +47,45 @@ const CustomDrawerContent = (props) => {
     );
   };
 
-  
-
   const storeNo = '1';
-  const cashRegisterNo = '1';
-  const ipAddress = '123';
+  const cashRegisterNo = '38462';
+  const ipAddress = '192.168.X.X'; 
   const version = getAppVersion();
 
   return (
     <DrawerContentScrollView {...props}>
-        <View style={{ marginTop: 20, paddingHorizontal: 16 }}>
-        <InformationRow label="Store No" value={storeNo} />
-        <InformationRow label="Cash Register No" value={cashRegisterNo} />
-        <InformationRow label="Cash Register IP" value={ipAddress} />
-        <InformationRow label="Version" value={version} />
+      <View style={{ alignItems:'center' }}>
+        <AntDesign name="user" size={72} color="gray"  />
       </View>
-      <DrawerItemList {...props} />
-      
-      <LeaveAccountButton onPress={handleLeaveAccount} />
+
+      <View style={{ flex: 1, marginTop: 5, marginBottom: 40, paddingHorizontal: 16, borderStyle: 'solid', borderColor: 'gray', borderWidth: 1 }}>
+        <View style={{ paddingBottom: 10 }}>
+          <InformationRow label="Store No" value={storeNo} iconName="shoppingcart" iconColor="gray" />
+          <InformationRow label="Cash Register No" value={cashRegisterNo} iconName="barcode" iconColor="gray" />
+          <InformationRow label="Cash Register IP"  value={ipAddress} iconName="wifi" iconColor="gray" />
+          <InformationRow label="Version" value={version} iconName="info" iconColor="gray" />
+        </View>
+      </View>
+
+      <DrawerItem
+        label="Menu"
+        icon={({color, size }) => <AntDesign name="menu-fold" size={size} color={color} />}
+        onPress={() => {
+          // Navigate to Menu screen
+          navigation.navigate('Menu');
+        }}
+      />
+
+      <DrawerItem
+        label="Settings"
+        icon={({color, size }) => <AntDesign name="setting" size={size} color={color} />}
+        onPress={() => {
+          // Navigate to Settings screen
+          navigation.navigate('Settings');
+        }}
+      />
+
+      <LeaveAccountButton  onPress={handleLeaveAccount} />
     </DrawerContentScrollView>
   );
 };
