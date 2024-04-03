@@ -24,7 +24,7 @@ const FingerprintScreen = ({ navigation }) => {
       });
       if (result.success) {
         Alert.alert('Succesful', 'Fingerprint verified!');
-        navigation.navigate('Application');
+        navigation.navigate('Menu');
       } else {
         Alert.alert('Error', 'Fingerprint authentication failed.');
       }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, View, Text, Button } from 'react-native';
-import { getProductPrice } from '../API/GetProductPrice'; // ProductService dosyasını içe aktar
+import getProductPrice from '../MockApi/GetProductPrice';
 
 const App = () => {
   const [productId, setProductId] = useState('');

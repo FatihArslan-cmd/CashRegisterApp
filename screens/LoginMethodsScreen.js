@@ -14,7 +14,7 @@ const offset = itemWidth;
 const data = [
     { color: 'purple', route: 'Finger', icon: 'fingerprint', text: 'TouchID', description: 'TouchID offers fingerprint-based authentication' },
     { color: 'red', route: 'Face', icon: 'user', text: 'FaceID', description: 'FaceID provides facial recognition authentication' },
-    { color: 'orange', route: 'Application', icon: 'barcode', text: 'Barcode', description: 'Barcode scanning allows quick retrieval of encoded information using a devices camera' },
+    { color: 'orange', route: 'Menu', icon: 'barcode', text: 'Barcode', description: 'Barcode scanning allows quick retrieval of encoded information using a devices camera' },
     { color: 'yellow', route: 'nfc', icon: 'cellphone-nfc', text: 'NFC', description: 'NFC enables contactless data exchange and transactions between devices.' }
 ];
 

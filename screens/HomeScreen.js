@@ -4,8 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginMethodsButtons from '../functions/LoginMethodsButtons';
-
-import Application from './Application';
+import App from './Application';
 const HomeScreen = ({ navigation }) => {
   
   const [username, setUsername] = useState('');
@@ -37,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
 
       if (savedUser && savedUser.password === password) {
         Alert.alert('Success', 'Login successful');
-        navigation.navigate('Application');
+        navigation.navigate('Menu');
 
         if (rememberMe) {
           try {
@@ -99,7 +98,7 @@ const HomeScreen = ({ navigation }) => {
       <Text style={styles.signIn}>Sign in</Text>
      <TouchableOpacity style={styles.signInButton} onPress={handleLogin}><Antdesign name={"arrowright"} size={36} color={"white"}/></TouchableOpacity>
      </View>
-     <Text style={styles.footerText}>Don't have an account ? <TouchableOpacity  onPress={() => navigation.navigate('SignUp')}><Text style={{textDecorationLine:"underline",fontSize:18}}>Createe</Text></TouchableOpacity> </Text>     
+     <Text style={styles.footerText}>Don't have an account ? <TouchableOpacity  onPress={() => navigation.navigate('SignUp')}><Text style={{textDecorationLine:"underline",fontSize:18}}>Create</Text></TouchableOpacity> </Text>     
      <LoginMethodsButtons/>
 
      
