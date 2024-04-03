@@ -43,6 +43,11 @@ const AuthStack = () => {
         component={SignUpScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="MainDrawer"
+        component={MainDrawer}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
@@ -52,12 +57,14 @@ const MainDrawer = () => {
     <Drawer.Navigator>
       <Drawer.Screen name="Menu" component={MenuScreen} />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
+     
     </Drawer.Navigator>
   );
 };
 
 export default function App() {
-  const userLoggedIn = true; // Örnek olarak kullanıcı oturum açmış gibi varsayalım, gerçek bir duruma göre bu değişkeni ayarlayın
+  
+  const userLoggedIn = false; // Örnek olarak kullanıcı oturum açmış gibi varsayalım, gerçek bir duruma göre bu değişkeni ayarlayın
   return (
     <LoaderProvider>
       <NavigationContainer>

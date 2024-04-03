@@ -36,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
 
       if (savedUser && savedUser.password === password) {
         Alert.alert('Success', 'Login successful');
-        navigation.navigate('Menu');
+        navigation.navigate('MainDrawer');
 
         if (rememberMe) {
           try {
