@@ -4,7 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginMethodsButtons from '../functions/LoginMethodsButtons';
-import App from './Menu/Application';
+import App from './Menu/SalesScreen';
 const HomeScreen = ({ navigation }) => {
   
   const [username, setUsername] = useState('');

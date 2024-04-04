@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, View, Text, Button } from 'react-native';
-import getProductPrice from '../../MockApi/GetProductPrice';
+import { getProductPrice } from '../../MockApi/GetProductPrice';
 
 const Application = () => {
   const [productId, setProductId] = useState('');
@@ -11,6 +11,11 @@ const Application = () => {
     setProductId(text);
   };
 
+  const getPrice = () => {
+    // Kullanıcı butona tıkladığında bu fonksiyon çağrılacak
+    getProductPrice(productId, productData, setProductData, subTotal, setSubTotal);
+  };
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -18,9 +23,10 @@ const Application = () => {
         placeholder="Enter Product ID"
         onChangeText={onProductIdChange}
       />
+      {/* Butona tıklanınca getPrice fonksiyonu çalışacak */}
       <Button
         title="Get Price"
-        onPress={() => getProductPrice(productId, productData, setProductData, subTotal, setSubTotal)}
+        onPress={getPrice}
       />
       <View style={styles.productPricesList}>
         {productData.map((product, index) => (
@@ -33,6 +39,7 @@ const Application = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -6,7 +6,8 @@ import FaceIDScreen from './screens/FaceId';
 import SignUpScreen from './screens/SignUpScreen';
 import Swiper5 from './screens/LoginMethodsScreen';
 import MainDrawer from './DrawerNavigation';
-import Application from './screens/Menu/Application';
+import Application from './screens/Menu/SalesScreen';
+import SeeProductsScreen from './screens/Menu/SeeProductsScreen';
 const Stack = createStackNavigator();
 
 
@@ -41,6 +42,11 @@ const AuthStack = () => {
       <Stack.Screen
         name="Application"
         component={Application}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SeeProducts"
+        component={SeeProductsScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

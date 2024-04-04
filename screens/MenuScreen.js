@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const menuItems = [
   { icon: 'shopping-cart', color: 'black', label: 'SATIŞ', navigation: 'Application' },
-  { icon: 'money', color: 'green', label: 'FİYAT GÖR' },
+  { icon: 'money', color: 'green', label: 'FİYAT GÖR',navigation: 'SeeProducts' },
   { icon: 'undo', color: 'red', label: 'İADE İŞLEMLERİ' },
   { icon: 'credit-card', color: 'orange', label: 'TAHSİLATLAR' },
   { icon: 'file-text-o', color: 'gray', label: 'RAPORLAR' },
