@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, Button, TextInput, Image, Pressable } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // FontAwesome ikonlarını kullanmak için
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, Button, TextInput, Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome'; 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import FilterModal from './FiltersModel';
+
 const SeeProductScreen = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
-  const [showFiltersModal, setShowFiltersModal] = useState(false); // Add state for showing filters modal
+  const [showFiltersModal, setShowFiltersModal] = useState(false); 
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchProducts = async () => {
@@ -33,6 +35,7 @@ const SeeProductScreen = () => {
 
   useEffect(() => {
     fetchProducts();
+    loadFavorites(); // AsyncStorage'den favori ürünleri yükle
   }, []);
 
   useEffect(() => {
@@ -42,8 +45,28 @@ const SeeProductScreen = () => {
     setFilteredProducts(filtered);
   }, [searchTerm, products]);
 
- 
-  
+  useEffect(() => {
+    saveFavorites(); // Favori ürünleri her güncellediğinizde AsyncStorage'e kaydet
+  }, [favorites]);
+
+  const saveFavorites = async () => {
+    try {
+      await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+    } catch (error) {
+      console.error('Error saving favorites:', error);
+    }
+  };
+
+  const loadFavorites = async () => {
+    try {
+      const storedFavorites = await AsyncStorage.getItem('favorites');
+      if (storedFavorites !== null) {
+        setFavorites(JSON.parse(storedFavorites));
+      }
+    } catch (error) {
+      console.error('Error loading favorites:', error);
+    }
+  };
 
   const toggleFavorite = (id) => {
     const index = favorites.findIndex((item) => item.id === id);
@@ -56,7 +79,9 @@ const SeeProductScreen = () => {
       setFavorites(updatedFavorites);
     }
   };
-
+  const isFavorite = (id) => {
+    return favorites.some((item) => item.id === id);
+  };
   const renderItem = ({ item }) => (
     <View style={styles.productContainer}>
       <Text style={styles.productName}>{item.name}</Text>
@@ -75,11 +100,6 @@ const SeeProductScreen = () => {
     </View>
   );
 
-  const isFavorite = (id) => {
-    return favorites.some((item) => item.id === id);
-  };
-  
-  
   return (
     <View style={styles.container}>
       <View style={styles.filterContainer}>
@@ -158,12 +178,6 @@ const styles = StyleSheet.create({
     marginTop:12,
     marginRight:20
   },
-  sortButtons: {
-    flexDirection: 'column',
-    borderRadius:15,
-    backgroundColor:'orange',
-    margin:5
-  },
   favoriteIcon:{
     padding:4,
   },
@@ -172,11 +186,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
     borderRadius: 15,
     marginLeft: 5,
-  },
-  filterButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize:10,
   },
   productContainer: {
     marginBottom: 20,
@@ -219,58 +228,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#fff',
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight:'bold'
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-    fontWeight:'bold'
-  },
-  sortButton: {
-    padding: 10,
-    marginVertical: 5,
-    borderRadius: 5,
   },
 });
 
