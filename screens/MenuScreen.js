@@ -1,21 +1,29 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook from React Navigation
+import { View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const menuItems = [
-  { icon: 'shopping-cart', color: 'black', label: 'SATIŞ', navigation: 'Application' },
-  { icon: 'money', color: 'green', label: 'FİYAT GÖR',navigation: 'SeeProducts' },
+  { icon: 'shopping-cart', color: 'black', label: 'SALES', navigation: 'Application' },
+  { icon: 'money', color: 'green', label: 'PRODUCTS', navigation: 'SeeProducts' },
   { icon: 'undo', color: 'red', label: 'İADE İŞLEMLERİ' },
   { icon: 'credit-card', color: 'orange', label: 'TAHSİLATLAR' },
-  { icon: 'file-text-o', color: 'gray', label: 'RAPORLAR' },
+  { icon: 'file-text-o', color: 'gray', label: 'REPORTS' },
   { icon: 'ellipsis-h', color: 'black', label: 'DİĞER İŞLEMLER' },
   { icon: 'plus-square', color: 'blue', label: 'DİREKT ÜRÜN GİRİŞİ' },
-  { icon: 'external-link', color: 'black', label: 'www' },
+  { icon: 'external-link', color: 'black', label: 'www', url: 'https://32bit.com.tr/' }, // Add URL to www item
 ];
 
 const MenuScreen = () => {
-  const navigation = useNavigation(); // Get the navigation object using useNavigation hook
+  const navigation = useNavigation();
+
+  const handle32bit = (item) => {
+    if (item.url) {
+      Linking.openURL(item.url);
+    } else {
+      navigation.navigate(item.navigation);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -23,9 +31,7 @@ const MenuScreen = () => {
         <TouchableOpacity
           key={index}
           style={[styles.buttonContainer, { borderColor: item.color }]}
-          onPress={() => {
-            navigation.navigate(item.navigation); // Use item.navigation instead of 'item.navigation'
-          }}
+          onPress={() => handle32bit(item)}
         >
           <Icon name={item.icon} size={24} color={item.color} />
           <Text style={styles.buttonText}>{item.label}</Text>
