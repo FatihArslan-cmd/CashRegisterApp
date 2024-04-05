@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 import { View, Modal, Text, Pressable, StyleSheet } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const SortButton = ({ onPress, text }) => (
+const SortButton = ({ onPress, text, iconName, iconType }) => (
   <Pressable style={styles.sortButton} onPress={onPress}>
-    <Text style={styles.buttonText}>{text}</Text>
+    <View style={styles.sortButtonContent}>
+      {iconType === 'FontAwesome' ? (
+        <FontAwesome name={iconName} size={24} style={styles.icon} />
+      ) : (
+        <FontAwesome5 name={iconName} size={24} style={styles.icon} />
+      )}
+      <Text style={styles.buttonText}>{text}</Text>
+    </View>
   </Pressable>
 );
 
@@ -40,19 +49,47 @@ const FilterModal = ({ showFiltersModal, setShowFiltersModal, filteredProducts, 
         <View style={styles.modalView}>
           <Text style={styles.modalText}>Filter Options</Text>
           <View style={styles.sortButtons}>
-            <SortButton onPress={() => applySort('AtoZ')} text="Sort A to Z" />
-            <SortButton onPress={() => applySort('ZtoA')} text="Sort Z to A" />
-            <SortButton onPress={() => applySort('LowToHigh')} text="Sort Low to High" />
-            <SortButton onPress={() => applySort('HighToLow')} text="Sort High to Low" />
-            <SortButton onPress={() => applySort('IdAscending')} text="Sort ID Ascending" />
-            <SortButton onPress={() => applySort('IdDescending')} text="Sort ID Descending" />
+            <SortButton
+              onPress={() => applySort('AtoZ')}
+              text="Sort A to Z"
+              iconName="sort-alpha-asc"
+              iconType="FontAwesome"
+            />
+            <SortButton
+              onPress={() => applySort('ZtoA')}
+              text="Sort Z to A"
+              iconName="sort-alpha-desc"
+              iconType="FontAwesome"
+            />
+            <SortButton
+              onPress={() => applySort('LowToHigh')}
+              text="Sort Low to High"
+              iconName="sort-amount-down-alt"
+              iconType="FontAwesome5"
+            />
+            <SortButton
+              onPress={() => applySort('HighToLow')}
+              text="Sort High to Low"
+              iconName="sort-amount-down"
+              iconType="FontAwesome5"
+            />
+            <SortButton
+              onPress={() => applySort('IdAscending')}
+              text="Sort ID Ascending"
+              iconName="sort-numeric-down-alt"
+              iconType="FontAwesome5"
+            />
+            <SortButton
+              onPress={() => applySort('IdDescending')}
+              text="Sort ID Descending"
+              iconName="sort-numeric-down"
+              iconType="FontAwesome5"
+            />
           </View>
           <View style={{ flexDirection: 'row', marginTop: 10 }}>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => {
-                setShowFiltersModal(false);
-              }}
+              onPress={() => setShowFiltersModal(false)}
             >
               <Text style={styles.textStyle}>Cancel</Text>
             </Pressable>
@@ -69,6 +106,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+  },
+  button: {
+    backgroundColor:'red'
   },
   modalView: {
     margin: 20,
@@ -96,15 +136,22 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: 'orange',
   },
+  sortButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: 10,
+  },
   textStyle: {
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
-    borderWidth:1,
-    borderColor:'lightgray',
-    padding:5
+    
+    padding: 5,
   },
   modalText: {
+    fontSize:20,
     marginBottom: 15,
     textAlign: 'center',
     fontWeight: 'bold',

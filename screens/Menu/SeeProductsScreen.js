@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, Button, TextInput, Image } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, Button, TextInput, Image, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import FilterModal from './FiltersModel';
+import * as Animatable from 'react-native-animatable';
 
 const SeeProductScreen = () => {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,7 @@ const SeeProductScreen = () => {
   const [showFavorites, setShowFavorites] = useState(false);
   const [showFiltersModal, setShowFiltersModal] = useState(false); 
   const [searchTerm, setSearchTerm] = useState('');
+  const [refreshing, setRefreshing] = useState(false); // Yenileme durumu
 
   const fetchProducts = async () => {
     try {
@@ -35,7 +37,7 @@ const SeeProductScreen = () => {
 
   useEffect(() => {
     fetchProducts();
-    loadFavorites(); // AsyncStorage'den favori ürünleri yükle
+    loadFavorites(); 
   }, []);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ const SeeProductScreen = () => {
   }, [searchTerm, products]);
 
   useEffect(() => {
-    saveFavorites(); // Favori ürünleri her güncellediğinizde AsyncStorage'e kaydet
+    saveFavorites(); 
   }, [favorites]);
 
   const saveFavorites = async () => {
@@ -82,23 +84,37 @@ const SeeProductScreen = () => {
   const isFavorite = (id) => {
     return favorites.some((item) => item.id === id);
   };
-  const renderItem = ({ item }) => (
-    <View style={styles.productContainer}>
-      <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.productPrice}>Price: ${item.price}</Text>
-      <Text style={styles.productid}>ID: {item.id}</Text>
-      
-      <Image source={{ uri: item.image }} style={{ width: 100, height: 100 ,borderRadius:15, marginTop:5,marginBottom:5 }} />
-      <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Icon name={isFavorite(item.id) ? 'heart' : 'heart-o'} size={24} color={isFavorite(item.id) ? 'orange' : 'green'} />
-          <Text style={[styles.favoriteButton, isFavorite(item.id) && styles.favoriteButtonText]}>
-            {isFavorite(item.id) ? 'Favorited' : 'Add to Favorites'}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
+
+  const renderItem = useCallback(({ item }) => (
+    <Animatable.View
+     
+      animation="fadeInUp"
+      delay={500} 
+      useNativeDriver
+    >
+      <View style={styles.productContainer}>
+        <Text style={styles.productName}>{item.name}</Text>
+        <Text style={styles.productPrice}>Price: ${item.price}</Text>
+        <Text style={styles.productid}>ID: {item.id}</Text>
+        
+        <Image source={{ uri: item.image }} style={{ width: 100, height: 100 ,borderRadius:15, marginTop:5,marginBottom:5 }} />
+        <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Icon name={isFavorite(item.id) ? 'heart' : 'heart-o'} size={24} color={isFavorite(item.id) ? 'orange' : 'green'} />
+            <Text style={[styles.favoriteButton, isFavorite(item.id) && styles.favoriteButtonText]}>
+              {isFavorite(item.id) ? 'Favorited' : 'Add to Favorites'}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </Animatable.View>
+  ), [favorites, toggleFavorite]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchProducts();
+    setRefreshing(false);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -122,6 +138,12 @@ const SeeProductScreen = () => {
           data={filteredProducts}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
         />
       </View>
       
@@ -219,10 +241,11 @@ const styles = StyleSheet.create({
     color: 'orange',
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 20,
+    marginTop: 5,
     marginBottom: 10,
+    textAlign:'center'
   },
   favoritesContainer: {
     flex: 1,

@@ -27,6 +27,7 @@
     "native-base": "^3.4.28",
     "react": "18.2.0",
     "react-native": "0.73.5",
+    "react-native-animatable": "^1.4.0",
     "react-native-camera": "^4.2.1",
     "react-native-camera-kit": "^13.0.0",
     "react-native-device-info": "^10.13.1",

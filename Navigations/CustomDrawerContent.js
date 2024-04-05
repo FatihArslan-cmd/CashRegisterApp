@@ -4,14 +4,15 @@ import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
 import getAppVersion from '../functions/getAppVersion';
 import loadUserProfile from '../functions/LoadUserProfile';
+import GetIP from '../functions/GetIp';
 
-// Reusable component for displaying information rows
 const InformationRow = ({ label, value, iconName, iconColor, style }) => (
   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
     {iconName && <AntDesign name={iconName} size={20} color={iconColor} />}
     <Text style={{ marginLeft: iconName ? 10 : 0, fontWeight: 'bold', ...style }}>{label}: {value}</Text>
   </View>
 );
+
 
 const CustomDrawerContent = (props) => {
   const { navigation } = props;
@@ -52,7 +53,7 @@ const CustomDrawerContent = (props) => {
 
   const storeNo = '1';
   const cashRegisterNo = '38462';
-  const ipAddress = '192.168.X.X'; 
+  const ipAddress = GetIP(); 
   const version = getAppVersion();
 
   return (
@@ -79,7 +80,6 @@ const CustomDrawerContent = (props) => {
         label="Menu"
         icon={({color, size }) => <AntDesign name="menu-fold" size={size} color={color} />}
         onPress={() => {
-          // Navigate to Menu screen
           navigation.navigate('Menu');
         }}
       />

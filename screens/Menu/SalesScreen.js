@@ -12,7 +12,6 @@ const Application = () => {
   };
 
   const getPrice = () => {
-    // Kullanıcı butona tıkladığında bu fonksiyon çağrılacak
     getProductPrice(productId, productData, setProductData, subTotal, setSubTotal);
   };
 
@@ -23,7 +22,7 @@ const Application = () => {
         placeholder="Enter Product ID"
         onChangeText={onProductIdChange}
       />
-      {/* Butona tıklanınca getPrice fonksiyonu çalışacak */}
+      
       <Button
         title="Get Price"
         onPress={getPrice}
