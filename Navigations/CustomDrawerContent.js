@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import getAppVersion from '../functions/getAppVersion';
 import loadUserProfile from '../functions/LoadUserProfile';
 import GetIP from '../functions/GetIp';
-
+import OnlineStatusInformer from '../functions/OnlineStatusInformer';
 const InformationRow = ({ label, value, iconName, iconColor, style }) => (
   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
     {iconName && <AntDesign name={iconName} size={20} color={iconColor} />}
@@ -64,6 +64,7 @@ const CustomDrawerContent = (props) => {
 
       <View style={{ flex: 1, marginTop: 5, marginBottom: 40, paddingHorizontal: 16, borderStyle: 'solid', borderColor: 'gray', borderWidth: 1 }}>
         <View style={{ paddingBottom: 10 }}>
+        <OnlineStatusInformer/>
           {userProfile && (
             <View>
               <InformationRow label="Staff Email" value={userProfile.email} iconName="mail" iconColor="gray" />
@@ -75,7 +76,7 @@ const CustomDrawerContent = (props) => {
           )}
         </View>
       </View>
-
+      
       <DrawerItem
         label="Menu"
         icon={({color, size }) => <AntDesign name="menu-fold" size={size} color={color} />}

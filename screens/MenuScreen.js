@@ -1,7 +1,8 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import {React,useContext} from 'react';
+import { View, TouchableOpacity, StyleSheet, Linking,Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import CustomText from '../functions/CustomText'; // Burada CustomText bileşenini import ediyoruz.
 
 const menuItems = [
   { icon: 'shopping-cart', color: 'black', label: 'SALES', navigation: 'Application' },
@@ -15,6 +16,7 @@ const menuItems = [
 ];
 
 const MenuScreen = () => {
+  
   const navigation = useNavigation();
 
   const handle32bit = (item) => {
@@ -27,6 +29,7 @@ const MenuScreen = () => {
 
   return (
     <View style={styles.container}>
+    
       {menuItems.map((item, index) => (
         <TouchableOpacity
           key={index}
@@ -34,10 +37,13 @@ const MenuScreen = () => {
           onPress={() => handle32bit(item)}
         >
           <Icon name={item.icon} size={24} color={item.color} />
-          <Text style={styles.buttonText}>{item.label}</Text>
+         
+          <CustomText style={styles.buttonText}>{item.label}</CustomText>
         </TouchableOpacity>
+        
       ))}
     </View>
+    
   );
 };
 
@@ -46,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: 'gray',
+    borderColor: 'lightgray',
     borderWidth: 1,
     margin: 30
   },
@@ -62,8 +68,7 @@ const styles = StyleSheet.create({
     height: 40
   },
   buttonText: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 20,
     marginLeft: 8,
   },
 });

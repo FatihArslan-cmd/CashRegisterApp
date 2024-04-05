@@ -4,7 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppLoader from '../functions/AppLoader';
-
+import CustomText from '../functions/CustomText';
 const SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -75,9 +75,9 @@ const SignUpScreen = ({ navigation }) => {
       <View style={styles.topImageContainer}>
         <Image source={require("../assets/topVector.png")} style={styles.topImage}></Image>
       </View>
-
+      
       <View style={styles.CreateContainer}>
-        <Text style={styles.signInText}>Create an Account</Text>
+      <CustomText style={styles.signInText} >Create an Account</CustomText>
       </View>
 
       <View style={styles.inputContainer}>
@@ -114,7 +114,7 @@ const SignUpScreen = ({ navigation }) => {
           <Antdesign name={"arrowright"} size={36} color={"white"} />
         </TouchableOpacity>
       </View>
-
+   
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
         <Antdesign name={"fastbackward"} size={36} color={"#9A9A9A"} style={styles.inputIcon} />
       </TouchableOpacity>
@@ -134,9 +134,9 @@ const styles = StyleSheet.create({
   CreateContainer: {},
   signInText: {
     textAlign: 'center',
-    fontSize: 40,
+    fontSize:35,
     marginBottom: 30,
-    fontWeight: 'bold'
+   
   },
   inputContainer: {
     backgroundColor: "white",

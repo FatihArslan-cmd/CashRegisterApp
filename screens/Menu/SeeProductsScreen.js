@@ -155,7 +155,10 @@ const SeeProductScreen = () => {
             renderItem={renderItem}
             keyExtractor={(item) => item.id.toString()}
           />
-          <Button title="Close" onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange' }} />
+          <TouchableOpacity onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange' }}>
+  <Text style={{ color: 'white', padding: 10, textAlign:'center', fontWeight:'bold' }}>Close</Text>
+</TouchableOpacity>
+
         </View>
       </Modal>
 

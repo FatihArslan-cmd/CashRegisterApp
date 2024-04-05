@@ -4,16 +4,15 @@ import { LoaderProvider } from './context/LoaderContext';
 import AppLoader from './functions/AppLoader';
 import AuthStack from './AuthStack';
 import MainDrawer from './DrawerNavigation';
-
+import { OnlineStatusProvider } from './context/OnlineStatusContext';
 export default function App() {
   
   const userLoggedIn = false; 
   return (
-    <LoaderProvider>
+    <OnlineStatusProvider>
       <NavigationContainer>
         {userLoggedIn ? <MainDrawer /> : <AuthStack />}
-        <AppLoader />
       </NavigationContainer>
-    </LoaderProvider>
+      </OnlineStatusProvider>
   );
 }

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import CustomText from '../functions/CustomText'; // CustomText bileşenini import ediyoruz.
 const { width, height } = Dimensions.get('window');
 const itemWidth = width / 5 * 4;
 const itemHeight = height / 3 * 2;
@@ -111,9 +111,10 @@ const Item = ({ i, data, scrollX, navigation }) => {
     return (
         <Animated.View style={[styles.item, { transform: [{ scale }] }]}>
             <TouchableOpacity onPress={handlePress} style={styles.button}>
-                <Text style={styles.iconText}>{data.text}</Text>
+                {/* CustomText bileşenini text için kullanıyoruz */}
+                <CustomText style={styles.iconText}>{data.text}</CustomText>
                 {iconComponent}
-                <Text style={styles.descriptionText}>{data.description}</Text>
+                <CustomText style={styles.descriptionText}>{data.description}</CustomText>
             </TouchableOpacity>
         </Animated.View>
     );
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
     },
     iconText: {
         fontSize: 24,
-        fontWeight: 'bold',
+        
         marginBottom: 33,
     },
     descriptionText: {

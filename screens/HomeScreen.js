@@ -5,6 +5,7 @@ import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginMethodsButtons from '../functions/LoginMethodsButtons';
 import App from './Menu/SalesScreen';
+import CustomText from '../functions/CustomText';
 const HomeScreen = ({ navigation }) => {
   
   const [username, setUsername] = useState('');
@@ -67,12 +68,12 @@ const HomeScreen = ({ navigation }) => {
      </View>   
 
       <View style={styles.helloContainer}>
-       <Text style={styles.helloText}>Hello</Text>
+       <CustomText style={styles.helloText}>Hello</CustomText>
        
       </View>
 
       <View style={styles.helloContainer}>
-       <Text style={styles.signInText}>Sign in to your account</Text>
+       <CustomText style={styles.signInText}>Sign in to your account</CustomText>
       </View>
 
       <View style={styles.inputContainer}>
@@ -95,7 +96,7 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
      <View style={styles.signInButtonContainer}>
-      <Text style={styles.signIn}>Sign in</Text>
+      <CustomText style={styles.signIn}>Sign in</CustomText>
      <TouchableOpacity style={styles.signInButton} onPress={handleLogin}><Antdesign name={"arrowright"} size={36} color={"white"}/></TouchableOpacity>
      </View>
      <Text style={styles.footerText}>Don't have an account ? <TouchableOpacity  onPress={() => navigation.navigate('SignUp')}><Text style={{textDecorationLine:"underline",fontSize:18}}>Create</Text></TouchableOpacity> </Text>     
@@ -122,8 +123,8 @@ const styles = StyleSheet.create({
    },
    helloText: {
     textAlign:'center',
-    fontSize:70,
-    fontWeight:"bold"
+    fontSize:65,
+    
     },
    topImage: {
     width:"100%",
