@@ -9,7 +9,7 @@ const App = () => {
       <Box
         bg={{
           linearGradient: {
-            colors: ['lightblue', 'violet'],
+            colors: ['black', 'violet'],
             start: [0, 0],
             end: [1, 0]
           }

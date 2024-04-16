@@ -11,7 +11,7 @@ const menuItems = [
   { icon: 'credit-card', color: 'orange', label: 'TAHSİLATLAR' },
   { icon: 'file-text-o', color: 'gray', label: 'REPORTS' },
   { icon: 'ellipsis-h', color: 'black', label: 'DİĞER İŞLEMLER' },
-  { icon: 'plus-square', color: 'blue', label: 'DİREKT ÜRÜN GİRİŞİ' },
+  { icon: 'plus-square', color: 'blue', label: 'PRODUCT ENTRY', navigation: 'DirectProductEntry' },
   { icon: 'external-link', color: 'black', label: 'www', url: 'https://32bit.com.tr/' }, // Add URL to www item
 ];
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert,Image } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
 import getAppVersion from '../functions/getAppVersion';
@@ -36,8 +36,6 @@ const CustomDrawerContent = (props) => {
         {
           text: 'Yes',
           onPress: () => {
-            // Here you can add the operations to leave the account.
-            // For example: AsyncStorage.clear() or any other relevant operation.
             navigation.navigate('Home'); // Navigates to the home screen.
           },
         },
@@ -57,14 +55,16 @@ const CustomDrawerContent = (props) => {
   const version = getAppVersion();
 
   return (
+    
     <DrawerContentScrollView {...props}>
+      <OnlineStatusInformer />
       <View style={{ alignItems:'center' }}>
         <AntDesign name="user" size={72} color="gray"  />
       </View>
 
-      <View style={{ flex: 1, marginTop: 5, marginBottom: 40, paddingHorizontal: 16, borderStyle: 'solid', borderColor: 'gray', borderWidth: 1 }}>
+      <View style={{ flex: 1, marginTop: 5, paddingHorizontal: 16, borderStyle: 'solid', borderColor: 'lightgray', borderWidth: 1 }}>
         <View style={{ paddingBottom: 10 }}>
-        <OnlineStatusInformer/>
+        
           {userProfile && (
             <View>
               <InformationRow label="Staff Email" value={userProfile.email} iconName="mail" iconColor="gray" />
@@ -76,7 +76,8 @@ const CustomDrawerContent = (props) => {
           )}
         </View>
       </View>
-      
+
+      <View style={{borderWidth:1, borderColor:'lightgray'}}>
       <DrawerItem
         label="Menu"
         icon={({color, size }) => <AntDesign name="menu-fold" size={size} color={color} />}
@@ -84,7 +85,6 @@ const CustomDrawerContent = (props) => {
           navigation.navigate('Menu');
         }}
       />
-
       <DrawerItem
         label="Settings"
         icon={({color, size }) => <AntDesign name="setting" size={size} color={color} />}
@@ -93,12 +93,19 @@ const CustomDrawerContent = (props) => {
           navigation.navigate('Settings');
         }}
       />
+      </View>
 
-      <TouchableOpacity onPress={handleLeaveAccount} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 300, paddingHorizontal: 16 }}>
+      <View style={{borderWidth:1,borderRadius:20,borderColor: 'lightcoral'}}>
+      <TouchableOpacity onPress={handleLeaveAccount} style={{ flexDirection: 'row', alignItems: 'center', justifyContent:'center'}}>
         <AntDesign name={"back"} size={36} color={"red"} />
-        <Text style={{ color: 'red', fontWeight: 'bold', marginLeft: 15 }}>Leave the Account</Text>
+        <Text style={{ color: 'red', fontWeight: 'bold'}}>Leave the Account</Text>
       </TouchableOpacity>
+      </View>
+
+      
+      
     </DrawerContentScrollView>
+    
   );
 };
 

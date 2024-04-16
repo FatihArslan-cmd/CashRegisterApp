@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet ,TouchableOpacity} from 'react-native';
-
+import { View,  StyleSheet ,TouchableOpacity} from 'react-native';
+import AnimatedTypewriterText from '../functions/AnimatedTypewriterText'
+import ShareEg from '../functions/ShareButton';
+import ContactMe from '../functions/ContactButton';
 const SettingsScreen = () => {
   return (
     <View style={styles.container}>
-       
-          <Text >Show all the users in db</Text>
-       
+          <ShareEg/>
+          <AnimatedTypewriterText></AnimatedTypewriterText>
+          <ContactMe/>
     </View>
   );
 };

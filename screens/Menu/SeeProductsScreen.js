@@ -94,8 +94,8 @@ const SeeProductScreen = () => {
     >
       <View style={styles.productContainer}>
         <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productPrice}>Price: ${item.price}</Text>
-        <Text style={styles.productid}>ID: {item.id}</Text>
+        <Text style={styles.productPrice}>Price: ${item.price} </Text>
+        <Text style={styles.productid}>ID:  {item.id} </Text>
         
         <Image source={{ uri: item.image }} style={{ width: 100, height: 100 ,borderRadius:15, marginTop:5,marginBottom:5 }} />
         <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
