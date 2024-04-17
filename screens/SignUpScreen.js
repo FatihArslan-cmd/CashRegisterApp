@@ -4,6 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppLoader from '../functions/AppLoader';
+import * as Animatable from 'react-native-animatable';
 import CustomText from '../functions/CustomText';
 const SignUpScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -72,6 +73,11 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+       <Animatable.View
+     animation="fadeInUp"
+     delay={250} 
+     useNativeDriver
+   >
       <View style={styles.topImageContainer}>
         <Image source={require("../assets/topVector.png")} style={styles.topImage}></Image>
       </View>
@@ -118,6 +124,7 @@ const SignUpScreen = ({ navigation }) => {
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
         <Antdesign name={"fastbackward"} size={36} color={"#9A9A9A"} style={styles.inputIcon} />
       </TouchableOpacity>
+      </Animatable.View>
     </View>
   );
 }

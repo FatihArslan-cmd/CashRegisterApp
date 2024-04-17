@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, VStack, FormControl, Input, Button, NativeBaseProvider, Alert } from 'native-base';
+import { Modal, VStack, FormControl, Input, Button, NativeBaseProvider, TouchableOpacity,Text } from 'native-base';
+
 
 const FaturaButton = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -54,10 +55,10 @@ const FaturaButton = () => {
                 </Modal.Content>
             </Modal>
             <VStack space={8} alignItems="center">
-                <Button w="104" onPress={() => setModalVisible(!modalVisible)}>
-                    E-Fatura
+                <Button style={{backgroundColor:'#bf7700',borderRadius:15,marginTop:2}} onPress={() => setModalVisible(!modalVisible)}>
+                    E-Document
                 </Button>
-               
+              
             </VStack>
         </NativeBaseProvider>
     );

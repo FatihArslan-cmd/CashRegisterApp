@@ -11,6 +11,10 @@ const FavoriteModal = ({ visible, favorites, onClose }) => {
     item.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  const addToFavorites = (item) => {
+    console.log(item);
+  };
+
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.modalContainer}>
@@ -41,13 +45,15 @@ const FavoriteModal = ({ visible, favorites, onClose }) => {
             <FlatList
               data={filteredFavorites}
               renderItem={({ item }) => (
-                <View style={styles.productContainer}>
-                  <Text style={styles.productName}>{item.name}</Text>
-                  <Text style={styles.productID}>ID: {item.id}</Text>
-                  <Text style={styles.productPrice}>Price: ${item.price}</Text>
-                  <Text style={styles.productPrice}>KDV %{item.kdv}</Text>
-                  <Image source={{ uri: item.image }} style={styles.productImage} />
-                </View>
+                <TouchableOpacity onPress={() => addToFavorites(item)}>
+                  <View style={styles.productContainer}>
+                    <Text style={styles.productName}>{item.name}</Text>
+                    <Text style={styles.productID}>ID: {item.id}</Text>
+                    <Text style={styles.productPrice}>Price: ${item.price}</Text>
+                    <Text style={styles.productPrice}>KDV %{item.kdv}</Text>
+                    <Image source={{ uri: item.image }} style={styles.productImage} />
+                  </View>
+                </TouchableOpacity>
               )}
               keyExtractor={(item) => item.id.toString()}
             />
@@ -111,7 +117,7 @@ const FavoriteProductsScreen = () => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#fff',
   },
   searchContainer: {
@@ -162,7 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     width: 50,
     height: 50,
-    margin: 100
+
   },
   productImage: {
     width: 100,

@@ -8,7 +8,7 @@ import Swiper5 from './screens/LoginMethodsScreen';
 import MainDrawer from './DrawerNavigation';
 import Application from './screens/Menu/SalesScreen';
 import SeeProductsScreen from './screens/Menu/SeeProductsScreen';
-import FavoriteProductsScreen from './screens/Menu/FavoriteProductsScreen';
+import FavoriteProductsScreen from './screens/Menu/DirectProductEntryScreen';
 const Stack = createStackNavigator();
 
 
