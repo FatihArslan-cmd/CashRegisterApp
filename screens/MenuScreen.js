@@ -3,7 +3,7 @@ import { View, TouchableOpacity, StyleSheet, Linking,Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomText from '../functions/CustomText'; // Burada CustomText bileşenini import ediyoruz.
-
+import * as Animatable from 'react-native-animatable';
 const menuItems = [
   { icon: 'shopping-cart', color: 'black', label: 'SALES', navigation: 'Application' },
   { icon: 'money', color: 'green', label: 'PRODUCTS', navigation: 'SeeProducts' },
@@ -29,7 +29,11 @@ const MenuScreen = () => {
 
   return (
     <View style={styles.container}>
-    
+    <Animatable.View
+     animation="fadeInUp"
+     delay={250} 
+     useNativeDriver
+   >
       {menuItems.map((item, index) => (
         <TouchableOpacity
           key={index}
@@ -42,6 +46,7 @@ const MenuScreen = () => {
         </TouchableOpacity>
         
       ))}
+      </Animatable.View>
     </View>
     
   );

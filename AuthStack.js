@@ -8,7 +8,7 @@ import Swiper5 from './screens/LoginMethodsScreen';
 import MainDrawer from './DrawerNavigation';
 import Application from './screens/Menu/SalesScreen';
 import SeeProductsScreen from './screens/Menu/SeeProductsScreen';
-import DirectProductEntry from './screens/Menu/DirectProductEntryScreen';
+import FavoriteProductsScreen from './screens/Menu/FavoriteProductsScreen';
 const Stack = createStackNavigator();
 
 
@@ -47,7 +47,7 @@ const AuthStack = () => {
       />
       <Stack.Screen
         name="DirectProductEntry"
-        component={DirectProductEntry}
+        component={FavoriteProductsScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

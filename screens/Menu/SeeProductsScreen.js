@@ -96,7 +96,6 @@ const SeeProductScreen = () => {
         <Text style={styles.productName}>{item.name}</Text>
         <Text style={styles.productPrice}>Price: ${item.price} </Text>
         <Text style={styles.productid}>ID:  {item.id} </Text>
-        
         <Image source={{ uri: item.image }} style={{ width: 100, height: 100 ,borderRadius:15, marginTop:5,marginBottom:5 }} />
         <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -118,6 +117,12 @@ const SeeProductScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Animatable.View
+     
+     animation="fadeInDown"
+     delay={300} 
+     useNativeDriver
+   >
       <View style={styles.filterContainer}>
         <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}> 
           <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
@@ -132,7 +137,7 @@ const SeeProductScreen = () => {
           <MaterialCommunityIcons style={styles.searchIcons} name={"filter-variant"} size={30} color={"black"} />
         </TouchableOpacity>
       </View>
-      
+      </Animatable.View>
       <View style={styles.productsListContainer}>
         <FlatList
           data={filteredProducts}
@@ -149,7 +154,14 @@ const SeeProductScreen = () => {
       
       <Modal visible={showFavorites} animationType="slide">
         <View style={styles.favoritesContainer}>
+        <Animatable.View
+     
+     animation="fadeInDown"
+     delay={250} 
+     useNativeDriver
+   >
           <Text style={styles.sectionTitle}>Favorites</Text>
+          </Animatable.View>
           <FlatList
             data={favorites}
             renderItem={renderItem}
