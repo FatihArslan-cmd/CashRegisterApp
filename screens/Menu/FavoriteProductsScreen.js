@@ -116,6 +116,7 @@ const FavoriteProductsScreen = () => {
 };
 
 const styles = StyleSheet.create({
+ 
   modalContainer: {
     flexGrow: 1,
     backgroundColor: '#fff',
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     width: 50,
     height: 50,
-
+    marginLeft:'auto'
   },
   productImage: {
     width: 100,

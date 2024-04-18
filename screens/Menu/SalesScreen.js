@@ -9,6 +9,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CalculatorApp from '../../functions/NumberButtons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
+import Antdesign from 'react-native-vector-icons/AntDesign';
+import { NativeBaseProvider, Input, Box } from 'native-base';
 const Application = () => {
   const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState([]);
@@ -56,24 +58,37 @@ const Application = () => {
     }
   }, [productData]); // Dependency on productData for automatic scrolling
 
+  const clearInput = () => {
+    setProductId('');
+  };
+
   return (
     <View style={styles.container}>
       <Animatable.View
-     animation="fadeInUp"
-     delay={250} 
-     useNativeDriver
-   >
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.productIdInput]}
-          placeholder="Enter Product ID"
-          onChangeText={onProductIdChange}
-        />
-        <TouchableOpacity style={styles.getPriceButton} onPress={getPrice} >
-          <Text style={styles.enterButton}>Enter</Text>
-        </TouchableOpacity>
-        <FavoriteProductsScreen/>
-      </View>
+        animation="fadeInUp"
+        delay={250} 
+        useNativeDriver
+      >
+        <View style={styles.inputContainer}>
+          <AntDesign name="search1" size={24} color="black" /> 
+          <TextInput
+            style={{ marginLeft: 10, flex: 1 }} 
+            placeholder="Enter Product ID"
+            onChangeText={onProductIdChange}
+            value={productId}
+          />
+          {productId.length > 0 && (
+            <TouchableOpacity onPress={clearInput}>
+              <AntDesign name="closecircle" size={20} color="gray" />
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity style={styles.getPriceButton} onPress={getPrice} >
+            <Text style={styles.enterButton}>Enter</Text>
+          </TouchableOpacity>
+          
+          <FavoriteProductsScreen/>
+          
+        </View>
       </Animatable.View>
       <ScrollView ref={scrollViewRef} style={styles.productPricesList}>
         {productData.length === 0 ? (
@@ -94,6 +109,7 @@ const Application = () => {
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.productId}>{product.id}</Text>
                     <Text style={styles.productTax}>1 PCS</Text>
+                    
                     <Text style={styles.productTax}>KDV %{product.kdv}</Text>
                   </View>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -123,7 +139,7 @@ const Application = () => {
    >
       <View style={{flexDirection:'row'}}>
       <CalculatorApp/>
-       <View style={{flexDirection:'column'}}>
+       <View style={{flexDirection:'column',borderWidth:1,borderColor:'#ccc',borderRadius:15,marginLeft:5}}>
           <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
             <View style={{flexDirection:'row'}}>
              <Entypo name={"cross"} size={36} color={"white"} style={styles.inputIcon} />
@@ -162,7 +178,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor:'#d9e0e8'
+    backgroundColor:'#d9e0e8',
+    borderWidth:1,
+    borderColor:'#ccc',
+    justifyContent:'center'
   },
   separator: {
     height: 1,
@@ -170,12 +189,14 @@ const styles = StyleSheet.create({
   },
   getPriceButton:{
     backgroundColor:'#028a3b',
-    borderRadius:10
+    borderRadius:10,
+    marginLeft:20,
+    
   },
   enterButton:{
-    padding:10,
+    padding:15,
     color:'white',
-    fontWeight:'bold'
+    fontWeight:'bold',    
   },
   subTotalContainer: {
     backgroundColor: '#1e445e',
@@ -193,7 +214,6 @@ const styles = StyleSheet.create({
     borderWidth:1,
     borderColor:'#ccc',
     borderRadius:15,
-    
   },
   productIdInput: {
     borderColor: '#ccc',
@@ -201,8 +221,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     flex: 1,
-    marginHorizontal:30,
-    backgroundColor:'white'
+    backgroundColor:'white',
   },
   productContainer: {
     padding: 9,
@@ -218,7 +237,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     maxHeight: 255,
-    backgroundColor:'white'
+    backgroundColor:'white',
+    borderRadius:15,
   },
   productPrice: {
     fontSize: 16,
@@ -262,7 +282,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     width: 85,
-    height:70
+    height:60
   },
   confirmButton:{
     backgroundColor: '#3e66ae',

@@ -20,6 +20,7 @@ const CalculatorApp = () => {
     value={inputValue}
     keyboardType="numeric"
     editable={false}
+    placeholder='Enter Amount of Money'
   />
   <View style={styles.row}>
     <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('00')}>
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     width:275,
-    
+    borderRadius:15
   },
   row: {
     flexDirection: 'row',
