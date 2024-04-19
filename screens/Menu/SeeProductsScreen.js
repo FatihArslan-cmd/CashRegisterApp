@@ -6,6 +6,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import FilterModal from './FiltersModel';
 import * as Animatable from 'react-native-animatable';
+import { Menu,Box,NativeBaseProvider,Pressable,HamburgerIcon,Heading } from 'native-base';
+import axios from 'axios';
 
 const SeeProductScreen = () => {
   const [products, setProducts] = useState([]);
@@ -15,11 +17,14 @@ const SeeProductScreen = () => {
   const [showFiltersModal, setShowFiltersModal] = useState(false); 
   const [searchTerm, setSearchTerm] = useState('');
   const [refreshing, setRefreshing] = useState(false); // Yenileme durumu
+  const [showAssignModal, setShowAssignModal] = useState(false);
+
+  
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('https://fatiharslan-cmd.github.io/mockjson/db.json');
-      const data = await response.json();
+      const response = await axios.get('https://fatiharslan-cmd.github.io/mockjson/db.json');
+      const data = response.data;
       if (!data.products || !Array.isArray(data.products)) {
         throw new Error('Product data is not in the expected format');
       }
@@ -34,6 +39,7 @@ const SeeProductScreen = () => {
       console.error('Error fetching products:', error);
     }
   };
+  
 
   useEffect(() => {
     fetchProducts();
@@ -58,7 +64,8 @@ const SeeProductScreen = () => {
       console.error('Error saving favorites:', error);
     }
   };
-
+  
+  
   const loadFavorites = async () => {
     try {
       const storedFavorites = await AsyncStorage.getItem('favorites');
@@ -69,7 +76,16 @@ const SeeProductScreen = () => {
       console.error('Error loading favorites:', error);
     }
   };
-
+  const assignAllFavorites = () => {
+    setFavorites([...favorites, ...products]);
+    setShowAssignModal(false);
+  };
+  
+  const unFavoriteAll = () => {
+    setFavorites([]);
+    setShowAssignModal(false);
+  };
+  
   const toggleFavorite = (id) => {
     const index = favorites.findIndex((item) => item.id === id);
     if (index === -1) {
@@ -123,7 +139,9 @@ const SeeProductScreen = () => {
      delay={300} 
      useNativeDriver
    >
+   
       <View style={styles.filterContainer}>
+      
         <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}> 
           <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
         </TouchableOpacity>
@@ -136,7 +154,20 @@ const SeeProductScreen = () => {
         <TouchableOpacity onPress={() => setShowFiltersModal(true)}>
           <MaterialCommunityIcons style={styles.searchIcons} name={"filter-variant"} size={30} color={"black"} />
         </TouchableOpacity>
+        <Modal visible={showAssignModal} animationType="slide" transparent>
+  <View style={styles.modalContainer}>
+    <View style={styles.modalContent}>
+      
+      <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setShowAssignModal(false)}>
+        <Text style={[styles.modalButtonText, styles.cancelButtonText]}>Cancel</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
+
       </View>
+     
+    
       </Animatable.View>
       <View style={styles.productsListContainer}>
         <FlatList
@@ -153,26 +184,32 @@ const SeeProductScreen = () => {
       </View>
       
       <Modal visible={showFavorites} animationType="slide">
-        <View style={styles.favoritesContainer}>
-        <Animatable.View
-     
-     animation="fadeInDown"
-     delay={250} 
-     useNativeDriver
-   >
-          <Text style={styles.sectionTitle}>Favorites</Text>
-          </Animatable.View>
-          <FlatList
-            data={favorites}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-          />
-          <TouchableOpacity onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange' }}>
-  <Text style={{ color: 'white', padding: 10, textAlign:'center', fontWeight:'bold' }}>Close</Text>
-</TouchableOpacity>
-
-        </View>
-      </Modal>
+  <View style={styles.favoritesContainer}>
+    <View style={{ flexDirection: 'row' }}>
+      <NativeBaseProvider>
+        <Box justifyContent={'center'} alignItems={'center'} >
+          <Heading>Favorites</Heading>
+          <Menu w="190" trigger={triggerProps => {
+            return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
+              <HamburgerIcon />
+            </Pressable>;
+          }}>
+            <Menu.Item onPress={assignAllFavorites}>Favorite All Products</Menu.Item>
+            <Menu.Item onPress={unFavoriteAll}>Unfavorite All Products</Menu.Item>
+          </Menu>
+        </Box>
+      </NativeBaseProvider>
+    </View>
+    <FlatList
+      data={favorites}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id.toString()}
+    />
+    <TouchableOpacity onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange' }}>
+      <Text style={{ color: 'white', padding: 10, textAlign: 'center', fontWeight: 'bold' }}>Close</Text>
+    </TouchableOpacity>
+  </View>
+</Modal>
 
      
       <FilterModal
@@ -238,6 +275,38 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+  },
+  modalButton: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  cancelButton: {
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  cancelButtonText: {
+    color: 'red',
+  },
+
   productPrice: {
     fontSize: 16,
     marginTop: 5,
@@ -260,7 +329,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 5,
     marginBottom: 10,
-    textAlign:'center'
+   
   },
   favoritesContainer: {
     flex: 1,

@@ -87,7 +87,7 @@ const FilterModal = ({ showFiltersModal, setShowFiltersModal, filteredProducts, 
             />
           </View>
           <View style={{ flexDirection: 'row', marginTop: 10 }}>
-            <Pressable
+            <Pressable 
               style={[styles.button, styles.buttonClose]}
               onPress={() => setShowFiltersModal(false)}
             >
@@ -108,7 +108,9 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   button: {
-    backgroundColor:'red'
+    backgroundColor:'red',
+    borderRadius:15
+    
   },
   modalView: {
     margin: 20,
@@ -134,7 +136,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     borderRadius: 5,
-    backgroundColor: 'orange',
+    backgroundColor: '#3e66ae',
   },
   sortButtonContent: {
     flexDirection: 'row',
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     
-    padding: 5,
+    padding: 10,
   },
   modalText: {
     fontSize:20,

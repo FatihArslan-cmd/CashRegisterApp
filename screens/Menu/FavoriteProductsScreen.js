@@ -41,7 +41,7 @@ const FavoriteModal = ({ visible, favorites, onClose }) => {
             delay={500}
             useNativeDriver
           >
-            <Animatable.Text style={{fontWeight:'bold'}} animation="slideInUp" iterationCount={15} direction="alternate">Tap to add!</Animatable.Text>
+            <Animatable.Text style={{fontWeight:'bold'}} animation="slideInUp" iterationCount={5} direction="alternate">Tap to add!</Animatable.Text>
             <FlatList
               data={filteredFavorites}
               renderItem={({ item }) => (

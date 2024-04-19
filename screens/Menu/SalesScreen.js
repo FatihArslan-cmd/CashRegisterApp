@@ -9,8 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CalculatorApp from '../../functions/NumberButtons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
-import Antdesign from 'react-native-vector-icons/AntDesign';
-import { NativeBaseProvider, Input, Box } from 'native-base';
+
 const Application = () => {
   const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState([]);
@@ -73,7 +72,7 @@ const Application = () => {
           <AntDesign name="search1" size={24} color="black" /> 
           <TextInput
             style={{ marginLeft: 10, flex: 1 }} 
-            placeholder="Enter Product ID"
+            placeholder="Enter ID"
             onChangeText={onProductIdChange}
             value={productId}
           />
@@ -82,12 +81,15 @@ const Application = () => {
               <AntDesign name="closecircle" size={20} color="gray" />
             </TouchableOpacity>
           )}
+          
           <TouchableOpacity style={styles.getPriceButton} onPress={getPrice} >
             <Text style={styles.enterButton}>Enter</Text>
           </TouchableOpacity>
-          
+          <TouchableOpacity style={styles.CampaignsButton} onPress={getPrice} >
+            <Text style={styles.enterButton}>Campaigns</Text>
+          </TouchableOpacity>
           <FavoriteProductsScreen/>
-          
+         
         </View>
       </Animatable.View>
       <ScrollView ref={scrollViewRef} style={styles.productPricesList}>
@@ -190,8 +192,13 @@ const styles = StyleSheet.create({
   getPriceButton:{
     backgroundColor:'#028a3b',
     borderRadius:10,
-    marginLeft:20,
-    
+    marginLeft:45,
+    marginRight:1
+  },
+  CampaignsButton:{
+    backgroundColor:'#3e66ae',
+    borderRadius:10,
+   
   },
   enterButton:{
     padding:15,
@@ -236,7 +243,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     marginTop: 10,
-    maxHeight: 255,
+    maxHeight: 260,
     backgroundColor:'white',
     borderRadius:15,
   },

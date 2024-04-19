@@ -47,8 +47,7 @@ const CustomDrawerContent = (props) => {
         {
           text: 'Yes',
           onPress: async () => {
-            // Clear local database
-            await clearLocalDatabase();
+           
             navigation.navigate('Home'); // Navigates to the home screen.
           },
         },
