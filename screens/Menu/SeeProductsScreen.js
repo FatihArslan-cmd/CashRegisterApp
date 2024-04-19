@@ -134,56 +134,58 @@ const SeeProductScreen = () => {
   return (
     <View style={styles.container}>
       <Animatable.View
-     
-     animation="fadeInDown"
-     delay={300} 
-     useNativeDriver
-   >
-   
-      <View style={styles.filterContainer}>
-      
-        <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}> 
-          <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search products"
-          onChangeText={text => setSearchTerm(text)}
-          value={searchTerm}
-        />
-        <TouchableOpacity onPress={() => setShowFiltersModal(true)}>
-          <MaterialCommunityIcons style={styles.searchIcons} name={"filter-variant"} size={30} color={"black"} />
-        </TouchableOpacity>
-        <Modal visible={showAssignModal} animationType="slide" transparent>
-  <View style={styles.modalContainer}>
-    <View style={styles.modalContent}>
-      
-      <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setShowAssignModal(false)}>
-        <Text style={[styles.modalButtonText, styles.cancelButtonText]}>Cancel</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-</Modal>
-
-      </View>
-     
-    
+        animation="fadeInDown"
+        delay={300} 
+        useNativeDriver
+      >
+        <View style={styles.filterContainer}>
+          <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}> 
+            <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
+          </TouchableOpacity>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search products"
+            onChangeText={text => setSearchTerm(text)}
+            value={searchTerm}
+          />
+          <TouchableOpacity onPress={() => setShowFiltersModal(true)}>
+            <MaterialCommunityIcons style={styles.searchIcons} name={"filter-variant"} size={30} color={"black"} />
+          </TouchableOpacity>
+          <Modal visible={showAssignModal} animationType="slide" transparent>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setShowAssignModal(false)}>
+                  <Text style={[styles.modalButtonText, styles.cancelButtonText]}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        </View>
       </Animatable.View>
-      <View style={styles.productsListContainer}>
-        <FlatList
-          data={filteredProducts}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
-        />
-      </View>
-      
-      <Modal visible={showFavorites} animationType="slide">
+  
+      {filteredProducts.length === 0 ? (
+        <View style={styles.emptyContainer}>
+        <Image
+             source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
+             style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }} 
+           />
+        </View>
+      ) : (
+        <View style={styles.productsListContainer}>
+          <FlatList
+            data={filteredProducts}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id.toString()}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }
+          />
+        </View>
+      )}
+  <Modal visible={showFavorites} animationType="slide">
   <View style={styles.favoritesContainer}>
     <View style={{ flexDirection: 'row' }}>
       <NativeBaseProvider>
@@ -200,25 +202,33 @@ const SeeProductScreen = () => {
         </Box>
       </NativeBaseProvider>
     </View>
-    <FlatList
-      data={favorites}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id.toString()}
-    />
-    <TouchableOpacity onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange' }}>
+    {favorites.length === 0 ? (
+      <View style={styles.emptyContainer}>
+        <Image
+             source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
+             style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }} 
+           />
+      </View>
+    ) : (
+      <FlatList
+        data={favorites}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+      />
+    )}
+    <TouchableOpacity onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange',marginTop:'auto' }}>
       <Text style={{ color: 'white', padding: 10, textAlign: 'center', fontWeight: 'bold' }}>Close</Text>
     </TouchableOpacity>
   </View>
 </Modal>
 
-     
+  
       <FilterModal
         showFiltersModal={showFiltersModal}
         setShowFiltersModal={setShowFiltersModal}
         filteredProducts={filteredProducts}
         setFilteredProducts={setFilteredProducts}
       />
-
     </View>
   );
 };
@@ -239,6 +249,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding:10
   },
+  
   searchInput: {
     flex: 1,
     borderWidth: 1,

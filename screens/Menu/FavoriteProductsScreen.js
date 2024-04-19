@@ -18,7 +18,6 @@ const FavoriteModal = ({ visible, favorites, onClose }) => {
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.modalContainer}>
-      
         <View style={styles.favoritesContainer}>
           <Animatable.View
             animation="fadeInDown"
@@ -26,38 +25,48 @@ const FavoriteModal = ({ visible, favorites, onClose }) => {
             useNativeDriver
           >
             <Text style={styles.sectionTitle}>Favorites</Text>
-          
-          <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search by name"
-            onChangeText={text => setSearchText(text)}
-            value={searchText}
-          />
-        </View>
-        </Animatable.View>
-          <Animatable.View
-            animation="fadeInUp"
-            delay={500}
-            useNativeDriver
-          >
-            <Animatable.Text style={{fontWeight:'bold'}} animation="slideInUp" iterationCount={5} direction="alternate">Tap to add!</Animatable.Text>
-            <FlatList
-              data={filteredFavorites}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => addToFavorites(item)}>
-                  <View style={styles.productContainer}>
-                    <Text style={styles.productName}>{item.name}</Text>
-                    <Text style={styles.productID}>ID: {item.id}</Text>
-                    <Text style={styles.productPrice}>Price: ${item.price}</Text>
-                    <Text style={styles.productPrice}>KDV %{item.kdv}</Text>
-                    <Image source={{ uri: item.image }} style={styles.productImage} />
-                  </View>
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item) => item.id.toString()}
-            />
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search by name"
+                onChangeText={text => setSearchText(text)}
+                value={searchText}
+              />
+            </View>
           </Animatable.View>
+          {filteredFavorites.length === 0 ? (
+           <View style={styles.container}>
+           <Image
+             source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
+             style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }} 
+           />
+         </View>
+         
+          
+          ) : (
+            <Animatable.View
+              animation="fadeInUp"
+              delay={500}
+              useNativeDriver
+            >
+              <Animatable.Text style={{fontWeight:'bold'}} animation="slideInUp" iterationCount={5} direction="alternate">Tap to add!</Animatable.Text>
+              <FlatList
+                data={filteredFavorites}
+                renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => addToFavorites(item)}>
+                    <View style={styles.productContainer}>
+                      <Text style={styles.productName}>{item.name}</Text>
+                      <Text style={styles.productID}>ID: {item.id}</Text>
+                      <Text style={styles.productPrice}>Price: ${item.price}</Text>
+                      <Text style={styles.productPrice}>KDV %{item.kdv}</Text>
+                      <Image source={{ uri: item.image }} style={styles.productImage} />
+                    </View>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.id.toString()}
+              />
+            </Animatable.View>
+          )}
         </View>
       </View>
       <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -66,6 +75,7 @@ const FavoriteModal = ({ visible, favorites, onClose }) => {
     </Modal>
   );
 };
+
 
 const FavoriteProductsScreen = () => {
   const [favorites, setFavorites] = useState([]);
@@ -130,6 +140,12 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 10,
     padding: 10,
+  },
+  emptyText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 20,
+    fontStyle: 'italic',
   },
   favoritesContainer: {
     flex: 1,
