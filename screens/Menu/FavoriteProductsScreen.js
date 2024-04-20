@@ -3,16 +3,30 @@ import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, Modal, Refre
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const FavoriteModal = ({ visible, favorites, onClose }) => {
+const FavoriteModal = ({ visible, favorites, onClose, refreshing, onRefresh }) => {
   const [searchText, setSearchText] = useState('');
+  const navigation = useNavigation();
+  const route = useRoute();
+  const [showToast, setShowToast] = useState(false);
+  const [showToastItem, setShowToastItem] = useState(null); // State to store the item to be displayed in the toast
 
   const filteredFavorites = favorites.filter(item =>
     item.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  const showToastMessage = (selectedItem) => {
+    setShowToast(true);
+    setShowToastItem(selectedItem); // Set the item to be displayed in the toast
+    setTimeout(() => {
+      setShowToast(false);
+    }, 1000);
+  };
+
   const addToFavorites = (item) => {
-    console.log(item);
+    navigation.navigate('Application', { favoriteItem: item });
+    showToastMessage(item); // Pass the selected item to the toast message function
   };
 
   return (
@@ -35,21 +49,19 @@ const FavoriteModal = ({ visible, favorites, onClose }) => {
             </View>
           </Animatable.View>
           {filteredFavorites.length === 0 ? (
-           <View style={styles.container}>
-           <Image
-             source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
-             style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }} 
-           />
-         </View>
-         
-          
+            <View style={styles.container}>
+              <Image
+                source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
+                style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }}
+              />
+            </View>
           ) : (
             <Animatable.View
               animation="fadeInUp"
               delay={500}
               useNativeDriver
             >
-              <Animatable.Text style={{fontWeight:'bold'}} animation="slideInUp" iterationCount={5} direction="alternate">Tap to add!</Animatable.Text>
+              <Animatable.Text style={{ fontWeight: 'bold' }} animation="slideInUp" iterationCount={5} direction="alternate">Tap to add!</Animatable.Text>
               <FlatList
                 data={filteredFavorites}
                 renderItem={({ item }) => (
@@ -64,7 +76,20 @@ const FavoriteModal = ({ visible, favorites, onClose }) => {
                   </TouchableOpacity>
                 )}
                 keyExtractor={(item) => item.id.toString()}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
               />
+              {showToast && (
+                <View style={styles.toast}>
+                  <Text style={styles.toastText}>
+                    {showToastItem ? `"${showToastItem.name}" has been added` : ''}
+                  </Text>
+                </View>
+              )}
             </Animatable.View>
           )}
         </View>
@@ -75,7 +100,6 @@ const FavoriteModal = ({ visible, favorites, onClose }) => {
     </Modal>
   );
 };
-
 
 const FavoriteProductsScreen = () => {
   const [favorites, setFavorites] = useState([]);
@@ -120,13 +144,14 @@ const FavoriteProductsScreen = () => {
         visible={showFavorites}
         favorites={favorites}
         onClose={() => setShowFavorites(false)}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
- 
   modalContainer: {
     flexGrow: 1,
     backgroundColor: '#fff',
@@ -140,6 +165,19 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 10,
     padding: 10,
+  },
+  toast: {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 15,
+    position: 'absolute',
+    marginBottom:'auto',
+    alignSelf: 'center',
+  },
+  toastText: {
+    color: 'white',
+    fontSize: 16,
   },
   emptyText: {
     fontSize: 18,

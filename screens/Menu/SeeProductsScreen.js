@@ -18,7 +18,7 @@ const SeeProductScreen = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [refreshing, setRefreshing] = useState(false); // Yenileme durumu
   const [showAssignModal, setShowAssignModal] = useState(false);
-
+  const [favoriteAllPressed, setFavoriteAllPressed] = useState(false);
   
 
   const fetchProducts = async () => {
@@ -77,13 +77,17 @@ const SeeProductScreen = () => {
     }
   };
   const assignAllFavorites = () => {
-    setFavorites([...favorites, ...products]);
-    setShowAssignModal(false);
+    if (!favoriteAllPressed) {
+      setFavorites([...favorites, ...products]);
+      setFavoriteAllPressed(true);
+      setShowAssignModal(false);
+    }
   };
   
   const unFavoriteAll = () => {
     setFavorites([]);
     setShowAssignModal(false);
+    setFavoriteAllPressed(false); 
   };
   
   const toggleFavorite = (id) => {
@@ -161,7 +165,7 @@ const SeeProductScreen = () => {
             </View>
           </Modal>
         </View>
-      </Animatable.View>
+      
   
       {filteredProducts.length === 0 ? (
         <View style={styles.emptyContainer}>
@@ -170,6 +174,7 @@ const SeeProductScreen = () => {
              style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }} 
            />
         </View>
+       
       ) : (
         <View style={styles.productsListContainer}>
           <FlatList
@@ -185,6 +190,7 @@ const SeeProductScreen = () => {
           />
         </View>
       )}
+       </Animatable.View>
   <Modal visible={showFavorites} animationType="slide">
   <View style={styles.favoritesContainer}>
     <View style={{ flexDirection: 'row' }}>

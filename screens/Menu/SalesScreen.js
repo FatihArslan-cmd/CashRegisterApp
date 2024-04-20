@@ -9,17 +9,25 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CalculatorApp from '../../functions/NumberButtons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
+import { useRoute } from '@react-navigation/native';
 
 const Application = () => {
+  const route = useRoute();
+  const { favoriteItem } = route.params || {};
   const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
   const scrollViewRef = useRef(null);
-
+  useEffect(() => {
+    if (favoriteItem) {
+      setSubTotal(subTotal + favoriteItem.price); 
+      setProductData([...productData, favoriteItem]);
+    }
+  }, [favoriteItem]);
   const onProductIdChange = (text) => {
     setProductId(text);
   };
-
+  
   const getPrice = async () => {
     await getProductPrice(productId, productData, setProductData, subTotal, setSubTotal);
   };
@@ -139,7 +147,7 @@ const Application = () => {
      delay={250} 
      useNativeDriver
    >
-      <View style={{flexDirection:'row'}}>
+      <View style={{flexDirection:'row',marginTop:'auto'}}>
       <CalculatorApp/>
        <View style={{flexDirection:'column',borderWidth:1,borderColor:'#ccc',borderRadius:15,marginLeft:5}}>
           <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
