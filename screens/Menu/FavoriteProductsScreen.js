@@ -61,7 +61,7 @@ const FavoriteModal = ({ visible, favorites, onClose, refreshing, onRefresh }) =
               delay={500}
               useNativeDriver
             >
-              <Animatable.Text style={{ fontWeight: 'bold' }} animation="slideInUp" iterationCount={5} direction="alternate">Tap to add!</Animatable.Text>
+              <Animatable.Text style={{ fontWeight: 'bold' }} animation="slideInUp" iterationCount={3} direction="alternate">Tap to add!</Animatable.Text>
               <FlatList
                 data={filteredFavorites}
                 renderItem={({ item }) => (
@@ -136,10 +136,17 @@ const FavoriteProductsScreen = () => {
 
   return (
     <View style={styles.container}>
+       <Animatable.View
+              animation="fadeInUp"
+              delay={750}
+              useNativeDriver
+            >
+
       <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}>
         <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
       </TouchableOpacity>
 
+      </Animatable.View>
       <FavoriteModal
         visible={showFavorites}
         favorites={favorites}

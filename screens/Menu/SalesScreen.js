@@ -10,32 +10,56 @@ import CalculatorApp from '../../functions/NumberButtons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
 import { useRoute } from '@react-navigation/native';
+import CampaignScreen from './CampaignScreen';
+import { all } from 'axios';
 
 const Application = () => {
   const route = useRoute();
   const { favoriteItem } = route.params || {};
   const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState([]);
-  const [subTotal, setSubTotal] = useState(0);
+  const [SubTotal, setSubTotal] = useState(0);
+  const [allTotal, setAllTotal] = useState(0);
+  const [discountApplied, setDiscountApplied] = useState(false); // Discount applied control
   const scrollViewRef = useRef(null);
+
   useEffect(() => {
     if (favoriteItem) {
-      setSubTotal(subTotal + favoriteItem.price); 
+      setSubTotal(SubTotal + favoriteItem.price);
       setProductData([...productData, favoriteItem]);
     }
   }, [favoriteItem]);
+
   const onProductIdChange = (text) => {
     setProductId(text);
   };
-  
+
   const getPrice = async () => {
-    await getProductPrice(productId, productData, setProductData, subTotal, setSubTotal);
+    await getProductPrice(productId, productData, setProductData, SubTotal, setSubTotal);
+  };
+
+  const applyDiscount = () => {
+    if (!discountApplied) {
+      
+      setAllTotal((SubTotal * 0.8).toFixed(2)); // Apply discount only if not applied before
+      setDiscountApplied(true); // Set discount applied to true
+      
+    }
+    else {
+      Alert.alert(
+        "Discount Already Applied",
+        "The discount has already been applied to the order.",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      );
+    }
   };
 
   const removeProduct = (indexToRemove, price) => {
     const updatedProducts = productData.filter((_, index) => index !== indexToRemove);
     setProductData(updatedProducts);
-    setSubTotal(subTotal - price); 
+    setSubTotal(SubTotal - price);
   };
 
   const cancelOrder = () => {
@@ -48,6 +72,7 @@ const Application = () => {
           onPress: () => {
             setProductData([]);
             setSubTotal(0);
+            setDiscountApplied(false); // Reset discount applied when canceling order
           }
         },
         {
@@ -73,13 +98,13 @@ const Application = () => {
     <View style={styles.container}>
       <Animatable.View
         animation="fadeInUp"
-        delay={250} 
+        delay={250}
         useNativeDriver
       >
         <View style={styles.inputContainer}>
-          <AntDesign name="search1" size={24} color="black" /> 
+          <AntDesign name="search1" size={24} color="black" />
           <TextInput
-            style={{ marginLeft: 10, flex: 1 }} 
+            style={{ marginLeft: 10, flex: 1 }}
             placeholder="Enter ID"
             onChangeText={onProductIdChange}
             value={productId}
@@ -89,24 +114,32 @@ const Application = () => {
               <AntDesign name="closecircle" size={20} color="gray" />
             </TouchableOpacity>
           )}
-          
-          <TouchableOpacity style={styles.getPriceButton} onPress={getPrice} >
-            <Text style={styles.enterButton}>Enter</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.CampaignsButton} onPress={getPrice} >
-            <Text style={styles.enterButton}>Campaigns</Text>
-          </TouchableOpacity>
-          <FavoriteProductsScreen/>
-         
+
+          <Animatable.View
+            animation="fadeInUp"
+            delay={250}
+            useNativeDriver
+          >
+
+            <TouchableOpacity style={styles.getPriceButton} onPress={getPrice}>
+              <Text style={styles.enterButton}>Enter</Text>
+            </TouchableOpacity>
+
+          </Animatable.View>
+
+          <CampaignScreen />
+
+          <FavoriteProductsScreen />
+
         </View>
       </Animatable.View>
       <ScrollView ref={scrollViewRef} style={styles.productPricesList}>
         {productData.length === 0 ? (
-          
-          <View style={{alignSelf:'center'}}>
+
+          <View style={{ alignSelf: 'center' }}>
             <Text style={styles.emptyText}>Empty</Text>
-            <MaterialCommunityIcons name={"lock-question"} size={36} color={"gray"}/>
-        </View>
+            <MaterialCommunityIcons name={"lock-question"} size={36} color={"gray"} />
+          </View>
         ) : (
           productData.map((product, index) => (
             <Swipeable key={index} renderRightActions={() => (
@@ -119,7 +152,7 @@ const Application = () => {
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.productId}>{product.id}</Text>
                     <Text style={styles.productTax}>1 PCS</Text>
-                    
+
                     <Text style={styles.productTax}>KDV %{product.kdv}</Text>
                   </View>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -135,51 +168,51 @@ const Application = () => {
 
       <View style={styles.separator} />
       <View style={styles.subTotalContainer}>
-        <Text style={styles.subTotal}>Sub Total: {subTotal} $</Text>
+        <Text style={styles.subTotal}>Sub Total: {SubTotal} $</Text>
         <View style={styles.separator} />
-        
-        <Text style={styles.subTotal}>All Total: {subTotal} $</Text>
+
+        <Text style={styles.subTotal}>All Total: {allTotal} $</Text>
       </View>
-      
-     
+
+
       <Animatable.View
-     animation="fadeInUp"
-     delay={250} 
-     useNativeDriver
-   >
-      <View style={{flexDirection:'row',marginTop:'auto'}}>
-      <CalculatorApp/>
-       <View style={{flexDirection:'column',borderWidth:1,borderColor:'#ccc',borderRadius:15,marginLeft:5}}>
-          <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
-            <View style={{flexDirection:'row'}}>
-             <Entypo name={"cross"} size={36} color={"white"} style={styles.inputIcon} />
-             <Text style={styles.cancelButtonText}>Cancel Order</Text>
-            </View>
-           </TouchableOpacity>
-           <TouchableOpacity onPress={cancelOrder} style={styles.confirmButton}>
-            <View style={{flexDirection:'row'}}>
-             <Entypo name={"check"} size={36} color={"white"} style={styles.inputIcon} />
-             <Text style={styles.cancelButtonText}>Confirm Order</Text>
-            </View>
-           </TouchableOpacity>
-           <TouchableOpacity onPress={cancelOrder} style={styles.cashButton}>
-            <View style={{flexDirection:'row'}}>
-             <MaterialCommunityIcons name={"cash"} size={24} color={"white"} style={styles.inputIcon} />
-             <Text style={styles.cancelButtonText}>Cash</Text>
-            </View>
-           </TouchableOpacity>
+        animation="fadeInUp"
+        delay={250}
+        useNativeDriver
+      >
+        <View style={{ flexDirection: 'row', marginTop: 'auto' }}>
+          <CalculatorApp />
+          <View style={{ flexDirection: 'column', borderWidth: 1, borderColor: '#ccc', borderRadius: 15, marginLeft: 5 }}>
+            <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
+              <View style={{ flexDirection: 'row' }}>
+                <Entypo name={"cross"} size={36} color={"white"} style={styles.inputIcon} />
+                <Text style={styles.cancelButtonText}>Cancel Order</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={applyDiscount} style={styles.confirmButton}>
+              <View style={{ flexDirection: 'row' }}>
+                <Entypo name={"check"} size={36} color={"white"} style={styles.inputIcon} />
+                <Text style={styles.cancelButtonText}>Confirm Order</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={cancelOrder} style={styles.cashButton}>
+              <View style={{ flexDirection: 'row' }}>
+                <MaterialCommunityIcons name={"cash"} size={24} color={"white"} style={styles.inputIcon} />
+                <Text style={styles.cancelButtonText}>Cash</Text>
+              </View>
+            </TouchableOpacity>
             <TouchableOpacity onPress={cancelOrder} style={styles.creditButton}>
-            <View style={{flexDirection:'row'}}>
-             <AntDesign name={"creditcard"} size={24} color={"white"} style={styles.inputIcon} />
-             <Text style={styles.cancelButtonText}>Credit</Text>
-            </View>
-           </TouchableOpacity>
-           <FaturaButton/>
-               
-       </View>
-      
-      </View>
-      </Animatable.View>  
+              <View style={{ flexDirection: 'row' }}>
+                <AntDesign name={"creditcard"} size={24} color={"white"} style={styles.inputIcon} />
+                <Text style={styles.cancelButtonText}>Credit</Text>
+              </View>
+            </TouchableOpacity>
+            <FaturaButton />
+
+          </View>
+
+        </View>
+      </Animatable.View>
     </View>
   );
 };
@@ -188,30 +221,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor:'#d9e0e8',
-    borderWidth:1,
-    borderColor:'#ccc',
-    justifyContent:'center'
+    backgroundColor: '#d9e0e8',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    justifyContent: 'center'
   },
   separator: {
     height: 1,
     backgroundColor: '#ccc',
   },
-  getPriceButton:{
-    backgroundColor:'#028a3b',
-    borderRadius:10,
-    marginLeft:45,
-    marginRight:1
+  getPriceButton: {
+    backgroundColor: '#028a3b',
+    borderRadius: 10,
+    marginLeft: 45,
+    marginRight: 1
   },
-  CampaignsButton:{
-    backgroundColor:'#3e66ae',
-    borderRadius:10,
-   
+  CampaignsButton: {
+    backgroundColor: '#3e66ae',
+    borderRadius: 10,
+
   },
-  enterButton:{
-    padding:15,
-    color:'white',
-    fontWeight:'bold',    
+  enterButton: {
+    padding: 15,
+    color: 'white',
+    fontWeight: 'bold',
   },
   subTotalContainer: {
     backgroundColor: '#1e445e',
@@ -220,15 +253,15 @@ const styles = StyleSheet.create({
   },
   productTax:
   {
-    color:'gray',
-    fontSize:13,
+    color: 'gray',
+    fontSize: 13,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth:1,
-    borderColor:'#ccc',
-    borderRadius:15,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 15,
   },
   productIdInput: {
     borderColor: '#ccc',
@@ -236,7 +269,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     flex: 1,
-    backgroundColor:'white',
+    backgroundColor: 'white',
   },
   productContainer: {
     padding: 9,
@@ -244,7 +277,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 15,
     marginBottom: 8,
-    backgroundColor:'white'
+    backgroundColor: 'white'
   },
   productPricesList: {
     borderColor: '#ccc',
@@ -252,8 +285,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     maxHeight: 260,
-    backgroundColor:'white',
-    borderRadius:15,
+    backgroundColor: 'white',
+    borderRadius: 15,
   },
   productPrice: {
     fontSize: 16,
@@ -275,7 +308,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     margin: 7,
     color: 'white',
-    textAlign:'center'
+    textAlign: 'center'
   },
   deleteButton: {
     backgroundColor: 'red',
@@ -297,9 +330,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     width: 85,
-    height:60
+    height: 60
   },
-  confirmButton:{
+  confirmButton: {
     backgroundColor: '#3e66ae',
     justifyContent: 'center',
     alignItems: 'center',
@@ -307,9 +340,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     width: 85,
-    height:70
+    height: 70
   },
-  cashButton:{
+  cashButton: {
     backgroundColor: '#008b38',
     justifyContent: 'center',
     alignItems: 'center',
@@ -317,9 +350,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     width: 85,
-    height:70
+    height: 70
   },
-  creditButton:{
+  creditButton: {
     backgroundColor: '#008b38',
     justifyContent: 'center',
     alignItems: 'center',
@@ -327,7 +360,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     width: 85,
-    height:70
+    height: 70
   },
   cancelButtonText: {
     color: 'white',
@@ -338,11 +371,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 16,
     color: 'gray',
-    marginBottom:20
+    marginBottom: 20
   },
-  
+
 });
-
-
 
 export default Application;
