@@ -9,27 +9,39 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CalculatorApp from '../../functions/NumberButtons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
-import { useRoute } from '@react-navigation/native';
+import { useRoute,useNavigation } from '@react-navigation/native';
 import CampaignScreen from './CampaignScreen';
-import { all } from 'axios';
+
+
 
 const Application = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const { favoriteItem } = route.params || {};
+  const { campaignAlltotal } = route.params || {};
   const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState([]);
   const [SubTotal, setSubTotal] = useState(0);
   const [allTotal, setAllTotal] = useState(0);
-  const [discountApplied, setDiscountApplied] = useState(false); // Discount applied control
   const scrollViewRef = useRef(null);
+  const [exampleValue, setexampleValue] = useState(0);
+  const [exampleValueCredit, setexampleValueCredit] = useState(0);
 
+  
+  
+  useEffect(() => {
+    if (campaignAlltotal) {
+      setAllTotal(campaignAlltotal);
+    
+    }
+  }, [campaignAlltotal])
+ 
   useEffect(() => {
     if (favoriteItem) {
       setSubTotal(SubTotal + favoriteItem.price);
       setProductData([...productData, favoriteItem]);
     }
   }, [favoriteItem]);
-
   const onProductIdChange = (text) => {
     setProductId(text);
   };
@@ -38,31 +50,17 @@ const Application = () => {
     await getProductPrice(productId, productData, setProductData, SubTotal, setSubTotal);
   };
 
-  const applyDiscount = () => {
-    if (!discountApplied) {
-      
-      setAllTotal((SubTotal * 0.8).toFixed(2)); // Apply discount only if not applied before
-      setDiscountApplied(true); // Set discount applied to true
-      
-    }
-    else {
-      Alert.alert(
-        "Discount Already Applied",
-        "The discount has already been applied to the order.",
-        [
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ]
-      );
-    }
-  };
-
+ 
   const removeProduct = (indexToRemove, price) => {
+    
     const updatedProducts = productData.filter((_, index) => index !== indexToRemove);
     setProductData(updatedProducts);
     setSubTotal(SubTotal - price);
+    
   };
 
   const cancelOrder = () => {
+    
     Alert.alert(
       "Are you sure?",
       "Do you really want to cancel the order?",
@@ -72,7 +70,7 @@ const Application = () => {
           onPress: () => {
             setProductData([]);
             setSubTotal(0);
-            setDiscountApplied(false); // Reset discount applied when canceling order
+             // Reset discount applied when canceling order
           }
         },
         {
@@ -95,6 +93,7 @@ const Application = () => {
   };
 
   return (
+    
     <View style={styles.container}>
       <Animatable.View
         animation="fadeInUp"
@@ -109,26 +108,26 @@ const Application = () => {
             onChangeText={onProductIdChange}
             value={productId}
           />
-          {productId.length > 0 && (
-            <TouchableOpacity onPress={clearInput}>
+          
+          
+          <TouchableOpacity style={{marginRight:20}} onPress={clearInput}>
               <AntDesign name="closecircle" size={20} color="gray" />
             </TouchableOpacity>
-          )}
 
           <Animatable.View
             animation="fadeInUp"
             delay={250}
             useNativeDriver
           >
-
+            
             <TouchableOpacity style={styles.getPriceButton} onPress={getPrice}>
               <Text style={styles.enterButton}>Enter</Text>
             </TouchableOpacity>
 
           </Animatable.View>
-
-          <CampaignScreen />
-
+          
+          <CampaignScreen  />
+         
           <FavoriteProductsScreen />
 
         </View>
@@ -181,34 +180,35 @@ const Application = () => {
         useNativeDriver
       >
         <View style={{ flexDirection: 'row', marginTop: 'auto' }}>
-          <CalculatorApp />
+          <CalculatorApp subTotal={SubTotal} exampleValue={exampleValue} exampleValueCredit={exampleValueCredit} />
           <View style={{ flexDirection: 'column', borderWidth: 1, borderColor: '#ccc', borderRadius: 15, marginLeft: 5 }}>
+          <FaturaButton />
             <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
               <View style={{ flexDirection: 'row' }}>
                 <Entypo name={"cross"} size={36} color={"white"} style={styles.inputIcon} />
                 <Text style={styles.cancelButtonText}>Cancel Order</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={applyDiscount} style={styles.confirmButton}>
+            
+            <TouchableOpacity onPress={cancelOrder} style={styles.confirmButton}>
               <View style={{ flexDirection: 'row' }}>
                 <Entypo name={"check"} size={36} color={"white"} style={styles.inputIcon} />
                 <Text style={styles.cancelButtonText}>Confirm Order</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={cancelOrder} style={styles.cashButton}>
-              <View style={{ flexDirection: 'row' }}>
-                <MaterialCommunityIcons name={"cash"} size={24} color={"white"} style={styles.inputIcon} />
-                <Text style={styles.cancelButtonText}>Cash</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={cancelOrder} style={styles.creditButton}>
+            <TouchableOpacity onPress={() => setexampleValue(exampleValue + 1)} style={styles.cashButton}>
+             <View style={{ flexDirection: 'row' }}>
+              <MaterialCommunityIcons name={"cash"} size={24} color={"white"} style={styles.inputIcon} />
+              <Text style={styles.cancelButtonText}>Cash</Text>
+            </View>
+           </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => setexampleValueCredit(exampleValueCredit + 1)} style={styles.creditButton}>
               <View style={{ flexDirection: 'row' }}>
                 <AntDesign name={"creditcard"} size={24} color={"white"} style={styles.inputIcon} />
                 <Text style={styles.cancelButtonText}>Credit</Text>
               </View>
             </TouchableOpacity>
-            <FaturaButton />
-
           </View>
 
         </View>
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   getPriceButton: {
     backgroundColor: '#028a3b',
     borderRadius: 10,
-    marginLeft: 45,
+    marginLeft: 0,
     marginRight: 1
   },
   CampaignsButton: {

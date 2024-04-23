@@ -9,11 +9,13 @@ import MainDrawer from './DrawerNavigation';
 import Application from './screens/Menu/SalesScreen';
 import SeeProductsScreen from './screens/Menu/SeeProductsScreen';
 import FavoriteProductsScreen from './screens/Menu/DirectProductEntryScreen';
+import CalculatorApp from './functions/NumberButtons';
 const Stack = createStackNavigator();
 
 
 const AuthStack = () => {
   return (
+    
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="Home"
@@ -43,6 +45,11 @@ const AuthStack = () => {
       <Stack.Screen
         name="Application"
         component={Application}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CalculatorApp"
+        component={CalculatorApp}
         options={{ headerShown: false }}
       />
       <Stack.Screen

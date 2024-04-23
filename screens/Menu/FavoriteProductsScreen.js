@@ -18,7 +18,7 @@ const FavoriteModal = ({ visible, favorites, onClose, refreshing, onRefresh }) =
 
   const showToastMessage = (selectedItem) => {
     setShowToast(true);
-    setShowToastItem(selectedItem); // Set the item to be displayed in the toast
+    setShowToastItem(selectedItem); 
     setTimeout(() => {
       setShowToast(false);
     }, 1000);

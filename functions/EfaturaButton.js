@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, VStack, FormControl, Input, Button, NativeBaseProvider, TouchableOpacity,Text } from 'native-base';
-
-
+import { Modal, VStack, FormControl, Input, Button, NativeBaseProvider, } from 'native-base';
+import { Alert } from 'react-native';
 const FaturaButton = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [email, setEmail] = useState('');
@@ -19,7 +18,8 @@ const FaturaButton = () => {
 
         if (isValid) {
             setModalVisible(false);
-
+            // Show alert
+            showAlert();
         }
     };
 
@@ -27,6 +27,10 @@ const FaturaButton = () => {
         setModalVisible(false);
         setEmail('');
         setIsValidEmail(true);
+    };
+
+    const showAlert = () => {
+        Alert.alert("Success", "Your invoice will be sent as soon as possible.");
     };
 
     return (

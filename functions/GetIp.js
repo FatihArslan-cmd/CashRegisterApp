@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-export default GetIP = () => {
+const GetIP = () => {
   const [ip, setIP] = useState("");
 
   const fetchIP = async () => {
     try {
-      const response = await fetch("https://api.ipify.org/?format=json");
-      const data = await response.json();
-      setIP(data.ip);
+      const response = await axios.get("https://api.ipify.org/?format=json");
+      setIP(response.data.ip);
     } catch (error) {
       console.error('Error fetching IP address:', error);
     }
@@ -20,4 +20,4 @@ export default GetIP = () => {
   return ip;
 };
 
-
+export default GetIP;
