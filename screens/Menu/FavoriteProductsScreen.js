@@ -1,110 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, Modal, RefreshControl, TextInput } from 'react-native';
+import { View, Text, FlatList,Alert, StyleSheet, Image, TouchableOpacity, Modal, RefreshControl, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const FavoriteModal = ({ visible, favorites, onClose, refreshing, onRefresh }) => {
-  const [searchText, setSearchText] = useState('');
-  const navigation = useNavigation();
-  const route = useRoute();
-  const [showToast, setShowToast] = useState(false);
-  const [showToastItem, setShowToastItem] = useState(null); // State to store the item to be displayed in the toast
-
-  const filteredFavorites = favorites.filter(item =>
-    item.name.toLowerCase().includes(searchText.toLowerCase())
-  );
-
-  const showToastMessage = (selectedItem) => {
-    setShowToast(true);
-    setShowToastItem(selectedItem); 
-    setTimeout(() => {
-      setShowToast(false);
-    }, 1000);
-  };
-
-  const addToFavorites = (item) => {
-    navigation.navigate('Application', { favoriteItem: item });
-    showToastMessage(item); // Pass the selected item to the toast message function
-  };
-
-  return (
-    <Modal visible={visible} animationType="slide">
-      <View style={styles.modalContainer}>
-        <View style={styles.favoritesContainer}>
-          <Animatable.View
-            animation="fadeInDown"
-            delay={100}
-            useNativeDriver
-          >
-            <Text style={styles.sectionTitle}>Favorites</Text>
-            <View style={styles.searchContainer}>
-              <TextInput
-                style={styles.searchInput}
-                placeholder="Search by name"
-                onChangeText={text => setSearchText(text)}
-                value={searchText}
-              />
-            </View>
-          </Animatable.View>
-          {filteredFavorites.length === 0 ? (
-            <View style={styles.container}>
-              <Image
-                source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
-                style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }}
-              />
-            </View>
-          ) : (
-            <Animatable.View
-              animation="fadeInUp"
-              delay={500}
-              useNativeDriver
-            >
-              <Animatable.Text style={{ fontWeight: 'bold' }} animation="slideInUp" iterationCount={3} direction="alternate">Tap to add!</Animatable.Text>
-              <FlatList
-                data={filteredFavorites}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => addToFavorites(item)}>
-                    <View style={styles.productContainer}>
-                      <Text style={styles.productName}>{item.name}</Text>
-                      <Text style={styles.productID}>ID: {item.id}</Text>
-                      <Text style={styles.productPrice}>Price: ${item.price}</Text>
-                      <Text style={styles.productPrice}>KDV %{item.kdv}</Text>
-                      <Image source={{ uri: item.image }} style={styles.productImage} />
-                    </View>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.id.toString()}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
-              />
-              {showToast && (
-                <View style={styles.toast}>
-                  <Text style={styles.toastText}>
-                    {showToastItem ? `"${showToastItem.name}" has been added` : ''}
-                  </Text>
-                </View>
-              )}
-            </Animatable.View>
-          )}
-        </View>
-      </View>
-      <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-        <Text style={styles.closeButtonText}>Close</Text>
-      </TouchableOpacity>
-    </Modal>
-  );
-};
-
-const FavoriteProductsScreen = () => {
+const FavoriteProductsScreen = ({disableActions}) => {
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [showToastItem, setShowToastItem] = useState(null);
+
+  const navigation = useNavigation();
+  const route = useRoute();
 
   useEffect(() => {
     const loadFavorites = async () => {
@@ -134,26 +44,102 @@ const FavoriteProductsScreen = () => {
     setRefreshing(false);
   };
 
+  const showToastMessage = (selectedItem) => {
+    setShowToast(true);
+    setShowToastItem(selectedItem); 
+    setTimeout(() => {
+      setShowToast(false);
+    }, 1000);
+  };
+
+  const addToFavorites = (item) => {
+    if (!disableActions) {
+    navigation.navigate('Application', { favoriteItem: item });
+    showToastMessage(item);
+  } else {
+    // Show alert when actions are disabled
+    Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied.");
+  }
+  };
+
+  const filteredFavorites = favorites.filter(item =>
+    item.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
-       <Animatable.View
-              animation="fadeInUp"
-              delay={750}
-              useNativeDriver
-            >
-
       <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}>
         <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
       </TouchableOpacity>
 
-      </Animatable.View>
-      <FavoriteModal
-        visible={showFavorites}
-        favorites={favorites}
-        onClose={() => setShowFavorites(false)}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-      />
+      <Modal visible={showFavorites} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.favoritesContainer}>
+            <Animatable.View
+              animation="fadeInDown"
+              delay={100}
+              useNativeDriver
+            >
+              <Text style={styles.sectionTitle}>Favorites</Text>
+              <View style={styles.searchContainer}>
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Search by name"
+                  onChangeText={text => setSearchText(text)}
+                  value={searchText}
+                />
+              </View>
+            </Animatable.View>
+            {filteredFavorites.length === 0 ? (
+              <View style={styles.container}>
+                <Image
+                  source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
+                  style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }}
+                />
+              </View>
+            ) : (
+              <Animatable.View
+                animation="fadeInUp"
+                delay={500}
+                useNativeDriver
+              >
+                <Animatable.Text style={{ fontWeight: 'bold' }} animation="slideInUp" iterationCount={3} direction="alternate">Tap to add!</Animatable.Text>
+                <FlatList
+                  data={filteredFavorites}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => addToFavorites(item)}>
+                      <View style={styles.productContainer}>
+                        <Text style={styles.productName}>{item.name}</Text>
+                        <Text style={styles.productID}>ID: {item.id}</Text>
+                        <Text style={styles.productPrice}>Price: ${item.price}</Text>
+                        <Text style={styles.productPrice}>KDV %{item.kdv}</Text>
+                        <Image source={{ uri: item.image }} style={styles.productImage} />
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={(item) => item.id.toString()}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                />
+                {showToast && (
+                  <View style={styles.toast}>
+                    <Text style={styles.toastText}>
+                      {showToastItem ? `"${showToastItem.name}" has been added` : ''}
+                    </Text>
+                  </View>
+                )}
+              </Animatable.View>
+            )}
+          </View>
+        </View>
+        <TouchableOpacity onPress={() => setShowFavorites(false)} style={styles.closeButton}>
+          <Text style={styles.closeButtonText}>Close</Text>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 };
@@ -230,7 +216,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     width: 50,
     height: 50,
-    marginLeft:'auto'
+    
   },
   productImage: {
     width: 100,

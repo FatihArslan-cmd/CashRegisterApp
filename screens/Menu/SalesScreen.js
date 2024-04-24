@@ -9,16 +9,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import CalculatorApp from '../../functions/NumberButtons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
-import { useRoute,useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import CampaignScreen from './CampaignScreen';
-
-
 
 const Application = () => {
   const route = useRoute();
-  const navigation = useNavigation();
-  const { favoriteItem } = route.params || {};
-  const { campaignAlltotal } = route.params || {};
+  const { favoriteItem } = route.params || {}; 
   const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState([]);
   const [SubTotal, setSubTotal] = useState(0);
@@ -26,37 +22,51 @@ const Application = () => {
   const scrollViewRef = useRef(null);
   const [exampleValue, setexampleValue] = useState(0);
   const [exampleValueCredit, setexampleValueCredit] = useState(0);
+  const [disableActions, setDisableActions] = useState(false); // State to disable actions
 
-  
-  
-  useEffect(() => {
-    if (campaignAlltotal) {
-      setAllTotal(campaignAlltotal);
-    
-    }
-  }, [campaignAlltotal])
- 
   useEffect(() => {
     if (favoriteItem) {
+     
       setSubTotal(SubTotal + favoriteItem.price);
       setProductData([...productData, favoriteItem]);
+   
     }
   }, [favoriteItem]);
+
   const onProductIdChange = (text) => {
     setProductId(text);
   };
 
   const getPrice = async () => {
+    if (!disableActions) {
     await getProductPrice(productId, productData, setProductData, SubTotal, setSubTotal);
+  } else {
+    // Show alert when actions are disabled
+    Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied.");
+  }
   };
 
- 
+  const onDataReceived = (data) => {
+    setSubTotal(data);
+    setDisableActions(true);
+  
+  };
+  const ondiscountApplied= (discountApplied) => {
+   
+    
+    console.log(discountApplied)
+  };
   const removeProduct = (indexToRemove, price) => {
     
-    const updatedProducts = productData.filter((_, index) => index !== indexToRemove);
-    setProductData(updatedProducts);
-    setSubTotal(SubTotal - price);
-    
+
+    if (!disableActions) {
+      const updatedProducts = productData.filter((_, index) => index !== indexToRemove);
+      setProductData(updatedProducts);
+      setSubTotal(SubTotal - price);
+    } else {
+      // Show alert when actions are disabled
+      Alert.alert("Actions Disabled", "You cannot remove products after the discount is applied.");
+    }
   };
 
   const cancelOrder = () => {
@@ -70,7 +80,8 @@ const Application = () => {
           onPress: () => {
             setProductData([]);
             setSubTotal(0);
-             // Reset discount applied when canceling order
+            setDisableActions(false);
+            discountApplied='false';
           }
         },
         {
@@ -93,13 +104,8 @@ const Application = () => {
   };
 
   return (
-    
     <View style={styles.container}>
-      <Animatable.View
-        animation="fadeInUp"
-        delay={250}
-        useNativeDriver
-      >
+      <Animatable.View animation="fadeInUp" delay={250} useNativeDriver>
         <View style={styles.inputContainer}>
           <AntDesign name="search1" size={24} color="black" />
           <TextInput
@@ -108,33 +114,21 @@ const Application = () => {
             onChangeText={onProductIdChange}
             value={productId}
           />
-          
-          
           <TouchableOpacity style={{marginRight:20}} onPress={clearInput}>
-              <AntDesign name="closecircle" size={20} color="gray" />
-            </TouchableOpacity>
-
-          <Animatable.View
-            animation="fadeInUp"
-            delay={250}
-            useNativeDriver
-          >
-            
-            <TouchableOpacity style={styles.getPriceButton} onPress={getPrice}>
-              <Text style={styles.enterButton}>Enter</Text>
-            </TouchableOpacity>
-
-          </Animatable.View>
-          
-          <CampaignScreen  />
-         
-          <FavoriteProductsScreen />
-
+            <AntDesign name="closecircle" size={20} color="gray" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.getPriceButton} onPress={getPrice}>
+            <Text style={styles.enterButton}>Enter </Text>
+          </TouchableOpacity>
+          <CampaignScreen subTotal={SubTotal}
+                          onDataReceived={onDataReceived}
+                          ondiscountApplied={ondiscountApplied}
+                           />
+          <FavoriteProductsScreen disableActions={disableActions} />
         </View>
       </Animatable.View>
       <ScrollView ref={scrollViewRef} style={styles.productPricesList}>
         {productData.length === 0 ? (
-
           <View style={{ alignSelf: 'center' }}>
             <Text style={styles.emptyText}>Empty</Text>
             <MaterialCommunityIcons name={"lock-question"} size={36} color={"gray"} />
@@ -151,7 +145,6 @@ const Application = () => {
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.productId}>{product.id}</Text>
                     <Text style={styles.productTax}>1 PCS</Text>
-
                     <Text style={styles.productTax}>KDV %{product.kdv}</Text>
                   </View>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -164,32 +157,23 @@ const Application = () => {
           ))
         )}
       </ScrollView>
-
       <View style={styles.separator} />
       <View style={styles.subTotalContainer}>
         <Text style={styles.subTotal}>Sub Total: {SubTotal} $</Text>
         <View style={styles.separator} />
-
         <Text style={styles.subTotal}>All Total: {allTotal} $</Text>
       </View>
-
-
-      <Animatable.View
-        animation="fadeInUp"
-        delay={250}
-        useNativeDriver
-      >
+      <Animatable.View animation="fadeInUp" delay={250} useNativeDriver>
         <View style={{ flexDirection: 'row', marginTop: 'auto' }}>
           <CalculatorApp subTotal={SubTotal} exampleValue={exampleValue} exampleValueCredit={exampleValueCredit} />
           <View style={{ flexDirection: 'column', borderWidth: 1, borderColor: '#ccc', borderRadius: 15, marginLeft: 5 }}>
-          <FaturaButton />
+            <FaturaButton />
             <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
               <View style={{ flexDirection: 'row' }}>
                 <Entypo name={"cross"} size={36} color={"white"} style={styles.inputIcon} />
                 <Text style={styles.cancelButtonText}>Cancel Order</Text>
               </View>
             </TouchableOpacity>
-            
             <TouchableOpacity onPress={cancelOrder} style={styles.confirmButton}>
               <View style={{ flexDirection: 'row' }}>
                 <Entypo name={"check"} size={36} color={"white"} style={styles.inputIcon} />
@@ -197,12 +181,11 @@ const Application = () => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setexampleValue(exampleValue + 1)} style={styles.cashButton}>
-             <View style={{ flexDirection: 'row' }}>
-              <MaterialCommunityIcons name={"cash"} size={24} color={"white"} style={styles.inputIcon} />
-              <Text style={styles.cancelButtonText}>Cash</Text>
-            </View>
-           </TouchableOpacity>
-
+              <View style={{ flexDirection: 'row' }}>
+                <MaterialCommunityIcons name={"cash"} size={24} color={"white"} style={styles.inputIcon} />
+                <Text style={styles.cancelButtonText}>Cash</Text>
+              </View>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => setexampleValueCredit(exampleValueCredit + 1)} style={styles.creditButton}>
               <View style={{ flexDirection: 'row' }}>
                 <AntDesign name={"creditcard"} size={24} color={"white"} style={styles.inputIcon} />
@@ -210,7 +193,6 @@ const Application = () => {
               </View>
             </TouchableOpacity>
           </View>
-
         </View>
       </Animatable.View>
     </View>
@@ -373,7 +355,6 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginBottom: 20
   },
-
 });
 
 export default Application;

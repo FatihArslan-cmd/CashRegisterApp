@@ -1,22 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, RefreshControl, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
+import { Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Heading, NativeBaseProvider, VStack, Center, Button, Modal } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as Animatable from 'react-native-animatable';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const FavoriteModal = ({ SubTotal }) => {
+const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
     const [showModal, setShowModal] = useState(false);
     const [discountApplied, setDiscountApplied] = useState(false);
-    const navigation = useNavigation();
-   
-    const applyDiscount = (SubTotal) => {
+  
+
+    const applyDiscount = () => {
+        if (subTotal === 0) {
+            Alert.alert(
+                "No Items",
+                "There are no items in the list. Cannot apply discount.",
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            );
+            return;
+        }
+        else{
         if (!discountApplied) {
-            const discountedTotal = (SubTotal * 0.8).toFixed(2);
-           
-            setDiscountApplied(true);
-            navigation.navigate('Application', { campaignAlltotal: discountedTotal });
+            const discountedSubTotal = (subTotal * 0.8).toFixed(2);
+            
+            Alert.alert(
+                "Success",
+                "Discount applied successfully",
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            );
+            return discountedSubTotal;
         } else {
             Alert.alert(
                 "Discount Already Applied",
@@ -25,10 +41,75 @@ const FavoriteModal = ({ SubTotal }) => {
                     { text: "OK", onPress: () => console.log("OK Pressed") }
                 ]
             );
+            return subTotal;
         }
-        
+    }
     };
 
+    const getDayOfWeek = () => {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const today = new Date().getDay();
+        return days[today];
+    };
+
+    const blackFridayDiscount = () => {
+        if (subTotal === 0) {
+            Alert.alert(
+                "No Items",
+                "There are no items in the list. Cannot apply discount.",
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            );
+            return;
+        }
+        else{
+        const dayOfWeek = getDayOfWeek();
+        console.log(dayOfWeek)
+        if (dayOfWeek === 'Friday') {
+            if (!discountApplied) {
+                const discountedSubTotal = (subTotal * 0.3).toFixed(2);
+    
+                Alert.alert(
+                    "Success",
+                    "Discount applied successfully",
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                );
+                return discountedSubTotal;
+            } else {
+                Alert.alert(
+                    "Discount Already Applied",
+                    "The discount has already been applied to the order.",
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                );
+                return subTotal;
+            }
+        } else {
+            Alert.alert(
+                "No Discount Today",
+                "Today is not Black Friday. The discount only available on fridays",
+                [
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            );
+            return subTotal;
+        }
+    }
+    };
+
+   const sendDataToParent = () => {
+   
+
+    const updatedSubTotal = applyDiscount();
+    onDataReceived(updatedSubTotal);
+    ondiscountApplied(false);
+};
+
+    
     return (
         <NativeBaseProvider>
             <Animatable.View
@@ -38,7 +119,7 @@ const FavoriteModal = ({ SubTotal }) => {
             >
                 <Center>
                     <TouchableOpacity style={styles.CampaignsButton} onPress={() => setShowModal(true)}>
-                        <Text style={styles.enterButton}>Campaigns</Text>
+                    <MaterialIcons style={{padding:8}} name={"campaign"} size={32} color={"white"} />
                     </TouchableOpacity>
                     <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
                         <Modal.Content maxWidth="400px">
@@ -47,23 +128,22 @@ const FavoriteModal = ({ SubTotal }) => {
                                 <VStack style={styles.modalContainer} space={1} alignItems="center">
                                     <Heading>Campaigns</Heading>
                                     <Heading size="sm">Choose the one that you want to use</Heading>
-                                    <TouchableOpacity onPress={() => applyDiscount()}>
-                                        <MaterialIcons name={"discount"} size={24} color={"red"} style={styles.inputIcon} />
-                                        <Text>Buy 3, Pay 2</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => applyDiscount()}>
+
+                                    <TouchableOpacity onPress={() => sendDataToParent()}>
                                         <MaterialIcons name={"discount"} size={24} color={"red"} style={styles.inputIcon} />
                                         <Text>20% discount for all products</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => applyDiscount()}>
-                                        <MaterialIcons name={"auto-fix-normal"} size={24} color={"gray"} style={styles.inputIcon} />
-                                        <Text>Set Default</Text>
+
+                                    <TouchableOpacity onPress={() => blackFridayDiscount()}>
+                                        <MaterialIcons name={"discount"} size={24} color={"green"} style={styles.inputIcon} />
+                                        <Text>Black Friday %70 discount</Text>
                                     </TouchableOpacity>
+
                                 </VStack>
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button.Group space={2}>
-                                    <Button variant="ghost" colorScheme="blueGray" onPress={() => { setShowModal(false); }}>
+                                    <Button  onPress={() => setDiscountApplied(true)} variant="ghost" colorScheme="blueGray" onPress={() => { setShowModal(false); }}>
                                         Cancel
                                     </Button>
                                 </Button.Group>
@@ -76,33 +156,6 @@ const FavoriteModal = ({ SubTotal }) => {
     );
 };
 
-const CampaignScreen = () => {
-    const [favorites, setFavorites] = useState([]);
-    const [showFavorites, setShowFavorites] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
-    const [total, setTotal] = useState(0);
-    const route = useRoute();
-    const { SubTotal, setAllTotal } = route.params || {};
-    const onRefresh = async () => {
-        setRefreshing(true);
-        try {
-            const storedFavorites = await AsyncStorage.getItem('favorites');
-            if (storedFavorites !== null) {
-                setFavorites(JSON.parse(storedFavorites));
-            }
-        } catch (error) {
-            console.error('Error loading favorites:', error);
-        }
-        setRefreshing(false);
-    };
-
-    return (
-        <View style={styles.container}>
-            <FavoriteModal   SubTotal={SubTotal}  />
-        </View>
-    );
-};
-
 const styles = StyleSheet.create({
     modalContainer: {
         flexGrow: 1,
@@ -112,11 +165,13 @@ const styles = StyleSheet.create({
     CampaignsButton: {
         backgroundColor: '#3e66ae',
         borderRadius: 10,
+        justifyContent: 'center',
     },
     enterButton: {
         padding: 15,
         color: 'white',
         fontWeight: 'bold',
+        textAlign: 'center'
     },
     closeButton: {
         backgroundColor: '#3e66ae',

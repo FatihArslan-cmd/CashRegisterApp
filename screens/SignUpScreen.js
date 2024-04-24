@@ -3,7 +3,7 @@ import { View, StyleSheet, Alert, TouchableOpacity, Text, Image, TextInput } fro
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppLoader from '../functions/AppLoader';
+
 import * as Animatable from 'react-native-animatable';
 import CustomText from '../functions/CustomText';
 const SignUpScreen = ({ navigation }) => {
