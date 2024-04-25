@@ -9,6 +9,8 @@ const GetIP = () => {
       const response = await axios.get("https://api.ipify.org/?format=json");
       setIP(response.data.ip);
     } catch (error) {
+      return 192.168.X;
+
       console.error('Error fetching IP address:', error);
     }
   };

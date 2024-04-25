@@ -11,6 +11,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import CampaignScreen from './CampaignScreen';
+import ConfirmOrder from './ConfirmOrder';
 
 const Application = () => {
   const route = useRoute();
@@ -18,7 +19,7 @@ const Application = () => {
   const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState([]);
   const [SubTotal, setSubTotal] = useState(0);
-  const [allTotal, setAllTotal] = useState(0);
+  const [allTotal, setAllTotal] = useState(0); // State for all total
   const scrollViewRef = useRef(null);
   const [exampleValue, setexampleValue] = useState(0);
   const [exampleValueCredit, setexampleValueCredit] = useState(0);
@@ -26,12 +27,15 @@ const Application = () => {
 
   useEffect(() => {
     if (favoriteItem) {
-     
       setSubTotal(SubTotal + favoriteItem.price);
       setProductData([...productData, favoriteItem]);
-   
     }
   }, [favoriteItem]);
+
+  useEffect(() => {
+    // Calculate all total whenever SubTotal changes
+    setAllTotal(SubTotal);
+  }, [SubTotal]);
 
   const onProductIdChange = (text) => {
     setProductId(text);
@@ -39,26 +43,23 @@ const Application = () => {
 
   const getPrice = async () => {
     if (!disableActions) {
-    await getProductPrice(productId, productData, setProductData, SubTotal, setSubTotal);
-  } else {
-    // Show alert when actions are disabled
-    Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied.");
-  }
+      await getProductPrice(productId, productData, setProductData, SubTotal, setSubTotal);
+    } else {
+      // Show alert when actions are disabled
+      Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied.");
+    }
   };
 
   const onDataReceived = (data) => {
-    setSubTotal(data);
+    setAllTotal(data);
     setDisableActions(true);
-  
   };
-  const ondiscountApplied= (discountApplied) => {
-   
-    
-    console.log(discountApplied)
-  };
-  const removeProduct = (indexToRemove, price) => {
-    
 
+  const ondiscountApplied = (discountApplied) => {
+    console.log(discountApplied);
+  };
+
+  const removeProduct = (indexToRemove, price) => {
     if (!disableActions) {
       const updatedProducts = productData.filter((_, index) => index !== indexToRemove);
       setProductData(updatedProducts);
@@ -70,7 +71,6 @@ const Application = () => {
   };
 
   const cancelOrder = () => {
-    
     Alert.alert(
       "Are you sure?",
       "Do you really want to cancel the order?",
@@ -120,17 +120,14 @@ const Application = () => {
           <TouchableOpacity style={styles.getPriceButton} onPress={getPrice}>
             <Text style={styles.enterButton}>Enter </Text>
           </TouchableOpacity>
-          <CampaignScreen subTotal={SubTotal}
-                          onDataReceived={onDataReceived}
-                          ondiscountApplied={ondiscountApplied}
-                           />
+          <CampaignScreen allTotal={allTotal} onDataReceived={onDataReceived} ondiscountApplied={ondiscountApplied} />
           <FavoriteProductsScreen disableActions={disableActions} />
         </View>
       </Animatable.View>
       <ScrollView ref={scrollViewRef} style={styles.productPricesList}>
         {productData.length === 0 ? (
           <View style={{ alignSelf: 'center' }}>
-            <Text style={styles.emptyText}>Empty</Text>
+            <Text style={styles.emptyText}>Empty </Text>
             <MaterialCommunityIcons name={"lock-question"} size={36} color={"gray"} />
           </View>
         ) : (
@@ -144,8 +141,8 @@ const Application = () => {
                 <View style={styles.productPrice}>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.productId}>{product.id}</Text>
-                    <Text style={styles.productTax}>1 PCS</Text>
-                    <Text style={styles.productTax}>KDV %{product.kdv}</Text>
+                    <Text style={styles.productTax}>1 PCS </Text>
+                    <Text style={styles.productTax}>KDV %{product.kdv} </Text>
                   </View>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.productName}>{product.name}:</Text>
@@ -165,7 +162,7 @@ const Application = () => {
       </View>
       <Animatable.View animation="fadeInUp" delay={250} useNativeDriver>
         <View style={{ flexDirection: 'row', marginTop: 'auto' }}>
-          <CalculatorApp subTotal={SubTotal} exampleValue={exampleValue} exampleValueCredit={exampleValueCredit} />
+          <CalculatorApp allTotal={allTotal} exampleValue={exampleValue} exampleValueCredit={exampleValueCredit} />
           <View style={{ flexDirection: 'column', borderWidth: 1, borderColor: '#ccc', borderRadius: 15, marginLeft: 5 }}>
             <FaturaButton />
             <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
@@ -174,12 +171,7 @@ const Application = () => {
                 <Text style={styles.cancelButtonText}>Cancel Order</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={cancelOrder} style={styles.confirmButton}>
-              <View style={{ flexDirection: 'row' }}>
-                <Entypo name={"check"} size={36} color={"white"} style={styles.inputIcon} />
-                <Text style={styles.cancelButtonText}>Confirm Order</Text>
-              </View>
-            </TouchableOpacity>
+            <ConfirmOrder subTotal={SubTotal}/>
             <TouchableOpacity onPress={() => setexampleValue(exampleValue + 1)} style={styles.cashButton}>
               <View style={{ flexDirection: 'row' }}>
                 <MaterialCommunityIcons name={"cash"} size={24} color={"white"} style={styles.inputIcon} />
@@ -198,6 +190,7 @@ const Application = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -311,7 +304,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     padding: 10,
     borderRadius: 15,
-    width: 85,
+    width: 90,
     height: 60
   },
   confirmButton: {
@@ -331,7 +324,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     padding: 10,
     borderRadius: 15,
-    width: 85,
+    width: 90,
     height: 70
   },
   creditButton: {
@@ -341,7 +334,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     padding: 10,
     borderRadius: 15,
-    width: 85,
+    width: 90,
     height: 70
   },
   cancelButtonText: {

@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const CalculatorApp = ({ subTotal,exampleValue,exampleValueCredit}) => {
+const CalculatorApp = ({ allTotal,exampleValue,exampleValueCredit}) => {
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
@@ -38,20 +38,20 @@ const CalculatorApp = ({ subTotal,exampleValue,exampleValueCredit}) => {
       return;
     }
   
-    if (subTotal === 0) {
+    if (allTotal === 0) {
       Alert.alert('No Items in the List', 'There are no items in the list.');
       return;
     }
   
     const enteredAmount = parseFloat(inputValue);
-    if (enteredAmount > subTotal) {
-      const change = enteredAmount - subTotal;
-      Alert.alert('Change:', `Your change is $${change.toFixed(2)}`);
+    if (enteredAmount > allTotal) {
+      const change = enteredAmount - allTotal;
+      Alert.alert('Succes:', `Your change is $${change.toFixed(2)}`);
       setInputValue('');
-    } else if (enteredAmount === subTotal) {
+    } else if (enteredAmount === allTotal) {
       Alert.alert('The order is completed');
     } else {
-      const change1 = subTotal - enteredAmount;
+      const change1 = allTotal - enteredAmount;
       Alert.alert(
         'Insufficient Balance',
         `The customer must give $${change1.toFixed(2)} more.`,

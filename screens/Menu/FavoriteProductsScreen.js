@@ -109,10 +109,10 @@ const FavoriteProductsScreen = ({disableActions}) => {
                   renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => addToFavorites(item)}>
                       <View style={styles.productContainer}>
-                        <Text style={styles.productName}>{item.name}</Text>
-                        <Text style={styles.productID}>ID: {item.id}</Text>
-                        <Text style={styles.productPrice}>Price: ${item.price}</Text>
-                        <Text style={styles.productPrice}>KDV %{item.kdv}</Text>
+                        <Text style={styles.productName}>{item.name} </Text>
+                        <Text style={styles.productID}>ID: {item.id} </Text>
+                        <Text style={styles.productPrice}>Price: ${item.price} </Text>
+                        <Text style={styles.productPrice}>KDV %{item.kdv} </Text>
                         <Image source={{ uri: item.image }} style={styles.productImage} />
                       </View>
                     </TouchableOpacity>
@@ -128,7 +128,7 @@ const FavoriteProductsScreen = ({disableActions}) => {
                 {showToast && (
                   <View style={styles.toast}>
                     <Text style={styles.toastText}>
-                      {showToastItem ? `"${showToastItem.name}" has been added` : ''}
+                      {showToastItem ? `"${showToastItem.name}" has been added ` : ''}
                     </Text>
                   </View>
                 )}

@@ -5,13 +5,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
+const CampaignScreen = ({ allTotal, onDataReceived,ondiscountApplied }) => {
     const [showModal, setShowModal] = useState(false);
     const [discountApplied, setDiscountApplied] = useState(false);
   
 
     const applyDiscount = () => {
-        if (subTotal === 0) {
+        if (allTotal === 0) {
             Alert.alert(
                 "No Items",
                 "There are no items in the list. Cannot apply discount.",
@@ -23,7 +23,7 @@ const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
         }
         else{
         if (!discountApplied) {
-            const discountedSubTotal = (subTotal * 0.8).toFixed(2);
+            const discountedAllTotal = (allTotal * 0.8).toFixed(2);
             
             Alert.alert(
                 "Success",
@@ -32,7 +32,7 @@ const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
                     { text: "OK", onPress: () => console.log("OK Pressed") }
                 ]
             );
-            return discountedSubTotal;
+            return discountedAllTotal;
         } else {
             Alert.alert(
                 "Discount Already Applied",
@@ -41,7 +41,7 @@ const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
                     { text: "OK", onPress: () => console.log("OK Pressed") }
                 ]
             );
-            return subTotal;
+            return allTotal;
         }
     }
     };
@@ -53,7 +53,7 @@ const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
     };
 
     const blackFridayDiscount = () => {
-        if (subTotal === 0) {
+        if (allTotal === 0) {
             Alert.alert(
                 "No Items",
                 "There are no items in the list. Cannot apply discount.",
@@ -68,7 +68,7 @@ const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
         console.log(dayOfWeek)
         if (dayOfWeek === 'Friday') {
             if (!discountApplied) {
-                const discountedSubTotal = (subTotal * 0.3).toFixed(2);
+                const discountedAllTotal = (allTotal * 0.3).toFixed(2);
     
                 Alert.alert(
                     "Success",
@@ -77,7 +77,7 @@ const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
                         { text: "OK", onPress: () => console.log("OK Pressed") }
                     ]
                 );
-                return discountedSubTotal;
+                return discountedAllTotal;
             } else {
                 Alert.alert(
                     "Discount Already Applied",
@@ -86,7 +86,7 @@ const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
                         { text: "OK", onPress: () => console.log("OK Pressed") }
                     ]
                 );
-                return subTotal;
+                return allTotal;
             }
         } else {
             Alert.alert(
@@ -96,7 +96,7 @@ const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
                     { text: "OK", onPress: () => console.log("OK Pressed") }
                 ]
             );
-            return subTotal;
+            return allTotal;
         }
     }
     };
@@ -104,8 +104,8 @@ const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
    const sendDataToParent = () => {
    
 
-    const updatedSubTotal = applyDiscount();
-    onDataReceived(updatedSubTotal);
+    const updatedAllTotal = applyDiscount();
+    onDataReceived(updatedAllTotal);
     ondiscountApplied(false);
 };
 
@@ -131,21 +131,23 @@ const CampaignScreen = ({ subTotal, onDataReceived,ondiscountApplied }) => {
 
                                     <TouchableOpacity onPress={() => sendDataToParent()}>
                                         <MaterialIcons name={"discount"} size={24} color={"red"} style={styles.inputIcon} />
-                                        <Text>20% discount for all products</Text>
+                                        <Text>20% discount for all products </Text>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity onPress={() => blackFridayDiscount()}>
                                         <MaterialIcons name={"discount"} size={24} color={"green"} style={styles.inputIcon} />
-                                        <Text>Black Friday %70 discount</Text>
+                                        <Text>Black Friday %70 discount </Text>
                                     </TouchableOpacity>
 
                                 </VStack>
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button.Group space={2}>
-                                    <Button  onPress={() => setDiscountApplied(true)} variant="ghost" colorScheme="blueGray" onPress={() => { setShowModal(false); }}>
-                                        Cancel
-                                    </Button>
+                                <Button onPress={() => { setDiscountApplied(true); setShowModal(false); }} variant="ghost" colorScheme="blueGray">
+                                               Cancel
+                               </Button>
+
+                                    
                                 </Button.Group>
                             </Modal.Footer>
                         </Modal.Content>

@@ -59,7 +59,7 @@ const FaturaButton = () => {
                 </Modal.Content>
             </Modal>
             <VStack space={8} alignItems="center">
-                <Button style={{backgroundColor:'#bf7700',borderRadius:15,marginTop:2}} onPress={() => setModalVisible(!modalVisible)}>
+                <Button style={{backgroundColor:'#bf7700',borderRadius:15,marginTop:20}} onPress={() => setModalVisible(!modalVisible)}>
                     E-Document
                 </Button>
               
