@@ -5,14 +5,13 @@ import Antdesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-const FavoriteProductsScreen = ({disableActions}) => {
+const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [showToastItem, setShowToastItem] = useState(null);
-
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -58,7 +57,7 @@ const FavoriteProductsScreen = ({disableActions}) => {
     showToastMessage(item);
   } else {
     // Show alert when actions are disabled
-    Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied.");
+    Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied/Payment is done.");
   }
   };
 

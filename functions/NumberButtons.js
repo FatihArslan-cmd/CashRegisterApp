@@ -1,33 +1,46 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const CalculatorApp = ({ allTotal,exampleValue,exampleValueCredit}) => {
+const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit,paymentSuccessReceive,counter }) => {
   const [inputValue, setInputValue] = useState('');
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   useEffect(() => {
-    if(exampleValue>0)
-    {
+    if (exampleValue > 0) {
       handleCalculate();
     }
     return () => {};
-  }, [exampleValue]); 
+  }, [exampleValue]);
 
   useEffect(() => {
-    if(exampleValueCredit>0)
-    {
+    if (counter > 0) {
+      setPaymentSuccess(false);
+      console.log(paymentSuccess);
+
+    }
+    return () => {};
+  }, [counter]);
+
+  useEffect(() => {
+    if (exampleValueCredit > 0) {
       handleCalculateCredit();
     }
     return () => {};
   }, [exampleValueCredit]);
+
+  useEffect(() => {
+   
+      paymentSuccessReceive(paymentSuccess);
+    
+  }, [paymentSuccess, paymentSuccessReceive]);
 
   const handleButtonPress = (value) => {
     if (value === 'sil') {
       setInputValue('');
     } else if (value === '=') {
       handleCalculate();
-    } else 
-    {
+    } else {
       setInputValue((prevValue) => prevValue + value.toString());
     }
   };
@@ -37,19 +50,21 @@ const CalculatorApp = ({ allTotal,exampleValue,exampleValueCredit}) => {
       Alert.alert('Please Enter a Number', 'Please enter an amount before calculating.');
       return;
     }
-  
+
     if (allTotal === 0) {
       Alert.alert('No Items in the List', 'There are no items in the list.');
       return;
     }
-  
+
     const enteredAmount = parseFloat(inputValue);
     if (enteredAmount > allTotal) {
       const change = enteredAmount - allTotal;
-      Alert.alert('Succes:', `Your change is $${change.toFixed(2)}`);
+      Alert.alert('Success:', `Your change is $${change.toFixed(2)}`);
       setInputValue('');
-    } else if (enteredAmount === allTotal) {
-      Alert.alert('The order is completed');
+      setPaymentSuccess(true);
+    } else if (enteredAmount - allTotal === 0) {
+      Alert.alert('The order is completed', 'All the due has been paid');
+      setPaymentSuccess(true);
     } else {
       const change1 = allTotal - enteredAmount;
       Alert.alert(
@@ -66,23 +81,22 @@ const CalculatorApp = ({ allTotal,exampleValue,exampleValueCredit}) => {
             onPress: () => {
               const paymentMethod = paymentType === 'Cash' ? 'credit' : 'cash';
               Alert.alert('Payment Successful', `The remaining balance has been paid by ${paymentMethod}.`);
+              setPaymentSuccess(true);
             },
           },
         ]
       );
     }
   };
-  
+
   const handleCalculate = () => {
     handleCalculatePayment('Cash', 'credit');
   };
-  
+
   const handleCalculateCredit = () => {
     handleCalculatePayment('Card', 'cash');
   };
-  
-  
-  
+
   const renderButtons = (numbers) => {
     return numbers.map((number) => (
       <TouchableOpacity key={number} style={styles.button} onPress={() => handleButtonPress(number)}>
@@ -102,14 +116,14 @@ const CalculatorApp = ({ allTotal,exampleValue,exampleValueCredit}) => {
       />
 
       <View style={styles.row}>
-      <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('00')}>
+        <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('00')}>
           <Text style={styles.buttonText}>00</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('000')}>
           <Text style={styles.buttonText}>000</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('sil')}>
-          <FontAwesome name={"remove"} size={24} color={"white"} style={styles.inputIcon} />
+          <FontAwesome name={'remove'} size={24} color={'white'} style={styles.inputIcon} />
         </TouchableOpacity>
       </View>
       <View style={styles.row}>{renderButtons([7, 8, 9])}</View>
@@ -123,10 +137,9 @@ const CalculatorApp = ({ allTotal,exampleValue,exampleValueCredit}) => {
         <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('.')}>
           <Text style={styles.buttonText}>.</Text>
         </TouchableOpacity>
-       
-        
       </View>
       
+     
     </View>
   );
 };
@@ -168,6 +181,11 @@ const styles = StyleSheet.create({
     color: 'black',
     borderRadius: 15,
     backgroundColor: 'white',
+  },
+  paymentSuccessMessage: {
+    marginTop: 10,
+    color: 'green',
+    fontWeight: 'bold',
   },
 });
 

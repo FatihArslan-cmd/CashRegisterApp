@@ -24,7 +24,19 @@ const Application = () => {
   const [exampleValue, setexampleValue] = useState(0);
   const [exampleValueCredit, setexampleValueCredit] = useState(0);
   const [disableActions, setDisableActions] = useState(false); // State to disable actions
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [getValueFromConfirm, setGetValueFromConfirm] = useState(0);
+  const [counter, setCounter] = useState(0);
+  const [campaignCounter, setcampaignCounter] = useState(0);
 
+  const createNewOrder = () => {
+    setCounter(counter+1);
+    setProductData([]);
+    setSubTotal(0);
+    setPaymentSuccess(false);
+    console.log(paymentSuccess);
+    setcampaignCounter(campaignCounter+1)
+  };
   useEffect(() => {
     if (favoriteItem) {
       setSubTotal(SubTotal + favoriteItem.price);
@@ -32,6 +44,10 @@ const Application = () => {
     }
   }, [favoriteItem]);
 
+
+  const paymentSuccessReceive = (data) => {
+    setPaymentSuccess(data);
+  };
   useEffect(() => {
     // Calculate all total whenever SubTotal changes
     setAllTotal(SubTotal);
@@ -42,11 +58,11 @@ const Application = () => {
   };
 
   const getPrice = async () => {
-    if (!disableActions) {
+    if (!disableActions && !paymentSuccess) { 
       await getProductPrice(productId, productData, setProductData, SubTotal, setSubTotal);
     } else {
-      // Show alert when actions are disabled
-      Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied.");
+      
+      Alert.alert("Actions Disabled", "You cannot add products after the payment is done /Any campaign is applied.");
     }
   };
 
@@ -54,55 +70,75 @@ const Application = () => {
     setAllTotal(data);
     setDisableActions(true);
   };
-
+  const getValueFromConfirmOrder = (data) => {
+    setGetValueFromConfirm(getValueFromConfirm+data)
+  };
+  useEffect(() => {
+    if (getValueFromConfirm > 0) {
+      setPaymentSuccess(false);
+      setDisableActions(false);
+      
+    }
+    return () => {};
+  }, [getValueFromConfirm]);
   const ondiscountApplied = (discountApplied) => {
     console.log(discountApplied);
   };
 
   const removeProduct = (indexToRemove, price) => {
-    if (!disableActions) {
+    if (!disableActions && !paymentSuccess) { 
       const updatedProducts = productData.filter((_, index) => index !== indexToRemove);
       setProductData(updatedProducts);
       setSubTotal(SubTotal - price);
     } else {
-      // Show alert when actions are disabled
-      Alert.alert("Actions Disabled", "You cannot remove products after the discount is applied.");
+      
+      Alert.alert("Actions Disabled", "You cannot remove products after the payment is done /Any campaign is applied.");
     }
   };
 
   const cancelOrder = () => {
-    Alert.alert(
-      "Are you sure?",
-      "Do you really want to cancel the order?",
-      [
-        {
-          text: "yes",
-          onPress: () => {
-            setProductData([]);
-            setSubTotal(0);
-            setDisableActions(false);
-            discountApplied='false';
-          }
-        },
-        {
-          text: "no",
-          style: "cancel"
-        }
-      ]
-    );
+    if (paymentSuccess) {
+      Alert.alert(
+        "Cannot Cancel Order",
+        "The order has been successfully completed.You cannot cancel it.Create new order to continue",
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+      );
+    } else {
+      Alert.alert(
+        "Are you sure?",
+        "Do you really want to cancel the order?",
+        [
+          {
+            text: "Yes",
+            onPress: () => {
+              setProductData([]);
+              setSubTotal(0);
+              setDisableActions(false);
+              setcampaignCounter(campaignCounter+1);
+            }
+          },
+          { text: "No", style: "cancel" }
+        ]
+      );
+    }
   };
-
   useEffect(() => {
-    // Scroll to the bottom of the ScrollView whenever productData changes
+    setDisableActions(paymentSuccess);
+  }, [paymentSuccess]);
+  
+  useEffect(() => {
+    // Scroll to the bottom of the ScrollView whenever productData or paymentSuccess changes
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
-  }, [productData]); // Dependency on productData for automatic scrolling
+  }, [productData, paymentSuccess]);
+   // Dependency on productData for automatic scrolling
 
   const clearInput = () => {
     setProductId('');
-  };
 
+  };
+  
   return (
     <View style={styles.container}>
       <Animatable.View animation="fadeInUp" delay={250} useNativeDriver>
@@ -120,8 +156,14 @@ const Application = () => {
           <TouchableOpacity style={styles.getPriceButton} onPress={getPrice}>
             <Text style={styles.enterButton}>Enter </Text>
           </TouchableOpacity>
-          <CampaignScreen allTotal={allTotal} onDataReceived={onDataReceived} ondiscountApplied={ondiscountApplied} />
-          <FavoriteProductsScreen disableActions={disableActions} />
+          <CampaignScreen allTotal={allTotal}
+                          onDataReceived={onDataReceived}
+                          ondiscountApplied={ondiscountApplied}
+                          paymentSuccess={paymentSuccess}
+                          campaignCounter={campaignCounter}
+                           />
+          <FavoriteProductsScreen disableActions={disableActions}
+                                  />
         </View>
       </Animatable.View>
       <ScrollView ref={scrollViewRef} style={styles.productPricesList}>
@@ -153,6 +195,18 @@ const Application = () => {
             </Swipeable>
           ))
         )}
+         {paymentSuccess && (
+        <View style={{ alignItems: 'center',marginBottom:20}}>
+          <Entypo name="check" size={36} color="#008b38" style={styles.inputIcon} />
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#008b38' }}>Payment Successful</Text>
+          <TouchableOpacity onPress={createNewOrder}  style={{backgroundColor: '#3e66ae',borderRadius:10,margin:10}}>
+            <View style={{flexDirection:'row',margin:5}}>
+          <MaterialCommunityIcons name={"autorenew"} size={24} color={"white"} style={{marginTop:1}} />
+            <Text style={{color:'white',padding:5,fontWeight:'bold'}}>Create new order</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )}
       </ScrollView>
       <View style={styles.separator} />
       <View style={styles.subTotalContainer}>
@@ -162,7 +216,11 @@ const Application = () => {
       </View>
       <Animatable.View animation="fadeInUp" delay={250} useNativeDriver>
         <View style={{ flexDirection: 'row', marginTop: 'auto' }}>
-          <CalculatorApp allTotal={allTotal} exampleValue={exampleValue} exampleValueCredit={exampleValueCredit} />
+          <CalculatorApp allTotal={allTotal}
+                         exampleValue={exampleValue}
+                         exampleValueCredit={exampleValueCredit}
+                         paymentSuccessReceive={paymentSuccessReceive}
+                         counter={counter} />
           <View style={{ flexDirection: 'column', borderWidth: 1, borderColor: '#ccc', borderRadius: 15, marginLeft: 5 }}>
             <FaturaButton />
             <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
@@ -171,19 +229,37 @@ const Application = () => {
                 <Text style={styles.cancelButtonText}>Cancel Order</Text>
               </View>
             </TouchableOpacity>
-            <ConfirmOrder subTotal={SubTotal}/>
-            <TouchableOpacity onPress={() => setexampleValue(exampleValue + 1)} style={styles.cashButton}>
-              <View style={{ flexDirection: 'row' }}>
-                <MaterialCommunityIcons name={"cash"} size={24} color={"white"} style={styles.inputIcon} />
-                <Text style={styles.cancelButtonText}>Cash</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setexampleValueCredit(exampleValueCredit + 1)} style={styles.creditButton}>
-              <View style={{ flexDirection: 'row' }}>
-                <AntDesign name={"creditcard"} size={24} color={"white"} style={styles.inputIcon} />
-                <Text style={styles.cancelButtonText}>Credit</Text>
-              </View>
-            </TouchableOpacity>
+            <ConfirmOrder subTotal={SubTotal}
+                          allTotal={allTotal}
+                          paymentSuccess={paymentSuccess}
+                          disableActions={disableActions}
+                          getValueFromConfirmOrder={getValueFromConfirmOrder}
+                          getValueFromConfirm={getValueFromConfirm}/>
+            <TouchableOpacity onPress={() => {
+              setDisableActions();
+  if (paymentSuccess) {
+    Alert.alert("The order is completed", "The order is already succesfuly completed");
+  } else {
+    setexampleValue(exampleValue + 1);
+  }
+}} style={styles.cashButton}>
+  <View style={{ flexDirection: 'row' }}>
+    <MaterialCommunityIcons name={"cash"} size={24} color={"white"} style={styles.inputIcon} />
+    <Text style={styles.cancelButtonText}>Cash </Text>
+  </View>
+</TouchableOpacity>
+<TouchableOpacity onPress={() => {
+  if (paymentSuccess) {
+    Alert.alert("The order is completed", "The order is already succesfuly competed");
+  } else {
+    setexampleValueCredit(exampleValueCredit + 1);
+  }
+}} style={styles.creditButton}>
+  <View style={{ flexDirection: 'row' }}>
+    <AntDesign name={"creditcard"} size={24} color={"white"} style={styles.inputIcon} />
+    <Text style={styles.cancelButtonText}>Credit </Text>
+  </View>
+</TouchableOpacity>
           </View>
         </View>
       </Animatable.View>

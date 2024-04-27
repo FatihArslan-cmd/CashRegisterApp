@@ -1,30 +1,29 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Platform, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Platform, StyleSheet, Alert, Vibration } from 'react-native';
 import { Heading, NativeBaseProvider, VStack, Center, Button, Modal } from 'native-base';
 import { Entypo } from '@expo/vector-icons'; // Expo'dan Entypo ikonunu içe aktar
 
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 
-const ConfirmOrder = ({ subTotal }) => {
-  // Tarih bilgisini al
+const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess,getValueFromConfirmOrder,getValueFromConfirm }) => {
   const today = new Date();
   const formattedDate = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
   const hour = today.getHours() + 3;
   const minute = today.getMinutes();
   const second = today.getSeconds();
 
-  // Rasgele 6 basamaklı satış numarası üretme fonksiyonu
   const generateRandomSalesNo = () => {
     let salesNo = '';
     for (let i = 0; i < 6; i++) {
-      salesNo += Math.floor(Math.random() * 10); // 0 ile 9 arasında rastgele rakam ekle
+      salesNo += Math.floor(Math.random() * 10); 
     }
     return salesNo;
   };
 
   const [selectedPrinter, setSelectedPrinter] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [confirmedValue, setConfirmedValue] = useState(0);
 
   const html = `
     <html>
@@ -81,11 +80,34 @@ const ConfirmOrder = ({ subTotal }) => {
     const printer = await Print.selectPrinterAsync();
     setSelectedPrinter(printer);
   };
+  const confirmOrder = () => {
+    if (allTotal === 0) {
+        Alert.alert("No products!", "There are no products in the list. Please add products before confirming the order.");
+        Vibration.vibrate();
+    } else if (!paymentSuccess) {
+     
+      Alert.alert("Payment Not Completed", "Please complete the payment before confirming the order.");
+      Vibration.vibrate();
+    } else {
+      setShowModal(true);
+    }
+  };
+  const sendDataToParent = () => {
+   
+    getValueFromConfirm++;
+};
+  const handleCloseModal = () => {
+    // Increment confirmed value when modal is closed
+    setConfirmedValue(confirmedValue + 1);
+    sendDataToParent();
+    setShowModal(false);
+   
+};
 
   return (
     <NativeBaseProvider>
       <Center flex={1}>
-        <TouchableOpacity onPress={() => setShowModal(true)} style={styles.confirmButton}>
+        <TouchableOpacity onPress={() => confirmOrder()} style={styles.confirmButton}>
           <View style={{ flexDirection: 'row' }}>
             <Entypo name="check" size={36} color="white" style={styles.inputIcon} />
             <Text style={[styles.cancelButtonText]}>Confirm{"\n"}Order</Text>
@@ -113,7 +135,7 @@ const ConfirmOrder = ({ subTotal }) => {
             </Modal.Body>
             <Modal.Footer>
               <Button.Group space={2}>
-                <Button onPress={() => setShowModal(false)} variant="ghost" colorScheme="blueGray">
+                <Button onPress={() => handleCloseModal()} variant="ghost" colorScheme="blueGray">
                   Cancel
                 </Button>
               </Button.Group>
