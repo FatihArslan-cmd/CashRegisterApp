@@ -12,7 +12,8 @@ import * as Animatable from 'react-native-animatable';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import CampaignScreen from './CampaignScreen';
 import ConfirmOrder from './ConfirmOrder';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingIndicator from '../../functions/LoadingIndicator';
 const Application = () => {
   const route = useRoute();
   const { favoriteItem } = route.params || {}; 
@@ -28,15 +29,20 @@ const Application = () => {
   const [getValueFromConfirm, setGetValueFromConfirm] = useState(0);
   const [counter, setCounter] = useState(0);
   const [campaignCounter, setcampaignCounter] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const getValueFromConfirmOrder = (data) => {
+    setGetValueFromConfirm(getValueFromConfirm+data)
+  };
   const createNewOrder = () => {
-    setCounter(counter+1);
     setProductData([]);
+    setCounter(counter+1);
     setSubTotal(0);
     setPaymentSuccess(false);
-    console.log(paymentSuccess);
     setcampaignCounter(campaignCounter+1)
   };
+
+
   useEffect(() => {
     if (favoriteItem) {
       setSubTotal(SubTotal + favoriteItem.price);
@@ -48,31 +54,41 @@ const Application = () => {
   const paymentSuccessReceive = (data) => {
     setPaymentSuccess(data);
   };
+
+
   useEffect(() => {
     // Calculate all total whenever SubTotal changes
     setAllTotal(SubTotal);
   }, [SubTotal]);
 
+  
   const onProductIdChange = (text) => {
     setProductId(text);
   };
 
-  const getPrice = async () => {
-    if (!disableActions && !paymentSuccess) { 
+
+ const getPrice = async () => {
+  if (!disableActions && !paymentSuccess) { 
+    try {
+      setIsLoading(true);
       await getProductPrice(productId, productData, setProductData, SubTotal, setSubTotal);
-    } else {
-      
-      Alert.alert("Actions Disabled", "You cannot add products after the payment is done /Any campaign is applied.");
     }
-  };
+    catch (error) {
+      console.error('Error fetching data: ', error);
+    } finally {
+      setIsLoading(false);
+    }
+  } else {
+    Alert.alert("Actions Disabled", "You cannot add products after the payment is done /Any campaign is applied.");
+  }
+};
+
 
   const onDataReceived = (data) => {
     setAllTotal(data);
     setDisableActions(true);
   };
-  const getValueFromConfirmOrder = (data) => {
-    setGetValueFromConfirm(getValueFromConfirm+data)
-  };
+
   useEffect(() => {
     if (getValueFromConfirm > 0) {
       setPaymentSuccess(false);
@@ -81,9 +97,12 @@ const Application = () => {
     }
     return () => {};
   }, [getValueFromConfirm]);
+
+
   const ondiscountApplied = (discountApplied) => {
     console.log(discountApplied);
   };
+
 
   const removeProduct = (indexToRemove, price) => {
     if (!disableActions && !paymentSuccess) { 
@@ -95,6 +114,7 @@ const Application = () => {
       Alert.alert("Actions Disabled", "You cannot remove products after the payment is done /Any campaign is applied.");
     }
   };
+
 
   const cancelOrder = () => {
     if (paymentSuccess) {
@@ -122,18 +142,49 @@ const Application = () => {
       );
     }
   };
+
+
   useEffect(() => {
     setDisableActions(paymentSuccess);
   }, [paymentSuccess]);
   
+
+
   useEffect(() => {
     // Scroll to the bottom of the ScrollView whenever productData or paymentSuccess changes
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
-  }, [productData, paymentSuccess]);
+  }, [productData, paymentSuccess,isLoading]);
    // Dependency on productData for automatic scrolling
 
+   const saveDataToStorage = async (SubTotal, allTotal, productData) => {
+    try {
+      // Check if productData is empty or SubTotal/allTotal is 0
+      if (productData.length === 0 || SubTotal === 0 || allTotal === 0) {
+        console.log('Product data is empty or SubTotal/AllTotal is 0. Data not saved.');
+        return;
+      }
+      else
+      {
+      const data = JSON.stringify({ SubTotal, allTotal, productData });
+      await AsyncStorage.setItem('orderData', data);
+      console.log('Data saved successfully');
+      }
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
+  };
+ 
+  useEffect(() => {
+    if (paymentSuccess === true) {
+      saveDataToStorage(SubTotal, allTotal, productData);
+      console.log(SubTotal, allTotal, productData);
+    }
+  }, [paymentSuccess]);
+  
+  
+  
   const clearInput = () => {
     setProductId('');
 
@@ -153,7 +204,10 @@ const Application = () => {
           <TouchableOpacity style={{marginRight:20}} onPress={clearInput}>
             <AntDesign name="closecircle" size={20} color="gray" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.getPriceButton} onPress={getPrice}>
+          <TouchableOpacity
+            style={[styles.getPriceButton, isLoading && { backgroundColor: '#ccc' }]} // Disable button style when loading
+            onPress={getPrice}
+            disabled={isLoading}>
             <Text style={styles.enterButton}>Enter </Text>
           </TouchableOpacity>
           <CampaignScreen allTotal={allTotal}
@@ -165,49 +219,56 @@ const Application = () => {
           <FavoriteProductsScreen disableActions={disableActions}
                                   />
         </View>
-      </Animatable.View>
-      <ScrollView ref={scrollViewRef} style={styles.productPricesList}>
-        {productData.length === 0 ? (
-          <View style={{ alignSelf: 'center' }}>
-            <Text style={styles.emptyText}>Empty </Text>
-            <MaterialCommunityIcons name={"lock-question"} size={36} color={"gray"} />
+     </Animatable.View>
+     <ScrollView ref={scrollViewRef} style={styles.productPricesList}>
+  {productData.length === 0 && !isLoading && (
+    <View style={{ alignSelf: 'center' }}>
+      <Text style={styles.emptyText}>Empty </Text>
+      <MaterialCommunityIcons name={"lock-question"} size={36} color={"gray"} />
+    </View>
+  )}
+  {productData.map((product, index) => (
+    <Swipeable key={index} renderRightActions={() => (
+      <TouchableOpacity onPress={() => removeProduct(index, product.price)} style={styles.deleteButton}>
+        <Text style={styles.deleteButtonText}>Delete</Text>
+      </TouchableOpacity>
+    )}>
+      <View style={styles.productContainer}>
+        <View style={styles.productPrice}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.productId}>{product.id}</Text>
+            <Text style={styles.productTax}>1 PCS </Text>
+            <Text style={styles.productTax}>KDV %{product.kdv} </Text>
           </View>
-        ) : (
-          productData.map((product, index) => (
-            <Swipeable key={index} renderRightActions={() => (
-              <TouchableOpacity onPress={() => removeProduct(index, product.price)} style={styles.deleteButton}>
-                <Text style={styles.deleteButtonText}>Delete</Text>
-              </TouchableOpacity>
-            )}>
-              <View style={styles.productContainer}>
-                <View style={styles.productPrice}>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={styles.productId}>{product.id}</Text>
-                    <Text style={styles.productTax}>1 PCS </Text>
-                    <Text style={styles.productTax}>KDV %{product.kdv} </Text>
-                  </View>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={styles.productName}>{product.name}:</Text>
-                    <Text style={[styles.productPriceValue, { marginLeft: 'auto' }]}> {product.price} $</Text>
-                  </View>
-                </View>
-              </View>
-            </Swipeable>
-          ))
-        )}
-         {paymentSuccess && (
-        <View style={{ alignItems: 'center',marginBottom:20}}>
-          <Entypo name="check" size={36} color="#008b38" style={styles.inputIcon} />
-          <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#008b38' }}>Payment Successful</Text>
-          <TouchableOpacity onPress={createNewOrder}  style={{backgroundColor: '#3e66ae',borderRadius:10,margin:10}}>
-            <View style={{flexDirection:'row',margin:5}}>
-          <MaterialCommunityIcons name={"autorenew"} size={24} color={"white"} style={{marginTop:1}} />
-            <Text style={{color:'white',padding:5,fontWeight:'bold'}}>Create new order</Text>
-            </View>
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.productName}>{product.name}:</Text>
+            <Text style={[styles.productPriceValue, { marginLeft: 'auto' }]}> {product.price} $</Text>
+          </View>
         </View>
-      )}
-      </ScrollView>
+      </View>
+    </Swipeable>
+  ))}
+  {isLoading && (
+    <View style={{ marginBottom:20 }}>
+      <LoadingIndicator />
+    </View>
+  )}
+  {paymentSuccess && (
+    <View style={{ alignItems: 'center', marginBottom: 20 }}>
+      <Entypo name="check" size={36} color="#008b38" style={styles.inputIcon} />
+      <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#008b38' }}>Payment Successful</Text>
+      <TouchableOpacity onPress={createNewOrder} style={{ backgroundColor: '#3e66ae', borderRadius: 10, margin: 10 }}>
+        <View style={{ flexDirection: 'row', margin: 5 }}>
+          <MaterialCommunityIcons name={"autorenew"} size={24} color={"white"} style={{ marginTop: 1 }} />
+          <Text style={{ color: 'white', padding: 5, fontWeight: 'bold' }}>Create new order</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  )}
+</ScrollView>
+
+
+      
       <View style={styles.separator} />
       <View style={styles.subTotalContainer}>
         <Text style={styles.subTotal}>Sub Total: {SubTotal} $</Text>
@@ -229,13 +290,14 @@ const Application = () => {
                 <Text style={styles.cancelButtonText}>Cancel Order</Text>
               </View>
             </TouchableOpacity>
-            <ConfirmOrder subTotal={SubTotal}
-                          allTotal={allTotal}
-                          paymentSuccess={paymentSuccess}
-                          disableActions={disableActions}
-                          getValueFromConfirmOrder={getValueFromConfirmOrder}
-                          getValueFromConfirm={getValueFromConfirm}/>
-            <TouchableOpacity onPress={() => {
+            <ConfirmOrder
+                     subTotal={SubTotal}
+                     allTotal={allTotal}
+                     paymentSuccess={paymentSuccess}
+                     getValueFromConfirmOrder={getValueFromConfirmOrder}
+                 
+            />
+          <TouchableOpacity onPress={() => {
               setDisableActions();
   if (paymentSuccess) {
     Alert.alert("The order is completed", "The order is already succesfuly completed");

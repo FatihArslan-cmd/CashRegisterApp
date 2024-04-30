@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image, TextInput, Alert, Vibration } from 'react-native'; // Vibration eklenmeli
+import { View, StyleSheet, TouchableOpacity, Text, Image, TextInput, Alert, Vibration, ActivityIndicator } from 'react-native'; // Import ActivityIndicator
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginMethodsButtons from '../functions/LoginMethodsButtons';
 import App from './Menu/SalesScreen';
+import LoadingIndicator from '../functions/LoadingIndicator';
 import CustomText from '../functions/CustomText';
 const HomeScreen = ({ navigation }) => {
-  
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -33,16 +34,15 @@ const HomeScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
+      setIsLoading(true);
       const savedUser = JSON.parse(await AsyncStorage.getItem(username));
 
       if (savedUser && savedUser.password === password) {
-        Alert.alert('Success', 'Login successful');
         navigation.navigate('MainDrawer');
-
         if (rememberMe) {
           try {
             await AsyncStorage.setItem('username', username);
-            await AsyncStorage.setItem('password', password); 
+            await AsyncStorage.setItem('password', password);
           } catch (error) {
             console.error('Error storing credentials:', error);
           }
@@ -52,13 +52,18 @@ const HomeScreen = ({ navigation }) => {
         }
       } else {
         Alert.alert('Error', 'Invalid username or password');
-        Vibration.vibrate(500); 
+        Vibration.vibrate(500);
       }
     } catch (error) {
       console.error('Error:', error);
       Alert.alert('Error', 'An error occurred');
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1500);
     }
   };
+  
 
   return (
     <>
@@ -69,7 +74,6 @@ const HomeScreen = ({ navigation }) => {
 
       <View style={styles.helloContainer}>
        <CustomText style={styles.helloText}>Hello</CustomText>
-       
       </View>
 
       <View style={styles.helloContainer}>
@@ -94,17 +98,22 @@ const HomeScreen = ({ navigation }) => {
           {rememberMe && <View style={styles.checkedCheckbox} />}
         </TouchableOpacity>
       </View>
-
+      {isLoading ? (
+        <LoadingIndicator/>
+      ) : (
      <View style={styles.signInButtonContainer}>
       <CustomText style={styles.signIn}>Sign in</CustomText>
-     <TouchableOpacity style={styles.signInButton} onPress={handleLogin}><Antdesign name={"arrowright"} size={36} color={"white"}/></TouchableOpacity>
+      {/* Display ActivityIndicator if isLoading is true */}
+     
+        <TouchableOpacity style={styles.signInButton} onPress={handleLogin}>
+          <Antdesign name={"arrowright"} size={36} color={"white"} />
+        </TouchableOpacity>
+      
      </View>
+     )}
      <Text style={styles.footerText}>Don't have an account ? <TouchableOpacity  onPress={() => navigation.navigate('SignUp')}><Text style={{textDecorationLine:"underline",fontSize:18}}>Create </Text></TouchableOpacity> </Text>     
      <LoginMethodsButtons/>
-
-     
     </View>
-   
     </>
   );
 }
@@ -113,7 +122,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor:'white',
     flex:1,
-
   },
   topImage: {
     width:"100%",
@@ -124,11 +132,6 @@ const styles = StyleSheet.create({
    helloText: {
     textAlign:'center',
     fontSize:65,
-    
-    },
-   topImage: {
-    width:"100%",
-    height:130,
    },
    signInText:{
     textAlign:'center',
@@ -205,7 +208,6 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
     marginRight:5,
   }
-
 });
 
 export default HomeScreen;

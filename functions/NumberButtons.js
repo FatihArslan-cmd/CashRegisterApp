@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage from the correct package
 
-const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit,paymentSuccessReceive,counter }) => {
+const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit, paymentSuccessReceive, counter }) => {
   const [inputValue, setInputValue] = useState('');
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [change, setChange] = useState(0); // State to store the change
+  const [enteredAmount, setEnteredAmount] = useState(0); // State to store the entered amount
 
   useEffect(() => {
     if (exampleValue > 0) {
@@ -17,7 +20,6 @@ const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit,paymentSucce
     if (counter > 0) {
       setPaymentSuccess(false);
       console.log(paymentSuccess);
-
     }
     return () => {};
   }, [counter]);
@@ -30,9 +32,7 @@ const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit,paymentSucce
   }, [exampleValueCredit]);
 
   useEffect(() => {
-   
-      paymentSuccessReceive(paymentSuccess);
-    
+    paymentSuccessReceive(paymentSuccess);
   }, [paymentSuccess, paymentSuccessReceive]);
 
   const handleButtonPress = (value) => {
@@ -56,20 +56,22 @@ const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit,paymentSucce
       return;
     }
 
-    const enteredAmount = parseFloat(inputValue);
-    if (enteredAmount > allTotal) {
-      const change = enteredAmount - allTotal;
-      Alert.alert('Success:', `Your change is $${change.toFixed(2)}`);
+    const amount = parseFloat(inputValue);
+    const changeAmount = amount - allTotal;
+    const requiredAmount = allTotal - amount;
+
+    if (amount > allTotal) {
+      Alert.alert('Success:', `Your change is $${changeAmount.toFixed(2)}`);
+      setChange(changeAmount); // Update the state with change
       setInputValue('');
       setPaymentSuccess(true);
-    } else if (enteredAmount - allTotal === 0) {
+    } else if (changeAmount === 0) {
       Alert.alert('The order is completed', 'All the due has been paid');
       setPaymentSuccess(true);
     } else {
-      const change1 = allTotal - enteredAmount;
       Alert.alert(
         'Insufficient Balance',
-        `The customer must give $${change1.toFixed(2)} more.`,
+        `The customer must give $${requiredAmount.toFixed(2)} more.`,
         [
           {
             text: 'Cancel',
@@ -87,6 +89,8 @@ const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit,paymentSucce
         ]
       );
     }
+
+    setEnteredAmount(amount); 
   };
 
   const handleCalculate = () => {
@@ -96,6 +100,22 @@ const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit,paymentSucce
   const handleCalculateCredit = () => {
     handleCalculatePayment('Card', 'cash');
   };
+
+  useEffect(() => {
+    const savePaymentData = async () => {
+      if (paymentSuccess) {
+        try {
+          await AsyncStorage.setItem('change', change.toFixed(2));
+          await AsyncStorage.setItem('enteredAmount', enteredAmount.toFixed(2));
+          console.log(change,enteredAmount)
+        } catch (error) {
+          console.error('Error saving payment data:', error);
+        }
+      }
+    };
+
+    savePaymentData();
+  }, [paymentSuccess, change, enteredAmount]);
 
   const renderButtons = (numbers) => {
     return numbers.map((number) => (
@@ -138,8 +158,6 @@ const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit,paymentSucce
           <Text style={styles.buttonText}>.</Text>
         </TouchableOpacity>
       </View>
-      
-     
     </View>
   );
 };

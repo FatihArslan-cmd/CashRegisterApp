@@ -22,6 +22,6 @@ export const getProductPrice = async (productId, productData, setProductData, su
     setSubTotal(newSubTotal);
   } catch (error) {
     console.error('Error:', error);
-    alert(error.message || 'An error occurred while fetching product data'); // Display user-friendly error message
+    alert(error.message || 'An error occurred while fetching product data');
   }
 };

@@ -8,7 +8,7 @@ import FilterModal from './FiltersModel';
 import * as Animatable from 'react-native-animatable';
 import { Menu,Box,NativeBaseProvider,Pressable,HamburgerIcon,Heading } from 'native-base';
 import axios from 'axios';
-
+import LoadingIndicator from '../../functions/LoadingIndicator';
 const SeeProductScreen = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -19,10 +19,12 @@ const SeeProductScreen = () => {
   const [refreshing, setRefreshing] = useState(false); // Yenileme durumu
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [favoriteAllPressed, setFavoriteAllPressed] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const fetchProducts = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get('https://fatiharslan-cmd.github.io/mockjson/db.json');
       const data = response.data;
       if (!data.products || !Array.isArray(data.products)) {
@@ -37,6 +39,9 @@ const SeeProductScreen = () => {
       setFilteredProducts(productsWithImages);
     } catch (error) {
       console.error('Error fetching products:', error);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
   
@@ -101,34 +106,39 @@ const SeeProductScreen = () => {
       setFavorites(updatedFavorites);
     }
   };
-  const isFavorite = (id) => {
-    return favorites.some((item) => item.id === id);
-  };
+  
 
-  const renderItem = useCallback(({ item }) => (
-    <Animatable.View
-     
-      animation="fadeInUp"
-      delay={500} 
-      useNativeDriver
-    >
-      <View style={styles.productContainer}>
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productPrice}>Price: ${item.price} </Text>
-        <Text style={styles.productid}>ID:  {item.id} </Text>
-        <Image source={{ uri: item.image }} style={{ width: 100, height: 100 ,borderRadius:15, marginTop:5,marginBottom:5 }} />
-        <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Icon name={isFavorite(item.id) ? 'heart' : 'heart-o'} size={24} color={isFavorite(item.id) ? 'orange' : 'green'} />
-            <Text style={[styles.favoriteButton, isFavorite(item.id) && styles.favoriteButtonText]}>
-              {isFavorite(item.id) ? 'Favorited' : 'Add to Favorites'}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    </Animatable.View>
-  ), [favorites, toggleFavorite]);
+  const memoizedIsFavorite = useCallback(
+    (id) => favorites.some((item) => item.id === id),
+    [favorites]
+  );
 
+  const renderItem = useCallback(({ item }) => {
+    const isFavorite = memoizedIsFavorite(item.id);
+    return (
+      <Animatable.View
+        animation="fadeInUp"
+        delay={500}
+        useNativeDriver
+      >
+        <View style={styles.productContainer}>
+          <Text style={styles.productName}>{item.name}</Text>
+          <Text style={styles.productPrice}>Price: ${item.price} </Text>
+          <Text style={styles.productid}>ID: {item.id} </Text>
+          <Image source={{ uri: item.image }} style={{ width: 100, height: 100, borderRadius: 15, marginTop: 5, marginBottom: 5 }} />
+          <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Icon name={isFavorite ? 'heart' : 'heart-o'} size={24} color={isFavorite ? 'orange' : 'green'} />
+              <Text style={[styles.favoriteButton, isFavorite && styles.favoriteButtonText]}>
+                {isFavorite ? 'Favorited' : 'Add to Favorites'}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </Animatable.View>
+    );
+  }, [favorites, toggleFavorite, memoizedIsFavorite]);
+  
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchProducts();
@@ -137,44 +147,37 @@ const SeeProductScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Animatable.View
-        animation="fadeInDown"
-        delay={300} 
-        useNativeDriver
-      >
-        <View style={styles.filterContainer}>
-          <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}> 
-            <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
-          </TouchableOpacity>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search products"
-            onChangeText={text => setSearchTerm(text)}
-            value={searchTerm}
-          />
-          <TouchableOpacity onPress={() => setShowFiltersModal(true)}>
-            <MaterialCommunityIcons style={styles.searchIcons} name={"filter-variant"} size={30} color={"black"} />
-          </TouchableOpacity>
-          <Modal visible={showAssignModal} animationType="slide" transparent>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setShowAssignModal(false)}>
-                  <Text style={[styles.modalButtonText, styles.cancelButtonText]}>Cancel</Text>
-                </TouchableOpacity>
-              </View>
+    <Animatable.View
+      animation="fadeInDown"
+      delay={300} 
+      useNativeDriver
+    >
+      <View style={styles.filterContainer}>
+        <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}> 
+          <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search products"
+          onChangeText={text => setSearchTerm(text)}
+          value={searchTerm}
+        />
+        <TouchableOpacity onPress={() => setShowFiltersModal(true)}>
+          <MaterialCommunityIcons style={styles.searchIcons} name={"filter-variant"} size={30} color={"black"} />
+        </TouchableOpacity>
+        <Modal visible={showAssignModal} animationType="slide" transparent>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setShowAssignModal(false)}>
+                <Text style={[styles.modalButtonText, styles.cancelButtonText]}>Cancel</Text>
+              </TouchableOpacity>
             </View>
-          </Modal>
-        </View>
-      
-  
-      {filteredProducts.length === 0 ? (
-        <View style={styles.emptyContainer}>
-        <Image
-             source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
-             style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }} 
-           />
-        </View>
-       
+          </View>
+        </Modal>
+      </View>
+    
+      {isLoading ? (
+        <LoadingIndicator />
       ) : (
         <View style={styles.productsListContainer}>
           <FlatList
@@ -190,52 +193,55 @@ const SeeProductScreen = () => {
           />
         </View>
       )}
-       </Animatable.View>
-  <Modal visible={showFavorites} animationType="slide">
-  <View style={styles.favoritesContainer}>
-    <View style={{ flexDirection: 'row' }}>
-      <NativeBaseProvider>
-        <Box justifyContent={'center'} alignItems={'center'} >
-          <Heading>Favorites</Heading>
-          <Menu w="190" trigger={triggerProps => {
-            return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
-              <HamburgerIcon />
-            </Pressable>;
-          }}>
-            <Menu.Item onPress={assignAllFavorites}>Favorite All Products</Menu.Item>
-            <Menu.Item onPress={unFavoriteAll}>Unfavorite All Products</Menu.Item>
-          </Menu>
-        </Box>
-      </NativeBaseProvider>
-    </View>
-    {favorites.length === 0 ? (
-      <View style={styles.emptyContainer}>
-        <Image
-             source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
-             style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }} 
-           />
-      </View>
-    ) : (
-      <FlatList
-        data={favorites}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    )}
-    <TouchableOpacity onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange',marginTop:'auto' }}>
-      <Text style={{ color: 'white', padding: 10, textAlign: 'center', fontWeight: 'bold' }}>Close</Text>
-    </TouchableOpacity>
-  </View>
-</Modal>
-
+    </Animatable.View>
   
-      <FilterModal
-        showFiltersModal={showFiltersModal}
-        setShowFiltersModal={setShowFiltersModal}
-        filteredProducts={filteredProducts}
-        setFilteredProducts={setFilteredProducts}
-      />
-    </View>
+    <Modal visible={showFavorites} animationType="slide">
+      <View style={styles.favoritesContainer}>
+        <View style={{ flexDirection: 'row' }}>
+          <NativeBaseProvider>
+            <Box justifyContent={'center'} alignItems={'center'} >
+              <Heading>Favorites</Heading>
+              <Menu w="190" trigger={triggerProps => {
+                return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
+                  <HamburgerIcon />
+                </Pressable>;
+              }}>
+                <Menu.Item onPress={assignAllFavorites}>Favorite All Products</Menu.Item>
+                <Menu.Item onPress={unFavoriteAll}>Unfavorite All Products</Menu.Item>
+              </Menu>
+            </Box>
+          </NativeBaseProvider>
+        </View>
+        
+        {favorites.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Image
+              source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
+              style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }} 
+            />
+          </View>
+        ) : (
+          <FlatList
+            data={favorites}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        )}
+       
+        <TouchableOpacity onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange',marginTop:'auto' }}>
+          <Text style={{ color: 'white', padding: 10, textAlign: 'center', fontWeight: 'bold' }}>Close</Text>
+        </TouchableOpacity>
+      </View>
+    </Modal>
+  
+    <FilterModal
+      showFiltersModal={showFiltersModal}
+      setShowFiltersModal={setShowFiltersModal}
+      filteredProducts={filteredProducts}
+      setFilteredProducts={setFilteredProducts}
+    />
+  </View>
+  
   );
 };
 

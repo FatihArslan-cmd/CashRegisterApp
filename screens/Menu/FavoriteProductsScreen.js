@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
+import LoadingIndicator from '../../functions/LoadingIndicator';
 const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
@@ -12,8 +12,10 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
   const [searchText, setSearchText] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [showToastItem, setShowToastItem] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigation = useNavigation();
-  const route = useRoute();
+  
 
   useEffect(() => {
     const loadFavorites = async () => {
@@ -44,15 +46,25 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
   };
 
   const showToastMessage = (selectedItem) => {
+    setIsLoading(true);
     setShowToast(true);
     setShowToastItem(selectedItem); 
     setTimeout(() => {
-      setShowToast(false);
+      ;
+      setIsLoading(false);
     }, 1000);
+    setTimeout(() => {
+      setShowToast(false);
+      
+    }, 2000);
   };
 
   const addToFavorites = (item) => {
+    
+      
+      
     if (!disableActions) {
+      
     navigation.navigate('Application', { favoriteItem: item });
     showToastMessage(item);
   } else {
@@ -67,10 +79,10 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
 
   return (
     <View style={styles.container}>
+        
       <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}>
         <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
       </TouchableOpacity>
-
       <Modal visible={showFavorites} animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.favoritesContainer}>
@@ -78,8 +90,9 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
               animation="fadeInDown"
               delay={100}
               useNativeDriver
-            >
+            > 
               <Text style={styles.sectionTitle}>Favorites</Text>
+             
               <View style={styles.searchContainer}>
                 <TextInput
                   style={styles.searchInput}
@@ -87,13 +100,15 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
                   onChangeText={text => setSearchText(text)}
                   value={searchText}
                 />
+                 {isLoading && <LoadingIndicator />}
               </View>
+              
             </Animatable.View>
             {filteredFavorites.length === 0 ? (
-              <View style={styles.container}>
+              <View style={styles.emptyContainer}>
                 <Image
                   source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
-                  style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }}
+                  style={styles.emptyImage}
                 />
               </View>
             ) : (
@@ -102,28 +117,37 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
                 delay={500}
                 useNativeDriver
               >
-                <Animatable.Text style={{ fontWeight: 'bold' }} animation="slideInUp" iterationCount={3} direction="alternate">Tap to add!</Animatable.Text>
-                <FlatList
-                  data={filteredFavorites}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => addToFavorites(item)}>
-                      <View style={styles.productContainer}>
-                        <Text style={styles.productName}>{item.name} </Text>
-                        <Text style={styles.productID}>ID: {item.id} </Text>
-                        <Text style={styles.productPrice}>Price: ${item.price} </Text>
-                        <Text style={styles.productPrice}>KDV %{item.kdv} </Text>
-                        <Image source={{ uri: item.image }} style={styles.productImage} />
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                  keyExtractor={(item) => item.id.toString()}
-                  refreshControl={
-                    <RefreshControl
-                      refreshing={refreshing}
-                      onRefresh={onRefresh}
-                    />
-                  }
-                />
+               
+                <Animatable.Text style={styles.tapToAddText} animation="slideInUp" iterationCount={3} direction="alternate">
+                  Tap to add!
+                </Animatable.Text>
+                
+                  <FlatList
+                    data={filteredFavorites}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity 
+                      onPress={() => addToFavorites(item)} 
+                      disabled={isLoading} 
+                    >
+                        <View style={styles.productContainer}>
+                          <Text style={styles.productName}>{item.name}</Text>
+                          <Text style={styles.productID}>ID: {item.id}</Text>
+                          <Text style={styles.productPrice}>Price: ${item.price}</Text>
+                          <Text style={styles.productPrice}>KDV %{item.kdv}</Text>
+                          <Image source={{ uri: item.image }} style={styles.productImage} />
+                        </View>
+                      </TouchableOpacity>
+                    )}
+                    keyExtractor={(item) => item.id.toString()}
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                      />
+                    }
+                  />
+               
+  
                 {showToast && (
                   <View style={styles.toast}>
                     <Text style={styles.toastText}>
@@ -135,12 +159,16 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
             )}
           </View>
         </View>
+      
         <TouchableOpacity onPress={() => setShowFavorites(false)} style={styles.closeButton}>
           <Text style={styles.closeButtonText}>Close</Text>
         </TouchableOpacity>
+            
       </Modal>
+    
     </View>
   );
+  
 };
 
 const styles = StyleSheet.create({

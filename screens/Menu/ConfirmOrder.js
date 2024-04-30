@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Platform, StyleSheet, Alert, Vibration } from 'react-native';
 import { Heading, NativeBaseProvider, VStack, Center, Button, Modal } from 'native-base';
-import { Entypo } from '@expo/vector-icons'; // Expo'dan Entypo ikonunu içe aktar
-
+import { Entypo } from '@expo/vector-icons'; 
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
-
-const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess,getValueFromConfirmOrder,getValueFromConfirm }) => {
+import loadUserProfile from '../../functions/LoadUserProfile'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingIndicator from '../../functions/LoadingIndicator';
+const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmOrder }) => {
   const today = new Date();
   const formattedDate = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
   const hour = today.getHours() + 3;
   const minute = today.getMinutes();
   const second = today.getSeconds();
+  const [orderData, setOrderData] = useState(null);
 
   const generateRandomSalesNo = () => {
     let salesNo = '';
@@ -24,6 +26,36 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess,getValueFromConfirmOr
   const [selectedPrinter, setSelectedPrinter] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [confirmedValue, setConfirmedValue] = useState(0);
+  const [userProfile, setUserProfile] = useState(null); 
+  const [storedData, setStoredData] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state for print operation
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const profile = await loadUserProfile(); 
+        setUserProfile(profile); 
+      } catch (error) {
+        console.error('Error loading user profile:', error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []); 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('orderData');
+        const data = jsonValue != null ? JSON.parse(jsonValue) : null;
+        setStoredData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const html = `
     <html>
@@ -49,60 +81,72 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess,getValueFromConfirmOr
         <h2 style="font-size: 50px; font-family: Courier New; font-weight: bold;">32Bit</h2>
         <p style="font-size: 24px; font-family: Courier New; font-weight: normal;">Kemalpaşa, Esentepe Kampüsü, Üniversite Cd., 54050 Serdivan/Sakarya</p>
         <p style="font-size: 24px; font-family: Courier New; font-weight: normal;">Sales no: ${generateRandomSalesNo()}</p>
-        <div class="flex-row">
-          <p style="font-size: 24px; font-family: Courier New; font-weight: normal;">Payment Type:   |   Cashier:</p>
+        <div class="flex-row"> 
+        ${userProfile ? `
+          <p style="font-size: 24px; font-family: Courier New; font-weight: normal;">Payment Type:  <br/>  Cashier: ${userProfile.email}</p>
+          ` : ''}
         </div>
       </div>
       <hr/>
-      <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Products</h2>
+      <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">${
+        storedData ? (
+          storedData.productData.map((product, index) => (
+            `<p key=${index}>${index + 1}- ${product.name} ${product.price}$ KDV ${product.kdv}%</p>`
+          )).join('')
+        ) : (
+          '<p>No data available</p>'
+        )}
+      </h2>
       <hr/>
-      <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Received money Chnage</h2>
+      <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Received Money<br/>Change:</h2>
       <hr/>
-      <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Subtotal :${subTotal}all total</h2>
+      <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Subtotal :${subTotal}$ <br/>AllTotal :${allTotal}$</h2>
+      <hr/>
     </body>
     </html>
   `;
 
+ 
   const print = async () => {
+    setLoading(true); 
     await Print.printAsync({
       html,
       printerUrl: selectedPrinter?.url,
     });
+    setLoading(false); 
   };
-
+  
   const printToFile = async () => {
+    setLoading(true); 
     const { uri } = await Print.printToFileAsync({ html });
     console.log('File has been saved to:', uri);
     await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+    setLoading(false); 
   };
 
   const selectPrinter = async () => {
     const printer = await Print.selectPrinterAsync();
     setSelectedPrinter(printer);
   };
+
   const confirmOrder = () => {
     if (allTotal === 0) {
-        Alert.alert("No products!", "There are no products in the list. Please add products before confirming the order.");
-        Vibration.vibrate();
+      Alert.alert("No products!", "There are no products in the list. Please add products before confirming the order.");
+      Vibration.vibrate();
     } else if (!paymentSuccess) {
-     
       Alert.alert("Payment Not Completed", "Please complete the payment before confirming the order.");
       Vibration.vibrate();
     } else {
       setShowModal(true);
     }
   };
-  const sendDataToParent = () => {
-   
-    getValueFromConfirm++;
-};
+
   const handleCloseModal = () => {
     // Increment confirmed value when modal is closed
     setConfirmedValue(confirmedValue + 1);
-    sendDataToParent();
+    getValueFromConfirmOrder(); // Call the function without increment operator
     setShowModal(false);
-   
-};
+  };
 
   return (
     <NativeBaseProvider>
@@ -118,17 +162,22 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess,getValueFromConfirmOr
           <Modal.Content maxWidth="400px">
             <Modal.CloseButton />
             <Modal.Header>Invoice</Modal.Header>
-
             <Modal.Body>
               <VStack style={styles.modalContainer} space={4} alignItems="center">
-                <Button onPress={print}>Print</Button>
-                <Button onPress={printToFile}>Share the Invoice file</Button>
-                {Platform.OS === 'ios' && (
+                {loading ? ( 
+                  <LoadingIndicator/>
+                ) : (
                   <>
-                    <Button title="Select printer" onPress={selectPrinter} />
-                    {selectedPrinter ? (
-                      <Text style={styles.printer}>{`Selected printer: ${selectedPrinter.name}`}</Text>
-                    ) : null}
+                    <Button onPress={print}>Print</Button>
+                    <Button onPress={printToFile}>Share the Invoice file</Button>
+                    {Platform.OS === 'ios' && (
+                      <>
+                        <Button title="Select printer" onPress={selectPrinter} />
+                        {selectedPrinter ? (
+                          <Text style={styles.printer}>{`Selected printer: ${selectedPrinter.name}`}</Text>
+                        ) : null}
+                      </>
+                    )}
                   </>
                 )}
               </VStack>

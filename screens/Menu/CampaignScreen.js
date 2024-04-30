@@ -13,7 +13,6 @@ const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSu
     useEffect(() => {
         if (campaignCounter > 0) {
             setDiscountApplied(false);
-         
     
         }
         return () => {};
