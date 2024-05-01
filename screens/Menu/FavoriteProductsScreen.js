@@ -60,17 +60,14 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
   };
 
   const addToFavorites = (item) => {
-    
-      
-      
     if (!disableActions) {
-      
-    navigation.navigate('Application', { favoriteItem: item });
-    showToastMessage(item);
-  } else {
-    // Show alert when actions are disabled
-    Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied/Payment is done.");
-  }
+      navigation.navigate('Application', { favoriteItem: item });
+      showToastMessage(item);
+      setFavorites((prevFavorites) => [...prevFavorites, item]);
+    } else {
+      // Show alert when actions are disabled
+      Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied/Payment is done.");
+    }
   };
 
   const filteredFavorites = favorites.filter(item =>

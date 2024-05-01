@@ -175,7 +175,11 @@ const Application = () => {
       console.error('Error saving data:', error);
     }
   };
- 
+  const addProductToList = (product) => {
+    setProductData([...productData, product]); // Yeni ürünü mevcut ürün listesine ekleyin
+    setSubTotal(SubTotal + product.price); // Yeni ürünün fiyatını toplama ekle
+  };
+  
   useEffect(() => {
     if (paymentSuccess === true) {
       saveDataToStorage(SubTotal, allTotal, productData);
@@ -232,7 +236,14 @@ const Application = () => {
       <TouchableOpacity onPress={() => removeProduct(index, product.price)} style={styles.deleteButton}>
         <Text style={styles.deleteButtonText}>Delete</Text>
       </TouchableOpacity>
-    )}>
+    )}
+    renderLeftActions={() => (
+        <TouchableOpacity onPress={() => addProductToList(product)} style={styles.addMultipleProducts}>
+          <Text style={styles.deleteButtonText}>+</Text>
+        </TouchableOpacity>
+        
+    )}
+    >
       <View style={styles.productContainer}>
         <View style={styles.productPrice}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -425,6 +436,14 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    height: '100%',
+    borderRadius: 15,
+  },
+  addMultipleProducts:{
+    backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
     width: 80,
