@@ -7,21 +7,15 @@ import { shareAsync } from 'expo-sharing';
 import loadUserProfile from '../../functions/LoadUserProfile'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingIndicator from '../../functions/LoadingIndicator';
-const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmOrder }) => {
+
+const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmOrder, change, receivedAmount, productData,paymentType }) => {
   const today = new Date();
   const formattedDate = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
   const hour = today.getHours() + 3;
   const minute = today.getMinutes();
   const second = today.getSeconds();
-  const [orderData, setOrderData] = useState(null);
 
-  const generateRandomSalesNo = () => {
-    let salesNo = '';
-    for (let i = 0; i < 6; i++) {
-      salesNo += Math.floor(Math.random() * 10); 
-    }
-    return salesNo;
-  };
+ 
 
   const [selectedPrinter, setSelectedPrinter] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -29,7 +23,12 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
   const [userProfile, setUserProfile] = useState(null); 
   const [storedData, setStoredData] = useState(null);
   const [loading, setLoading] = useState(false); // Loading state for print operation
-
+  const [salesNo, setSalesNo] = useState(0); // Sales number state
+  useEffect(() => {
+    if (paymentSuccess) {
+      setSalesNo(prevSalesNo => prevSalesNo + 1);
+    }
+  }, [paymentSuccess]);
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -42,20 +41,6 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
 
     fetchUserProfile();
   }, []); 
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem('orderData');
-        const data = jsonValue != null ? JSON.parse(jsonValue) : null;
-        setStoredData(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const html = `
     <html>
@@ -80,25 +65,23 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
       <div class="flex-container">
         <h2 style="font-size: 50px; font-family: Courier New; font-weight: bold;">32Bit</h2>
         <p style="font-size: 24px; font-family: Courier New; font-weight: normal;">Kemalpaşa, Esentepe Kampüsü, Üniversite Cd., 54050 Serdivan/Sakarya</p>
-        <p style="font-size: 24px; font-family: Courier New; font-weight: normal;">Sales no: ${generateRandomSalesNo()}</p>
+        <p style="font-size: 24px; font-family: Courier New; font-weight: normal;">Sales no: ${salesNo}</p>
         <div class="flex-row"> 
         ${userProfile ? `
-          <p style="font-size: 24px; font-family: Courier New; font-weight: normal;">Payment Type:  <br/>  Cashier: ${userProfile.email}</p>
+          <p style="font-size: 24px; font-family: Courier New; font-weight: normal;">Payment Type: ${paymentType}  <br/>  Cashier: ${userProfile.email}</p>
           ` : ''}
         </div>
       </div>
       <hr/>
-      <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">${
-        storedData ? (
-          storedData.productData.map((product, index) => (
-            `<p key=${index}>${index + 1}- ${product.name} ${product.price}$ KDV ${product.kdv}%</p>`
-          )).join('')
-        ) : (
-          '<p>No data available</p>'
-        )}
+      <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">
+      
+      ${productData.map(product => `
+      <p>${product.name}: ${product.price}$ | KDV :${product.kdv}% | 1 PCS  </p>
+    `).join('')}
+         
       </h2>
       <hr/>
-      <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Received Money<br/>Change:</h2>
+      <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Received Money :${receivedAmount}$ <br/>Change :${change}$</h2>
       <hr/>
       <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Subtotal :${subTotal}$ <br/>AllTotal :${allTotal}$</h2>
       <hr/>
@@ -137,6 +120,8 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
       Alert.alert("Payment Not Completed", "Please complete the payment before confirming the order.");
       Vibration.vibrate();
     } else {
+      // Update sales number on successful payment
+     
       setShowModal(true);
     }
   };

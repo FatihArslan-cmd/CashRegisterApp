@@ -3,11 +3,12 @@ import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'reac
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage from the correct package
 
-const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit, paymentSuccessReceive, counter }) => {
+const CalculatorApp = ({ receiveReceivedAndChange, allTotal, exampleValue, exampleValueCredit, paymentSuccessReceive, counter }) => {
   const [inputValue, setInputValue] = useState('');
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [change, setChange] = useState(0); // State to store the change
   const [enteredAmount, setEnteredAmount] = useState(0); // State to store the entered amount
+  const [paymentType, setPaymentType] = useState('');
 
   useEffect(() => {
     if (exampleValue > 0) {
@@ -65,9 +66,11 @@ const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit, paymentSucc
       setChange(changeAmount); // Update the state with change
       setInputValue('');
       setPaymentSuccess(true);
+      setPaymentType(paymentType); 
     } else if (changeAmount === 0) {
       Alert.alert('The order is completed', 'All the due has been paid');
       setPaymentSuccess(true);
+      setPaymentType(paymentType);
     } else {
       Alert.alert(
         'Insufficient Balance',
@@ -81,9 +84,12 @@ const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit, paymentSucc
           {
             text: `Pay the rest by ${oppositePaymentType}`,
             onPress: () => {
-              const paymentMethod = paymentType === 'Cash' ? 'credit' : 'cash';
+              const paymentMethod = 'Cash' ? 'credit' : 'cash';
               Alert.alert('Payment Successful', `The remaining balance has been paid by ${paymentMethod}.`);
+              setEnteredAmount(allTotal);
+              setChange(0)
               setPaymentSuccess(true);
+              setPaymentType('Cash and Credit'); // Set payment type as 'Both'
             },
           },
         ]
@@ -102,20 +108,11 @@ const CalculatorApp = ({ allTotal, exampleValue, exampleValueCredit, paymentSucc
   };
 
   useEffect(() => {
-    const savePaymentData = async () => {
-      if (paymentSuccess) {
-        try {
-          await AsyncStorage.setItem('change', change.toFixed(2));
-          await AsyncStorage.setItem('enteredAmount', enteredAmount.toFixed(2));
-          console.log(change,enteredAmount)
-        } catch (error) {
-          console.error('Error saving payment data:', error);
-        }
-      }
-    };
-
-    savePaymentData();
-  }, [paymentSuccess, change, enteredAmount]);
+    if (paymentSuccess) {
+      receiveReceivedAndChange(change, enteredAmount, paymentType);
+    }
+  }, [paymentSuccess]);
+  
 
   const renderButtons = (numbers) => {
     return numbers.map((number) => (

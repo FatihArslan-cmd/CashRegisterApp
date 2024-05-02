@@ -30,6 +30,9 @@ const Application = () => {
   const [counter, setCounter] = useState(0);
   const [campaignCounter, setcampaignCounter] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [receivedAmount, setReceivedAmount] = useState(false);
+  const [change, setChange] = useState(false);
+  const [paymentType, setPaymentType] = useState('');
 
   const getValueFromConfirmOrder = (data) => {
     setGetValueFromConfirm(getValueFromConfirm+data)
@@ -38,7 +41,6 @@ const Application = () => {
     setProductData([]);
     setCounter(counter+1);
     setSubTotal(0);
-    setPaymentSuccess(false);
     setcampaignCounter(campaignCounter+1)
   };
 
@@ -57,7 +59,6 @@ const Application = () => {
 
 
   useEffect(() => {
-    // Calculate all total whenever SubTotal changes
     setAllTotal(SubTotal);
   }, [SubTotal]);
 
@@ -148,7 +149,12 @@ const Application = () => {
     setDisableActions(paymentSuccess);
   }, [paymentSuccess]);
   
-
+  const receiveReceivedAndChange = (change,receivedAmount,paymentType) => {
+    setChange(change);
+    setReceivedAmount(receivedAmount);
+    setPaymentType(paymentType);
+    console.log(paymentType);
+  };
 
   useEffect(() => {
     // Scroll to the bottom of the ScrollView whenever productData or paymentSuccess changes
@@ -158,35 +164,18 @@ const Application = () => {
   }, [productData, paymentSuccess,isLoading]);
    // Dependency on productData for automatic scrolling
 
-   const saveDataToStorage = async (SubTotal, allTotal, productData) => {
-    try {
-      // Check if productData is empty or SubTotal/allTotal is 0
-      if (productData.length === 0 || SubTotal === 0 || allTotal === 0) {
-        console.log('Product data is empty or SubTotal/AllTotal is 0. Data not saved.');
-        return;
-      }
-      else
-      {
-      const data = JSON.stringify({ SubTotal, allTotal, productData });
-      await AsyncStorage.setItem('orderData', data);
-      console.log('Data saved successfully');
-      }
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
-  };
+  
   const addProductToList = (product) => {
-    setProductData([...productData, product]); // Yeni ürünü mevcut ürün listesine ekleyin
-    setSubTotal(SubTotal + product.price); // Yeni ürünün fiyatını toplama ekle
+    if (!disableActions && !paymentSuccess) { 
+    setProductData([...productData, product]); 
+    setSubTotal(SubTotal + product.price);
+  } else {
+      
+    Alert.alert("Actions Disabled", "You cannot remove products after the payment is done /Any campaign is applied.");
+  }
   };
   
-  useEffect(() => {
-    if (paymentSuccess === true) {
-      saveDataToStorage(SubTotal, allTotal, productData);
-      console.log(SubTotal, allTotal, productData);
-    }
-  }, [paymentSuccess]);
-  
+ 
   
   
   const clearInput = () => {
@@ -292,7 +281,8 @@ const Application = () => {
                          exampleValue={exampleValue}
                          exampleValueCredit={exampleValueCredit}
                          paymentSuccessReceive={paymentSuccessReceive}
-                         counter={counter} />
+                         counter={counter}
+                         receiveReceivedAndChange={receiveReceivedAndChange} />
           <View style={{ flexDirection: 'column', borderWidth: 1, borderColor: '#ccc', borderRadius: 15, marginLeft: 5 }}>
             <FaturaButton />
             <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
@@ -306,7 +296,10 @@ const Application = () => {
                      allTotal={allTotal}
                      paymentSuccess={paymentSuccess}
                      getValueFromConfirmOrder={getValueFromConfirmOrder}
-                 
+                     change={change}
+                     receivedAmount={receivedAmount}
+                     productData={productData}
+                     paymentType={paymentType}
             />
           <TouchableOpacity onPress={() => {
               setDisableActions();
