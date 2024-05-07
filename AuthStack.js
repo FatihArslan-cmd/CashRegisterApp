@@ -10,6 +10,7 @@ import Application from './screens/Menu/SalesScreen';
 import SeeProductsScreen from './screens/Menu/SeeProductsScreen';
 import FavoriteProductsScreen from './screens/Menu/DirectProductEntryScreen';
 import CalculatorApp from './functions/NumberButtons';
+import ReportsScreen from './screens/Menu/ReportsScreen';
 const Stack = createStackNavigator();
 
 
@@ -45,6 +46,11 @@ const AuthStack = () => {
       <Stack.Screen
         name="Application"
         component={Application}
+        options={{ headerShown: false }}
+      />
+       <Stack.Screen
+        name="Reports"
+        component={ReportsScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

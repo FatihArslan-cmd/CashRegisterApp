@@ -62,7 +62,7 @@ const SignUpScreen = ({ navigation }) => {
         return;
       }
       // Save new user data
-      await AsyncStorage.setItem(username, JSON.stringify({ password, email }));
+      await AsyncStorage.setItem(username, JSON.stringify({ password, email,username }));
       Alert.alert('Success', 'Account created successfully');
       navigation.navigate('Home');
     } catch (error) {

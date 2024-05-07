@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Alert, } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import getAppVersion from '../functions/getAppVersion';
-import loadUserProfile from '../functions/LoadUserProfile';
 import GetIP from '../functions/GetIp';
 import OnlineStatusInformer from '../functions/OnlineStatusInformer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const InformationRow = ({ label, value, iconName, iconColor, style }) => (
   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
@@ -15,28 +14,54 @@ const InformationRow = ({ label, value, iconName, iconColor, style }) => (
   </View>
 );
 
-const CustomDrawerContent = (props) => {
-  const { navigation } = props;
-  const [userProfile, setUserProfile] = useState(null);
-  const [currentDate, setCurrentDate] = useState('');
+const CustomDrawerContent = ({ navigation }) => {
+  const [userProfile, setUserProfile] = useState(null); // State to hold user profile
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      const profile = await loadUserProfile();
-      setUserProfile(profile);
+    // Function to fetch username from AsyncStorage
+    const fetchUsername = async () => {
+      try {
+        const storedUsername = await AsyncStorage.getItem('username');
+        setUsername(storedUsername);
+      } catch (error) {
+        console.error('Error fetching username:', error);
+        Alert.alert('Error', 'An error occurred while fetching username');
+      }
     };
 
-    fetchUserProfile();
-
-    // Set current date
-    const date = new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-    setCurrentDate(date);
+    fetchUsername(); // Call the function to fetch username
   }, []);
+
+  useEffect(() => {
+    // Function to fetch user profile from AsyncStorage
+    const fetchUserProfile = async () => {
+      try {
+        const userProfileJSON = await AsyncStorage.getItem(username);
+        const userProfile = JSON.parse(userProfileJSON);
+        setUserProfile(userProfile);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        Alert.alert('Error', 'An error occurred while fetching user profile');
+      }
+    };
+
+    if (username) {
+      fetchUserProfile(); // Call the function to fetch user profile
+    }
+  }, [username]);
+
+  const currentDate = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  const storeNo = '1';
+  const cashRegisterNo = '38462';
+  const ipAddress = GetIP();
+  const version = getAppVersion();
 
   // Function to handle leaving the account
   const handleLeaveAccount = () => {
@@ -46,8 +71,7 @@ const CustomDrawerContent = (props) => {
       [
         {
           text: 'Yes',
-          onPress: async () => {
-           
+          onPress: () => {
             navigation.navigate('Home'); // Navigates to the home screen.
           },
         },
@@ -61,13 +85,8 @@ const CustomDrawerContent = (props) => {
     );
   };
 
-  const storeNo = '1';
-  const cashRegisterNo = '38462';
-  const ipAddress = GetIP();
-  const version = getAppVersion();
-
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView>
       <OnlineStatusInformer />
       <View style={{ alignItems: 'center' }}>
         <AntDesign name="user" size={72} color="gray" />
@@ -76,16 +95,16 @@ const CustomDrawerContent = (props) => {
       <View style={{ flex: 1, marginTop: 5, paddingHorizontal: 16, borderStyle: 'solid', borderColor: 'lightgray', borderWidth: 1 }}>
         <View style={{ paddingBottom: 10 }}>
 
-          {userProfile && (
+        
             <View>
-              <InformationRow label="Staff Email" value={userProfile.email} iconName="mail" iconColor="gray" />
+              <InformationRow label="Staff Email" value={userProfile ? userProfile.email : ''} iconName="mail" iconColor="gray" />
               <InformationRow label="Store No" value={storeNo} iconName="shoppingcart" iconColor="gray" />
               <InformationRow label="Cash Register No" value={cashRegisterNo} iconName="barcode" iconColor="gray" />
               <InformationRow label="Cash Register IP" value={ipAddress} iconName="wifi" iconColor="gray" />
               <InformationRow label="Version" value={version} iconName="info" iconColor="gray" />
               <InformationRow label="Date" value={currentDate} iconName="calendar" iconColor="gray" />
             </View>
-          )}
+         
         </View>
       </View>
 

@@ -7,10 +7,10 @@ import * as Animatable from 'react-native-animatable';
 const menuItems = [
   { icon: 'shopping-cart', color: 'black', label: 'SALES', navigation: 'Application' },
   { icon: 'money', color: 'green', label: 'PRODUCTS', navigation: 'SeeProducts' },
-  { icon: 'undo', color: 'red', label: 'İADE İŞLEMLERİ' },
-  { icon: 'credit-card', color: 'orange', label: 'TAHSİLATLAR' },
-  { icon: 'file-text-o', color: 'gray', label: 'REPORTS' },
-  { icon: 'ellipsis-h', color: 'black', label: 'DİĞER İŞLEMLER' },
+  { icon: 'file-text-o', color: 'gray', label: 'REPORTS' , navigation: 'Reports'},
+  { icon: 'ellipsis-h', color: 'black', label: 'OTHER OPERATIONS' },
+  { icon: 'undo', color: 'red', label: 'REFUND' },
+  { icon: 'credit-card', color: 'orange', label: 'COLLECTIONS' },
   { icon: 'plus-square', color: 'blue', label: 'PRODUCT ENTRY', navigation: 'DirectProductEntry' },
   { icon: 'external-link', color: 'black', label: 'www', url: 'https://32bit.com.tr/' }, // Add URL to www item
 ];
@@ -22,10 +22,13 @@ const MenuScreen = () => {
   const handle32bit = (item) => {
     if (item.url) {
       Linking.openURL(item.url);
+    } else if (!item.navigation) {
+      // Do nothing for buttons without navigation defined
     } else {
       navigation.navigate(item.navigation);
     }
   };
+  
 
   return (
     <View style={styles.container}>

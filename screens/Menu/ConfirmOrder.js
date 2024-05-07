@@ -8,27 +8,20 @@ import loadUserProfile from '../../functions/LoadUserProfile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingIndicator from '../../functions/LoadingIndicator';
 
-const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmOrder, change, receivedAmount, productData,paymentType }) => {
+const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmOrder, change, receivedAmount, productData, paymentType }) => {
   const today = new Date();
   const formattedDate = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
   const hour = today.getHours() + 3;
   const minute = today.getMinutes();
   const second = today.getSeconds();
 
- 
-
   const [selectedPrinter, setSelectedPrinter] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [confirmedValue, setConfirmedValue] = useState(0);
   const [userProfile, setUserProfile] = useState(null); 
-  const [storedData, setStoredData] = useState(null);
   const [loading, setLoading] = useState(false); // Loading state for print operation
   const [salesNo, setSalesNo] = useState(0); // Sales number state
-  useEffect(() => {
-    if (paymentSuccess) {
-      setSalesNo(prevSalesNo => prevSalesNo + 1);
-    }
-  }, [paymentSuccess]);
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -41,6 +34,30 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
 
     fetchUserProfile();
   }, []); 
+
+  useEffect(() => {
+    const loadSalesNo = async () => {
+      try {
+        const savedSalesNo = await AsyncStorage.getItem('salesNo');
+        if (savedSalesNo !== null) {
+          setSalesNo(parseInt(savedSalesNo)); 
+        }
+      } catch (error) {
+        console.error('Error loading sales number:', error);
+      }
+    };
+  
+    loadSalesNo();
+  }, []);
+
+  useEffect(() => {
+    if (paymentSuccess) {
+      // Increment sales number and save it to AsyncStorage
+      const newSalesNo = salesNo + 1;
+      setSalesNo(newSalesNo);
+      AsyncStorage.setItem('salesNo', newSalesNo.toString());
+    }
+  }, [paymentSuccess]);
 
   const html = `
     <html>
@@ -85,17 +102,40 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
       <hr/>
       <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Subtotal :${subTotal}$ <br/>AllTotal :${allTotal}$</h2>
       <hr/>
+      
     </body>
     </html>
   `;
-
+  const saveInvoiceHTML = async (html) => {
+    try {
+      const invoices = await AsyncStorage.getItem('invoices');
+      let invoicesArray = [];
+  
+      if (invoices !== null) {
+        invoicesArray = JSON.parse(invoices);
+      }
+  
+      const invoiceWithDate = { salesNo,html, date: new Date().toLocaleString() };
+  
+      invoicesArray.push(invoiceWithDate);
+  
+      await AsyncStorage.setItem('invoices', JSON.stringify(invoicesArray));
+  
+      console.log('Invoice saved successfully.');
+    } catch (error) {
+      console.error('Error saving invoice:', error);
+    }
+  };
  
+  
   const print = async () => {
     setLoading(true); 
+    await saveInvoiceHTML(html); 
     await Print.printAsync({
       html,
       printerUrl: selectedPrinter?.url,
     });
+  
     setLoading(false); 
   };
   
@@ -121,7 +161,6 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
       Vibration.vibrate();
     } else {
       // Update sales number on successful payment
-     
       setShowModal(true);
     }
   };
