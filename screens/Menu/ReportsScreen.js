@@ -118,7 +118,7 @@ const ReportsScreen = () => {
             <View style={styles.invoiceContainer}>
               <Text style={styles.salesNoText}>Sales No {item.salesNo}</Text>
               <TouchableOpacity style={styles.accessButton} onPress={() => handleInvoicePress(item)}>
-                <Text style={styles.accessButtonText}>{item.date}</Text>
+                <Text style={styles.accessButtonText}>{item.date} </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteInvoice(index)}>
                 <Ionicons name="trash-outline" size={24} color="red" />
@@ -136,7 +136,7 @@ const ReportsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 30,
   },
   inputContainer: {
     flexDirection: 'row'

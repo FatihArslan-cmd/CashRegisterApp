@@ -63,7 +63,7 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
     if (!disableActions) {
       navigation.navigate('Application', { favoriteItem: item });
       showToastMessage(item);
-      setFavorites((prevFavorites) => [...prevFavorites, item]);
+    
     } else {
       // Show alert when actions are disabled
       Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied/Payment is done.");
@@ -127,10 +127,10 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
                       disabled={isLoading} 
                     >
                         <View style={styles.productContainer}>
-                          <Text style={styles.productName}>{item.name}</Text>
-                          <Text style={styles.productID}>ID: {item.id}</Text>
-                          <Text style={styles.productPrice}>Price: ${item.price}</Text>
-                          <Text style={styles.productPrice}>KDV %{item.kdv}</Text>
+                          <Text style={styles.productName}>{item.name} </Text>
+                          <Text style={styles.productID}>ID: {item.id} </Text>
+                          <Text style={styles.productPrice}>Price: ${item.price} </Text>
+                          <Text style={styles.productPrice}>KDV %{item.kdv} </Text>
                           <Image source={{ uri: item.image }} style={styles.productImage} />
                         </View>
                       </TouchableOpacity>

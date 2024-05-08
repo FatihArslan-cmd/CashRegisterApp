@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { LoaderProvider } from './context/LoaderContext';
-import AppLoader from './functions/AppLoader';
+
 import AuthStack from './AuthStack';
 import MainDrawer from './DrawerNavigation';
 import { OnlineStatusProvider } from './context/OnlineStatusContext';
