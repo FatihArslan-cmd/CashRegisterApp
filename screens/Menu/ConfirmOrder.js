@@ -115,14 +115,20 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
       if (invoices !== null) {
         invoicesArray = JSON.parse(invoices);
       }
-      
-      const invoiceWithDate = { 
-        salesNo, 
-        html, 
+  
+    
+      const existingInvoice = invoicesArray.find(invoice => invoice.salesNo === salesNo);
+      if (existingInvoice) {
+        console.log(`Invoice with sales number ${salesNo} already exists. Skipping saving.`);
+        return;
+      }
+  
+      const invoiceWithDate = {
+        salesNo,
+        html,
         date: new Date().toLocaleString(),
-       
-          online: isOnline // Set online attribute based on isOnline context value
-        
+  
+        online: isOnline 
       };
   
       invoicesArray.push(invoiceWithDate);
@@ -133,6 +139,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
       console.error('Error saving invoice:', error);
     }
   };
+  
   
  
   

@@ -6,12 +6,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { Box, Popover, Button, NativeBaseProvider } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import OnlineStatusContext from '../../context/OnlineStatusContext';
+import LoadingIndicator from '../../functions/LoadingIndicator';
 
 const ReportsScreen = () => {
   const [invoices, setInvoices] = useState([]);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const { isOnline } = useContext(OnlineStatusContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getInvoices = async () => {
@@ -27,7 +29,52 @@ const ReportsScreen = () => {
 
     getInvoices();
   }, []);
-
+  const sendRequestToStore = async () => {
+    return new Promise(resolve => {
+     
+      setTimeout(() => {
+        resolve({ success: true });
+      }, 2000); 
+  
+      setTimeout(() => {
+        if (invoices.length > 0) {
+          const updatedInvoices = invoices.map(invoice => {
+            if (!invoice.online) {
+              return { ...invoice, online: true };
+            }
+            return invoice;
+          });
+          AsyncStorage.setItem('invoices', JSON.stringify(updatedInvoices));
+          setInvoices(updatedInvoices);
+        }
+      }, 4000); 
+    
+    });
+  };
+  
+  const handleConfirmSendStore = async () => {
+    try {
+      setIsLoading(true);
+      const response = await sendRequestToStore();
+      if (response.success && invoices.some(invoice => !invoice.online)) {
+        const updatedInvoices = invoices.map(invoice => {
+          if (!invoice.online) {
+            return { ...invoice, online: true };
+          }
+          return invoice;
+        });
+        await AsyncStorage.setItem('invoices', JSON.stringify(updatedInvoices));
+        setInvoices(updatedInvoices);
+      }
+    } catch (error) {
+      console.error('Error confirming send store:', error);
+    }
+    finally{
+      setIsLoading(false);
+    }
+  };
+  
+  
   const handleInvoicePress = (invoice) => {
     setSelectedInvoice(invoice);
   };
@@ -84,6 +131,7 @@ const ReportsScreen = () => {
           onChangeText={setSearchTerm}
         />
         <NativeBaseProvider>
+        
           <Box w="150%" alignItems="center" flexDirection="row">
             <Popover trigger={triggerProps => {
               return <Button {...triggerProps} colorScheme="blue">Send Store</Button>;
@@ -98,13 +146,25 @@ const ReportsScreen = () => {
                     "You are offline. Come back when you are online"}
                 </Popover.Body>
                 <Popover.Footer justifyContent="flex-end">
-                  <Button.Group space={2}>
-                    {isOnline ? (
-                      <Button onPress={handleDeleteAllInvoices} colorScheme="blue">Confirm</Button>
-                    ) : (
-                      <Button isDisabled>Confirm</Button>
-                    )}
-                  </Button.Group>
+                <Button.Group space={2}>
+  {isLoading ? (
+   
+      <LoadingIndicator />
+   
+  ) : (
+    <>
+      {isOnline ? (
+        <Button onPress={handleConfirmSendStore} colorScheme="blue" isDisabled={falseInvoicesCount === 0}>
+          Confirm
+        </Button>
+      ) : (
+        <Button onPress={handleConfirmSendStore} colorScheme="blue" isDisabled>
+          Confirm
+        </Button>
+      )}
+    </>
+  )}
+</Button.Group>
                 </Popover.Footer>
               </Popover.Content>
             </Popover>
