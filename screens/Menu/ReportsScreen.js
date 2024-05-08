@@ -3,7 +3,8 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, Alert } 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons'; 
-import { Box, Popover, Button, NativeBaseProvider } from 'native-base';
+import { Box, Popover, Button, NativeBaseProvider, Center } from 'native-base';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ReportsScreen = () => {
   const [invoices, setInvoices] = useState([]);
@@ -57,6 +58,8 @@ const ReportsScreen = () => {
     }
   };
 
+ 
+
   const handleDeleteAllAlert = () => {
     Alert.alert(
       'No Invoices',
@@ -67,6 +70,8 @@ const ReportsScreen = () => {
   };
 
   const filteredInvoices = invoices.filter(invoice => invoice.salesNo.toString().includes(searchTerm));
+
+  const falseInvoicesCount = invoices.filter(invoice => !invoice.online).length;
 
   return (
     <View style={styles.container}>
@@ -79,7 +84,37 @@ const ReportsScreen = () => {
           onChangeText={setSearchTerm}
         />
         <NativeBaseProvider>
-          <Box w="150%" alignItems="center">
+          <Box w="150%" alignItems="center" flexDirection="row">
+          <Popover trigger={triggerProps => {
+  return <Button {...triggerProps} colorScheme="blue">Send Store</Button>;
+}}>
+  <Popover.Content accessibilityLabel="Confirm" w="56">
+    <Popover.Arrow />
+    <Popover.CloseButton />
+    <Popover.Header>{invoices.online ? "Offline" : "Send Orders"}</Popover.Header>
+    <Popover.Body>
+  {invoices.online ? "You are offline. Come back when you are online"
+   :
+    (falseInvoicesCount === 0 ? "No orders done when offline."
+    : 
+    `${falseInvoicesCount} Orders done when offline will be sent to the store. Do you Confirm?`)}
+</Popover.Body>
+
+
+
+    <Popover.Footer justifyContent="flex-end">
+      <Button.Group space={2}>
+        {invoices.online ? (
+        <Button isDisabled>Cancel</Button>
+         
+        ) : (
+          <Button onPress={handleDeleteAllInvoices} colorScheme="blue">Confirm</Button>
+        )}
+      </Button.Group>
+    </Popover.Footer>
+  </Popover.Content>
+</Popover>
+
             <Popover trigger={triggerProps => {
               return <Button {...triggerProps} colorScheme="red">Delete All</Button>;
             }}>
@@ -100,6 +135,7 @@ const ReportsScreen = () => {
           </Box>
         </NativeBaseProvider>
       </View>
+      
       {selectedInvoice ? (
         <View style={styles.webViewContainer}>
           <WebView
@@ -116,6 +152,11 @@ const ReportsScreen = () => {
           data={filteredInvoices}
           renderItem={({ item, index }) => (
             <View style={styles.invoiceContainer}>
+              <MaterialCommunityIcons
+                name={item.online ? "checkbox-blank-circle" : "checkbox-blank-circle"}
+                size={24}
+                color={item.online ? "green" : "red"}
+              />
               <Text style={styles.salesNoText}>Sales No {item.salesNo}</Text>
               <TouchableOpacity style={styles.accessButton} onPress={() => handleInvoicePress(item)}>
                 <Text style={styles.accessButtonText}>{item.date} </Text>
@@ -136,10 +177,11 @@ const ReportsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
+    padding: 20,
   },
   inputContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    
   },
   salesNoText: {
     fontWeight: 'bold'
@@ -190,6 +232,19 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: 'white',
     textAlign: 'center',
+  },
+  deleteAllFalseContainer: {
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  deleteAllFalseButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+  },
+  deleteAllFalseButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 

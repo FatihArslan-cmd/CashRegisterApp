@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { View, Text, TouchableOpacity, Platform, StyleSheet, Alert, Vibration } from 'react-native';
 import { Heading, NativeBaseProvider, VStack, Center, Button, Modal } from 'native-base';
 import { Entypo } from '@expo/vector-icons'; 
@@ -7,6 +7,7 @@ import { shareAsync } from 'expo-sharing';
 import loadUserProfile from '../../functions/LoadUserProfile'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingIndicator from '../../functions/LoadingIndicator';
+import OnlineStatusContext from '../../context/OnlineStatusContext';
 
 const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmOrder, change, receivedAmount, productData, paymentType }) => {
   const today = new Date();
@@ -14,7 +15,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
   const hour = today.getHours() + 3;
   const minute = today.getMinutes();
   const second = today.getSeconds();
-
+  const { isOnline} = useContext(OnlineStatusContext);
   const [selectedPrinter, setSelectedPrinter] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [confirmedValue, setConfirmedValue] = useState(0);
@@ -114,18 +115,25 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
       if (invoices !== null) {
         invoicesArray = JSON.parse(invoices);
       }
-  
-      const invoiceWithDate = { salesNo,html, date: new Date().toLocaleString() };
+      
+      const invoiceWithDate = { 
+        salesNo, 
+        html, 
+        date: new Date().toLocaleString(),
+       
+          online: isOnline // Set online attribute based on isOnline context value
+        
+      };
   
       invoicesArray.push(invoiceWithDate);
-  
       await AsyncStorage.setItem('invoices', JSON.stringify(invoicesArray));
   
-      console.log('Invoice saved successfully.');
+      console.log(`Invoice saved ${isOnline ? 'online' : 'offline'} successfully.`);
     } catch (error) {
       console.error('Error saving invoice:', error);
     }
   };
+  
  
   
   const print = async () => {
