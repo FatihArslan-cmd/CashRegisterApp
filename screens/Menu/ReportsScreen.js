@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WebView } from 'react-native-webview';
-import { Ionicons } from '@expo/vector-icons'; 
-import { Box, Popover, Button, NativeBaseProvider, Center } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
+import { Box, Popover, Button, NativeBaseProvider } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import OnlineStatusContext from '../../context/OnlineStatusContext';
 
 const ReportsScreen = () => {
   const [invoices, setInvoices] = useState([]);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const { isOnline } = useContext(OnlineStatusContext);
 
   useEffect(() => {
     const getInvoices = async () => {
@@ -58,8 +60,6 @@ const ReportsScreen = () => {
     }
   };
 
- 
-
   const handleDeleteAllAlert = () => {
     Alert.alert(
       'No Invoices',
@@ -85,35 +85,29 @@ const ReportsScreen = () => {
         />
         <NativeBaseProvider>
           <Box w="150%" alignItems="center" flexDirection="row">
-          <Popover trigger={triggerProps => {
-  return <Button {...triggerProps} colorScheme="blue">Send Store</Button>;
-}}>
-  <Popover.Content accessibilityLabel="Confirm" w="56">
-    <Popover.Arrow />
-    <Popover.CloseButton />
-    <Popover.Header>{invoices.online ? "Offline" : "Send Orders"}</Popover.Header>
-    <Popover.Body>
-  {invoices.online ? "You are offline. Come back when you are online"
-   :
-    (falseInvoicesCount === 0 ? "No orders done when offline."
-    : 
-    `${falseInvoicesCount} Orders done when offline will be sent to the store. Do you Confirm?`)}
-</Popover.Body>
-
-
-
-    <Popover.Footer justifyContent="flex-end">
-      <Button.Group space={2}>
-        {invoices.online ? (
-        <Button isDisabled>Cancel</Button>
-         
-        ) : (
-          <Button onPress={handleDeleteAllInvoices} colorScheme="blue">Confirm</Button>
-        )}
-      </Button.Group>
-    </Popover.Footer>
-  </Popover.Content>
-</Popover>
+            <Popover trigger={triggerProps => {
+              return <Button {...triggerProps} colorScheme="blue">Send Store</Button>;
+            }}>
+              <Popover.Content accessibilityLabel="Confirm" w="56">
+                <Popover.Arrow />
+                <Popover.CloseButton />
+                <Popover.Header>{isOnline ? "Send Orders" : "Offline"}</Popover.Header>
+                <Popover.Body>
+                  {isOnline ? (falseInvoicesCount === 0 ? "No orders done when offline." :
+                    `${falseInvoicesCount} Orders done when offline will be sent to the store. Do you Confirm?`) :
+                    "You are offline. Come back when you are online"}
+                </Popover.Body>
+                <Popover.Footer justifyContent="flex-end">
+                  <Button.Group space={2}>
+                    {isOnline ? (
+                      <Button onPress={handleDeleteAllInvoices} colorScheme="blue">Confirm</Button>
+                    ) : (
+                      <Button isDisabled>Confirm</Button>
+                    )}
+                  </Button.Group>
+                </Popover.Footer>
+              </Popover.Content>
+            </Popover>
 
             <Popover trigger={triggerProps => {
               return <Button {...triggerProps} colorScheme="red">Delete All</Button>;
@@ -135,7 +129,7 @@ const ReportsScreen = () => {
           </Box>
         </NativeBaseProvider>
       </View>
-      
+
       {selectedInvoice ? (
         <View style={styles.webViewContainer}>
           <WebView
@@ -181,7 +175,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    
+
   },
   salesNoText: {
     fontWeight: 'bold'

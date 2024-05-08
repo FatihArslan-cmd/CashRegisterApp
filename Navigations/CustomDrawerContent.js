@@ -30,7 +30,7 @@ const CustomDrawerContent = ({ navigation }) => {
       }
     };
 
-    fetchUsername(); // Call the function to fetch username
+    fetchUsername(); 
   }, []);
 
   useEffect(() => {
