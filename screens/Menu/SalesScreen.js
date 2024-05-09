@@ -266,9 +266,7 @@ const Application = () => {
     </View>
   )}
 </ScrollView>
-
-
-      
+     
       <View style={styles.separator} />
       <View style={styles.subTotalContainer}>
         <Text style={styles.subTotal}>Sub Total: {SubTotal} $</Text>
