@@ -3,11 +3,11 @@ import { View,  StyleSheet ,TouchableOpacity} from 'react-native';
 import AnimatedTypewriterText from '../functions/AnimatedTypewriterText'
 import ShareEg from '../functions/ShareButton';
 import ContactMe from '../functions/ContactButton';
+
 const SettingsScreen = () => {
   return (
     <View style={styles.container}>
           <ShareEg/>
-          <AnimatedTypewriterText></AnimatedTypewriterText>
           <ContactMe/>
     </View>
   );
@@ -20,10 +20,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
+
 });
 
 export default SettingsScreen;
