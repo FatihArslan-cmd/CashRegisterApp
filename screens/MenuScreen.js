@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomText from '../functions/CustomText'; // Burada CustomText bileşenini import ediyoruz.
 import * as Animatable from 'react-native-animatable';
+
 const menuItems = [
   { icon: 'shopping-cart', color: 'black', label: 'SALES', navigation: 'Application' },
   { icon: 'money', color: 'green', label: 'PRODUCTS', navigation: 'SeeProducts' },
@@ -16,7 +17,7 @@ const menuItems = [
 ];
 
 const MenuScreen = () => {
-  
+
   const navigation = useNavigation();
 
   const handle32bit = (item) => {
@@ -46,6 +47,7 @@ const MenuScreen = () => {
           <Icon name={item.icon} size={24} color={item.color} />
          
           <CustomText style={styles.buttonText}>{item.label}</CustomText>
+
         </TouchableOpacity>
         
       ))}

@@ -24,7 +24,8 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
         }
       ],
-      "react-native-vision-camera"
+      "react-native-vision-camera",
+      "expo-localization"
     ],
     "android": {
       "adaptiveIcon": {
