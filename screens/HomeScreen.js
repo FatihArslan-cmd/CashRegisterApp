@@ -7,11 +7,14 @@ import LoginMethodsButtons from '../functions/LoginMethodsButtons';
 import App from './Menu/SalesScreen';
 import LoadingIndicator from '../functions/LoadingIndicator';
 import CustomText from '../functions/CustomText';
+import { useTranslation } from 'react-i18next';
+
 const HomeScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const retrieveCredentials = async () => {
@@ -51,12 +54,12 @@ const HomeScreen = ({ navigation }) => {
           await AsyncStorage.removeItem('password');
         }
       } else {
-        Alert.alert('Error', 'Invalid username or password');
+        Alert.alert(t('Error'), t('Invalid username or password'));
         Vibration.vibrate(500);
-      }
+      }t('Error')
     } catch (error) {
       console.error('Error:', error);
-      Alert.alert('Error', 'An error occurred');
+      Alert.alert(t('Error'), 'An error occurred');
     } finally {
       setTimeout(() => {
         setIsLoading(false);
@@ -73,27 +76,27 @@ const HomeScreen = ({ navigation }) => {
      </View>   
 
       <View style={styles.helloContainer}>
-       <CustomText style={styles.helloText}>Hello</CustomText>
+       <CustomText style={styles.helloText}>{t('Hello')}</CustomText>
       </View>
 
       <View style={styles.helloContainer}>
-       <CustomText style={styles.signInText}>Sign in to your account</CustomText>
+       <CustomText style={styles.signInText}>{t('Sign in to your account')}</CustomText>
       </View>
 
       <View style={styles.inputContainer}>
        <FontAwesome name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon}/>
-       <TextInput style={styles.textInput} placeholder=' Username'  value={username}
+       <TextInput style={styles.textInput} placeholder={t('Username')}  value={username}
         onChangeText={text => setUsername(text)}/>
       </View>
       
       <View style={styles.inputContainer}>
        <FontAwesome name={"lock"} size={24} color={"#9A9A9A"} style={styles.inputIcon}/>
-       <TextInput style={styles.textInput} placeholder='Password' secureTextEntry value={password}
+       <TextInput style={styles.textInput} placeholder={t('Password')} secureTextEntry value={password}
         onChangeText={text => setPassword(text)} />
       </View>
 
       <View style={styles.rememberMeContainer}>
-      <Text style={styles.rememberMeText}>Remember Me</Text>
+      <Text style={styles.rememberMeText}>{t('Remember Me')}</Text>
         <TouchableOpacity style={styles.checkbox} onPress={() => setRememberMe(!rememberMe)}>
           {rememberMe && <View style={styles.checkedCheckbox} />}
         </TouchableOpacity>
@@ -102,16 +105,17 @@ const HomeScreen = ({ navigation }) => {
         <LoadingIndicator/>
       ) : (
      <View style={styles.signInButtonContainer}>
-      <CustomText style={styles.signIn}>Sign in</CustomText>
+      <CustomText style={styles.signIn}>{t('Sign in')}</CustomText>
       {/* Display ActivityIndicator if isLoading is true */}
-     
+      
         <TouchableOpacity style={styles.signInButton} onPress={handleLogin}>
           <Antdesign name={"arrowright"} size={36} color={"white"} />
         </TouchableOpacity>
       
      </View>
      )}
-     <Text style={styles.footerText}>Don't have an account ? <TouchableOpacity  onPress={() => navigation.navigate('SignUp')}><Text style={{textDecorationLine:"underline",fontSize:18}}>Create </Text></TouchableOpacity> </Text>     
+     <Text style={styles.footerText}>{t('Dont have an account ?')} <TouchableOpacity  onPress={() => navigation.navigate('SignUp')}>
+      <Text style={{textDecorationLine:"underline",fontSize:18}}> {t('Create')} </Text></TouchableOpacity> </Text>     
      <LoginMethodsButtons/>
     </View>
     </>

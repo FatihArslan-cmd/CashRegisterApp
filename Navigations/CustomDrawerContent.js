@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Import 
 import getAppVersion from '../functions/getAppVersion';
 import GetIP from '../functions/GetIp';
 import OnlineStatusInformer from '../functions/OnlineStatusInformer';
+import { useTranslation } from 'react-i18next';
 
 const InformationRow = ({ label, value, iconName, iconColor, style }) => (
   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
@@ -15,6 +16,7 @@ const InformationRow = ({ label, value, iconName, iconColor, style }) => (
 );
 
 const CustomDrawerContent = ({ navigation }) => {
+  const { t } = useTranslation();
   const [userProfile, setUserProfile] = useState(null); // State to hold user profile
   const [username, setUsername] = useState('');
 
@@ -26,7 +28,7 @@ const CustomDrawerContent = ({ navigation }) => {
         setUsername(storedUsername);
       } catch (error) {
         console.error('Error fetching username:', error);
-        Alert.alert('Error', 'An error occurred while fetching username');
+        Alert.alert(t('Error'), t('An error occurred while fetching username'));
       }
     };
 
@@ -42,7 +44,7 @@ const CustomDrawerContent = ({ navigation }) => {
         setUserProfile(userProfile);
       } catch (error) {
         console.error('Error fetching user profile:', error);
-        Alert.alert('Error', 'An error occurred while fetching user profile');
+        Alert.alert(t('Error'), 'An error occurred while fetching user profile');
       }
     };
 
@@ -66,17 +68,17 @@ const CustomDrawerContent = ({ navigation }) => {
   // Function to handle leaving the account
   const handleLeaveAccount = () => {
     Alert.alert(
-      'Are you sure?',
-      'Are you sure you want to leave your account?',
+      t('Are you sure?'),
+      t('Are you sure you want to leave your account?'),
       [
         {
-          text: 'Yes',
+          text: t('Yes'),
           onPress: () => {
             navigation.navigate('Home'); // Navigates to the home screen.
           },
         },
         {
-          text: 'No',
+          text: t('No'),
           onPress: () => console.log('Account stayed'),
           style: 'cancel',
         },
@@ -97,12 +99,12 @@ const CustomDrawerContent = ({ navigation }) => {
 
         
             <View>
-              <InformationRow label="Staff Email" value={userProfile ? userProfile.email : ''} iconName="mail" iconColor="gray" />
-              <InformationRow label="Store No" value={storeNo} iconName="shoppingcart" iconColor="gray" />
-              <InformationRow label="Cash Register No" value={cashRegisterNo} iconName="barcode" iconColor="gray" />
-              <InformationRow label="Cash Register IP" value={ipAddress} iconName="wifi" iconColor="gray" />
-              <InformationRow label="Version" value={version} iconName="info" iconColor="gray" />
-              <InformationRow label="Date" value={currentDate} iconName="calendar" iconColor="gray" />
+              <InformationRow label={t('email')} value={userProfile ? userProfile.email : ''} iconName="mail" iconColor="gray" />
+              <InformationRow label={t('Store No')} value={storeNo} iconName="shoppingcart" iconColor="gray" />
+              <InformationRow label={t('Cash Register No')} value={cashRegisterNo} iconName="barcode" iconColor="gray" />
+              <InformationRow label={t('Cash Register IP')} value={ipAddress} iconName="wifi" iconColor="gray" />
+              <InformationRow label={t('Version')} value={version} iconName="info" iconColor="gray" />
+              <InformationRow label={t('Date')} value={currentDate} iconName="calendar" iconColor="gray" />
             </View>
          
         </View>
@@ -110,18 +112,18 @@ const CustomDrawerContent = ({ navigation }) => {
 
       <View style={{ borderWidth: 1, borderColor: 'lightgray' }}>
         <DrawerItem
-          label="Menu"
+          label={t('Menu')}
           icon={({ color, size }) => <AntDesign name="menu-fold" size={size} color={color} />}
           onPress={() => {
-            navigation.navigate('Menu');
+            navigation.navigate(t('Menu'));
           }}
         />
         <DrawerItem
-          label="Settings"
+          label={t('Settings')}
           icon={({ color, size }) => <AntDesign name="setting" size={size} color={color} />}
           onPress={() => {
             // Navigate to Settings screen
-            navigation.navigate('Settings');
+            navigation.navigate(t('Settings'));
           }}
         />
       </View>
@@ -129,7 +131,7 @@ const CustomDrawerContent = ({ navigation }) => {
       <View style={{ borderWidth: 1, borderRadius: 20, borderColor: 'lightcoral' }}>
         <TouchableOpacity onPress={handleLeaveAccount} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <AntDesign name={"back"} size={36} color={"red"} />
-          <Text style={{ color: 'red', fontWeight: 'bold' }}>Leave the Account</Text>
+          <Text style={{ color: 'red', fontWeight: 'bold' }}>{t('Leave the Account')}</Text>
         </TouchableOpacity>
       </View>
     </DrawerContentScrollView>

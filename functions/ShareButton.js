@@ -1,12 +1,15 @@
 import React from 'react';
 import { Share, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import { useTranslation } from 'react-i18next';
 
 const ShareEg = () => {
+    const { t } = useTranslation();
+
     const onShare = async () => {
         try {
             const result = await Share.share({
-                message: 'I want to share an app that I discovered lately',
+                message: t('I want to share an app that I discovered lately'),
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {
@@ -28,7 +31,7 @@ const ShareEg = () => {
            <TouchableOpacity style={styles.shareButton} onPress={onShare}>
            <View style={styles.shareContainer}>
             <Fontisto name={"share"} size={24} color={"white"} style={styles.inputIcon} />
-            <Text style={styles.shareText}>Share</Text>
+            <Text style={styles.shareText}>{t('Share')}</Text>
             </View>
            </TouchableOpacity>
           

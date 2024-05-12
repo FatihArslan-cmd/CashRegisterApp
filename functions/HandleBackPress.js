@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import { BackHandler, Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const BackPressHandle = () => {
+  const { t } = useTranslation();
   const backHandlerSubscription = React.useRef(null); // Ref to store the subscription
+  
 
   useEffect(() => {
     backHandlerSubscription.current = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
@@ -15,16 +18,17 @@ const BackPressHandle = () => {
 
   const handleBackPress = () => {
     Alert.alert(
-      'Exit App?',
-      'Are you sure you want to leave your account?',
+      t('Exit App?'),                
+     
+      t('Are you sure you want to leave your account?'),
       [
-        {
-          text: 'Yes',
+        { 
+          text: t('Yes'),
           onPress: () => navigation.navigate('Menu'),
           
         },
         {
-          text: 'No',
+          text: t('No'),
           onPress: () => console.log('Staying in the app'),
           style: 'cancel',
         },

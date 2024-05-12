@@ -43,7 +43,7 @@ const SettingsScreen = () => {
         <Modal isOpen={showModal} onClose={() => setShowModal(false)} _backdrop={{ _dark: { bg: "coolGray.800" }, bg: "warmGray.50" }}>
           <Modal.Content maxWidth="350" maxH="212">
             <Modal.CloseButton />
-            <Modal.Header>Languages</Modal.Header>
+            <Modal.Header>{t('languages')}</Modal.Header>
             <Box flexDirection={'row'} marginY={3}>
               {languages.map(({ lang, image }) => (
                 <LanguageComponent key={lang} onPress={() => handleChangeLanguage(lang)} image={image} />
@@ -52,7 +52,7 @@ const SettingsScreen = () => {
             <Modal.Footer>
               <Button.Group space={2}>
                 <Button  colorScheme="red" onPress={() => setShowModal(false)}>
-                  Cancel
+                {t('Close')}
                 </Button>
                
               </Button.Group>

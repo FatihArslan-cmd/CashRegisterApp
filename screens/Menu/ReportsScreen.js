@@ -7,6 +7,7 @@ import { Box, Popover, Button, NativeBaseProvider } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import OnlineStatusContext from '../../context/OnlineStatusContext';
 import LoadingIndicator from '../../functions/LoadingIndicator';
+import { useTranslation } from 'react-i18next';
 
 const ReportsScreen = () => {
   const [invoices, setInvoices] = useState([]);
@@ -14,6 +15,7 @@ const ReportsScreen = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { isOnline } = useContext(OnlineStatusContext);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const getInvoices = async () => {
@@ -109,8 +111,8 @@ const ReportsScreen = () => {
 
   const handleDeleteAllAlert = () => {
     Alert.alert(
-      'No Invoices',
-      'There are no invoices to delete.',
+      t('No Invoices'),
+      t('There are no invoices to delete.')
       [{ text: 'OK' }],
       { cancelable: false }
     );
@@ -122,11 +124,11 @@ const ReportsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>REPORTS</Text>
+      <Text style={styles.title}>{t('price')}</Text>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.searchBar}
-          placeholder="Search by sales number..."
+          placeholder={t('Search by sales number')}
           value={searchTerm}
           onChangeText={setSearchTerm}
         />
@@ -134,17 +136,22 @@ const ReportsScreen = () => {
         
           <Box w="150%" alignItems="center" flexDirection="row">
             <Popover trigger={triggerProps => {
-              return <Button {...triggerProps} colorScheme="blue">Send Store</Button>;
+              return <Button {...triggerProps} colorScheme="blue">{t('Send Store')}</Button>;
             }}>
               <Popover.Content accessibilityLabel="Confirm" w="56">
                 <Popover.Arrow />
                 <Popover.CloseButton />
-                <Popover.Header>{isOnline ? "Send Orders" : "Offline"}</Popover.Header>
+                <Popover.Header>{isOnline ? t('Send Orders') : "Offline"}</Popover.Header>
                 <Popover.Body>
-                  {isOnline ? (falseInvoicesCount === 0 ? "No orders done when offline." :
-                    `${falseInvoicesCount} Orders done when offline will be sent to the store. Do you Confirm?`) :
-                    "You are offline. Come back when you are online"}
-                </Popover.Body>
+  {isOnline ? 
+    (falseInvoicesCount === 0 ? 
+      t('No orders done when offline.') :
+      `${falseInvoicesCount} ${t('Orders done when offline will be sent to the store. Do you Confirm?')}`
+    ) :
+    t('You are offline. Come back when you are online')
+  }
+</Popover.Body>
+
                 <Popover.Footer justifyContent="flex-end">
                 <Button.Group space={2}>
   {isLoading ? (
@@ -155,11 +162,11 @@ const ReportsScreen = () => {
     <>
       {isOnline ? (
         <Button onPress={handleConfirmSendStore} colorScheme="blue" isDisabled={falseInvoicesCount === 0}>
-          Confirm
+         {t('Confirm')}
         </Button>
       ) : (
         <Button onPress={handleConfirmSendStore} colorScheme="blue" isDisabled>
-          Confirm
+          {t('Confirm')}
         </Button>
       )}
     </>
@@ -170,18 +177,18 @@ const ReportsScreen = () => {
             </Popover>
 
             <Popover trigger={triggerProps => {
-              return <Button {...triggerProps} colorScheme="red">Delete All</Button>;
+              return <Button {...triggerProps} colorScheme="red">{t('Delete All')}</Button>;
             }}>
               <Popover.Content accessibilityLabel="Delete Invoices" w="56">
                 <Popover.Arrow />
                 <Popover.CloseButton />
-                <Popover.Header>Delete All</Popover.Header>
+                <Popover.Header>{t('Delete All')}</Popover.Header>
                 <Popover.Body>
-                  This will remove all invoices. This action cannot be reversed. Deleted data cannot be recovered.
+                {t('This will remove all invoices. This action cannot be reversed. Deleted data cannot be recovered')}
                 </Popover.Body>
                 <Popover.Footer justifyContent="flex-end">
                   <Button.Group space={2}>
-                    <Button onPress={handleDeleteAllInvoices} colorScheme="danger">Delete</Button>
+                    <Button onPress={handleDeleteAllInvoices} colorScheme="danger">{t('delete')}</Button>
                   </Button.Group>
                 </Popover.Footer>
               </Popover.Content>
@@ -198,7 +205,7 @@ const ReportsScreen = () => {
             style={{ flex: 1 }}
           />
           <TouchableOpacity style={styles.closeButton} onPress={handleCloseWebView}>
-            <Text style={styles.closeButtonText}>Close</Text>
+            <Text style={styles.closeButtonText}>{t('close')}</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -211,7 +218,7 @@ const ReportsScreen = () => {
                 size={24}
                 color={item.online ? "green" : "red"}
               />
-              <Text style={styles.salesNoText}>Sales No {item.salesNo}</Text>
+              <Text style={styles.salesNoText}>{t('Sales No')} {item.salesNo}</Text>
               <TouchableOpacity style={styles.accessButton} onPress={() => handleInvoicePress(item)}>
                 <Text style={styles.accessButtonText}>{item.date} </Text>
               </TouchableOpacity>
@@ -221,7 +228,7 @@ const ReportsScreen = () => {
             </View>
           )}
           keyExtractor={(item, index) => index.toString()}
-          ListEmptyComponent={<Text style={{ textAlign: 'center', color: 'gray' }}>No invoices available</Text>}
+          ListEmptyComponent={<Text style={{ textAlign: 'center', color: 'gray' }}>{t('No invoices available')}</Text>}
         />
       )}
     </View>

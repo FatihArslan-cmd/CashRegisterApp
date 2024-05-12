@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage from the correct package
+import { useTranslation } from 'react-i18next';
 
 const CalculatorApp = ({ receiveReceivedAndChange, allTotal, exampleValue, exampleValueCredit, paymentSuccessReceive, counter }) => {
   const [inputValue, setInputValue] = useState('');
@@ -9,6 +10,7 @@ const CalculatorApp = ({ receiveReceivedAndChange, allTotal, exampleValue, examp
   const [change, setChange] = useState(0); // State to store the change
   const [enteredAmount, setEnteredAmount] = useState(0); // State to store the entered amount
   const [paymentType, setPaymentType] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (exampleValue > 0) {
@@ -48,44 +50,46 @@ const CalculatorApp = ({ receiveReceivedAndChange, allTotal, exampleValue, examp
 
   const handleCalculatePayment = (paymentType, oppositePaymentType) => {
     if (inputValue === '') {
-      Alert.alert('Please Enter a Number', 'Please enter an amount before calculating.');
+      Alert.alert(t('Please Enter a Number'),t('Please enter an amount before calculating.'));
       return;
     }
 
     if (allTotal === 0) {
-      Alert.alert('No Items in the List', 'There are no items in the list.');
+      Alert.alert(t('No Items in the List'), t('There are no items in the list.'));
       return;
     }
 
     const amount = parseFloat(inputValue);
     const changeAmount = amount - allTotal;
     const requiredAmount = allTotal - amount;
-
+    
     if (amount > allTotal) {
-      Alert.alert('Success:', `Your change is $${changeAmount.toFixed(2)}`);
+      Alert.alert(t('Success'), `${t('Your change is')} $${changeAmount.toFixed(2)}`);
+
       setChange(changeAmount); // Update the state with change
       setInputValue('');
       setPaymentSuccess(true);
       setPaymentType(paymentType); 
     } else if (changeAmount === 0) {
-      Alert.alert('The order is completed', 'All the due has been paid');
+      Alert.alert(t('The order is completed'), t('All the due has been paid'));
       setPaymentSuccess(true);
       setPaymentType(paymentType);
     } else {
       Alert.alert(
-        'Insufficient Balance',
-        `The customer must give $${requiredAmount.toFixed(2)} more.`,
+        t('Insufficient Balance'),
+        t('The customer must give') + ' $' + requiredAmount.toFixed(2)
+,
         [
           {
-            text: 'Cancel',
+            text: t('Cancel'),
             onPress: () => console.log('Payment canceled'),
             style: 'cancel',
           },
           {
-            text: `Pay the rest by ${oppositePaymentType}`,
+            text: `${t('Pay the rest by')} ${oppositePaymentType}`,
             onPress: () => {
               const paymentMethod = 'Cash' ? 'credit' : 'cash';
-              Alert.alert('Payment Successful', `The remaining balance has been paid by ${paymentMethod}.`);
+              Alert.alert(t('Payment Successful'), `${t('The remaining balance has been paid by')} ${paymentMethod}.`);
               setEnteredAmount(allTotal);
               setChange(0)
               setPaymentSuccess(true);
@@ -124,13 +128,14 @@ const CalculatorApp = ({ receiveReceivedAndChange, allTotal, exampleValue, examp
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        value={inputValue}
-        keyboardType="numeric"
-        editable={false}
-        placeholder="Enter Amount of Money"
-      />
+    <TextInput
+  style={styles.input}
+  value={inputValue}
+  keyboardType="numeric"
+  editable={false}
+  placeholder={t('Enter Amount of money')}
+/>
+
 
       <View style={styles.row}>
         <TouchableOpacity style={styles.button} onPress={() => handleButtonPress('00')}>

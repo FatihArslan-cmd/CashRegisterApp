@@ -4,13 +4,17 @@ import Antdesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+
 const LoginMethodsButtons = () => {
     const navigation = useNavigation();
+    const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
             <View style={styles.textContainer}>
-              <Text style={styles.text}>Have'nt you tried</Text>
-              <Text style={styles.text}>Other login methods?</Text>
+              <Text style={styles.text}>{t('Havent you tried')}</Text>
+              <Text style={styles.text}>{t('Other login methods?')}</Text>
             </View>
             <Antdesign name={"arrowright"} size={48} color={"black"} style={styles.inputIcon}/>
         <View style={styles.buttonContainer}>

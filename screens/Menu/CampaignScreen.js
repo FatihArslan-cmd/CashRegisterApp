@@ -4,11 +4,13 @@ import { Heading, NativeBaseProvider, VStack, Center, Button, Modal } from 'nati
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSuccess,campaignCounter }) => {
     const [showModal, setShowModal] = useState(false);
     const [discountApplied, setDiscountApplied] = useState(false);
 
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (campaignCounter > 0) {
@@ -22,10 +24,10 @@ const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSu
     const canApplyDiscount = () => {
         if (allTotal === 0) {
             Alert.alert(
-                "No Items",
-                "There are no items in the list. Cannot apply discount.",
+                t('No Items'),
+                t('There are no items in the list. Cannot apply discount.'),
                 [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                    { text: "OK"}
                 ]
             );
             return false;
@@ -42,19 +44,19 @@ const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSu
             const discountedAllTotal = (allTotal * 0.8).toFixed(2);
 
             Alert.alert(
-                "Success",
-                "Discount applied successfully",
+                t('Success'),
+                t('Discount applied successfully'),
                 [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                    { text: "OK"}
                 ]
             );
             return discountedAllTotal;
         } else {
             Alert.alert(
-                "Discount Already Applied",
-                "The discount has already been applied to the order.",
+            t('Discount Already Applied'),
+            t('The discount has already been applied to the order.'),
                 [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                    { text: "OK" }
                 ]
             );
             return allTotal;
@@ -79,29 +81,29 @@ const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSu
                 const discountedAllTotal = (allTotal * 0.3).toFixed(2);
 
                 Alert.alert(
-                    "Success",
-                    "Discount applied successfully",
+                    t('Success'),
+                    t('Discount applied successfully'),
                     [
-                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                        { text: "OK"}
                     ]
                 );
                 return discountedAllTotal;
             } else {
                 Alert.alert(
-                    "Discount Already Applied",
-                    "The discount has already been applied to the order.",
+                t('Discount Already Applied'),
+                t('The discount has already been applied to the order.'),
                     [
-                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                        { text: "OK"}
                     ]
                 );
                 return allTotal;
             }
         } else {
             Alert.alert(
-                "No Discount Today",
-                "Today is not Black Friday. The discount only available on Fridays",
+                t('No Discount Today'),
+                t('Today is not Black Friday. The discount only available on Fridays'),
                 [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                    { text: "OK"}
                 ]
             );
             return allTotal;
@@ -111,10 +113,10 @@ const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSu
     const sendDataToParent = () => {
         if (paymentSuccess) {
             Alert.alert(
-                "Payment Done",
-                "Discounts cannot be applied after payment has been made.",
+                t('Payment Done'),
+                t('Discounts cannot be applied after payment has been made.'),
                 [
-                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                    { text: "OK"}
                 ]
             );
             return;
@@ -138,17 +140,17 @@ const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSu
                         <Modal.CloseButton />
                         <Modal.Body>
                             <VStack style={styles.modalContainer} space={1} alignItems="center">
-                                <Heading>Campaigns</Heading>
-                                <Heading size="sm">Choose the one that you want to use</Heading>
-
+                                <Heading>{t('Campaigns')}</Heading>
+                                <Heading size="sm">{t('Choose the one that you want to use')}</Heading>
+                                
                                 <TouchableOpacity onPress={() => sendDataToParent()}>
                                     <MaterialIcons name={"discount"} size={24} color={"red"} style={styles.inputIcon} />
-                                    <Text>20% discount for all products </Text>
+                                    <Text>{t('20% discount for all products')} </Text>
                                 </TouchableOpacity>
-
+                                
                                 <TouchableOpacity onPress={() => blackFridayDiscount()}>
                                     <MaterialIcons name={"discount"} size={24} color={"green"} style={styles.inputIcon} />
-                                    <Text>Black Friday %70 discount </Text>
+                                    <Text>{t('Black Friday %70 discount')}</Text>
                                 </TouchableOpacity>
 
                             </VStack>
@@ -156,7 +158,7 @@ const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSu
                         <Modal.Footer>
                             <Button.Group space={2}>
                                 <Button onPress={() => { setDiscountApplied(true); setShowModal(false); }} variant="ghost" colorScheme="blueGray">
-                                    Cancel
+                                    {t('Cancel')}
                                 </Button>
                             </Button.Group>
                         </Modal.Footer>

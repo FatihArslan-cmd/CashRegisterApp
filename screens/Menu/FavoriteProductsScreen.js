@@ -5,6 +5,8 @@ import Antdesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import LoadingIndicator from '../../functions/LoadingIndicator';
+import { useTranslation } from 'react-i18next';
+
 const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
@@ -16,6 +18,7 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
 
   const navigation = useNavigation();
   
+  const { t } = useTranslation();
 
   useEffect(() => {
     const loadFavorites = async () => {
@@ -66,7 +69,7 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
     
     } else {
       // Show alert when actions are disabled
-      Alert.alert("Actions Disabled", "You cannot remove/add products after the discount is applied/Payment is done.");
+      Alert.alert(t('Actions Disabled'), t('You cannot remove/add products after the discount is applied/Payment is done.'));
     }
   };
 
@@ -88,12 +91,12 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
               delay={100}
               useNativeDriver
             > 
-              <Text style={styles.sectionTitle}>Favorites</Text>
-             
+              <Text style={styles.sectionTitle}>{t('Favorites')}</Text>
+              
               <View style={styles.searchContainer}>
                 <TextInput
                   style={styles.searchInput}
-                  placeholder="Search by name"
+                  placeholder={t('Search by name')}
                   onChangeText={text => setSearchText(text)}
                   value={searchText}
                 />
@@ -116,7 +119,7 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
               >
                
                 <Animatable.Text style={styles.tapToAddText} animation="slideInUp" iterationCount={3} direction="alternate">
-                  Tap to add!
+                {t('Tap to add!')}
                 </Animatable.Text>
                 
                   <FlatList
@@ -129,7 +132,7 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
                         <View style={styles.productContainer}>
                           <Text style={styles.productName}>{item.name} </Text>
                           <Text style={styles.productID}>ID: {item.id} </Text>
-                          <Text style={styles.productPrice}>Price: ${item.price} </Text>
+                          <Text style={styles.productPrice}>{t('price')}: ${item.price} </Text>
                           <Text style={styles.productPrice}>KDV %{item.kdv} </Text>
                           <Image source={{ uri: item.image }} style={styles.productImage} />
                         </View>
@@ -143,22 +146,22 @@ const FavoriteProductsScreen = ({disableActions,paymentSuccess}) => {
                       />
                     }
                   />
-               
-  
+              
                 {showToast && (
                   <View style={styles.toast}>
                     <Text style={styles.toastText}>
-                      {showToastItem ? `"${showToastItem.name}" has been added ` : ''}
-                    </Text>
+                     {showToastItem ? `${showToastItem.name} ${t('has been added')}` : ''}
+                     </Text>
+
                   </View>
                 )}
               </Animatable.View>
             )}
           </View>
         </View>
-      
+        
         <TouchableOpacity onPress={() => setShowFavorites(false)} style={styles.closeButton}>
-          <Text style={styles.closeButtonText}>Close</Text>
+          <Text style={styles.closeButtonText}>{t('Close')}</Text>
         </TouchableOpacity>
             
       </Modal>

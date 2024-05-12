@@ -4,20 +4,23 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomText from '../functions/CustomText'; // Burada CustomText bileşenini import ediyoruz.
 import * as Animatable from 'react-native-animatable';
+import { useTranslation } from 'react-i18next';
 
-const menuItems = [
-  { icon: 'shopping-cart', color: 'black', label: 'SALES', navigation: 'Application' },
-  { icon: 'money', color: 'green', label: 'PRODUCTS', navigation: 'SeeProducts' },
-  { icon: 'file-text-o', color: 'gray', label: 'REPORTS' , navigation: 'Reports'},
-  { icon: 'ellipsis-h', color: 'black', label: 'OTHER OPERATIONS' },
-  { icon: 'undo', color: 'red', label: 'REFUND' },
-  { icon: 'credit-card', color: 'orange', label: 'COLLECTIONS' },
-  { icon: 'plus-square', color: 'blue', label: 'PRODUCT ENTRY', navigation: 'DirectProductEntry' },
-  { icon: 'external-link', color: 'black', label: 'www', url: 'https://32bit.com.tr/' }, // Add URL to www item
-];
+
 
 const MenuScreen = () => {
 
+  const { t } = useTranslation();
+const menuItems = [
+  { icon: 'shopping-cart', color: 'black', label: t('sales'), navigation: 'Application' },
+  { icon: 'money', color: 'green', label: t('products'), navigation: 'SeeProducts' },
+  { icon: 'file-text-o', color: 'gray', label: t('reports') , navigation: 'Reports'},
+  { icon: 'ellipsis-h', color: 'black', label: t('otheroperations') },
+  { icon: 'undo', color: 'red', label: t('refund') },
+  { icon: 'credit-card', color: 'orange', label: t('collections') },
+  { icon: 'plus-square', color: 'blue', label: t('productentry'), navigation: 'DirectProductEntry' },
+  { icon: 'external-link', color: 'black', label: 'www', url: 'https://32bit.com.tr/' }, // Add URL to www item
+];
   const navigation = useNavigation();
 
   const handle32bit = (item) => {
@@ -47,7 +50,6 @@ const MenuScreen = () => {
           <Icon name={item.icon} size={24} color={item.color} />
          
           <CustomText style={styles.buttonText}>{item.label}</CustomText>
-
         </TouchableOpacity>
         
       ))}

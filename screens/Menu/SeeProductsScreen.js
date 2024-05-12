@@ -9,6 +9,8 @@ import * as Animatable from 'react-native-animatable';
 import { Menu,Box,NativeBaseProvider,Pressable,HamburgerIcon,Heading } from 'native-base';
 import axios from 'axios';
 import LoadingIndicator from '../../functions/LoadingIndicator';
+import { useTranslation } from 'react-i18next';
+
 const SeeProductScreen = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -20,6 +22,8 @@ const SeeProductScreen = () => {
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [favoriteAllPressed, setFavoriteAllPressed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+  const { t } = useTranslation();
 
 
   const fetchProducts = async () => {
@@ -123,14 +127,14 @@ const SeeProductScreen = () => {
       >
         <View style={styles.productContainer}>
           <Text style={styles.productName}>{item.name}</Text>
-          <Text style={styles.productPrice}>Price: ${item.price} </Text>
+          <Text style={styles.productPrice}>{t('price')}: ${item.price} </Text>
           <Text style={styles.productid}>ID: {item.id} </Text>
           <Image source={{ uri: item.image }} style={{ width: 100, height: 100, borderRadius: 15, marginTop: 5, marginBottom: 5 }} />
           <TouchableOpacity onPress={() => toggleFavorite(item.id)}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Icon name={isFavorite ? 'heart' : 'heart-o'} size={24} color={isFavorite ? 'orange' : 'green'} />
               <Text style={[styles.favoriteButton, isFavorite && styles.favoriteButtonText]}>
-                {isFavorite ? 'Favorited' : 'Add to Favorites'}
+                {isFavorite ? t('Favorited') : t('Add to Favorites')}
               </Text>
             </View>
           </TouchableOpacity>
@@ -158,7 +162,7 @@ const SeeProductScreen = () => {
         </TouchableOpacity>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search products"
+          placeholder={t('Search products')}
           onChangeText={text => setSearchTerm(text)}
           value={searchTerm}
         />
@@ -169,7 +173,7 @@ const SeeProductScreen = () => {
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setShowAssignModal(false)}>
-                <Text style={[styles.modalButtonText, styles.cancelButtonText]}>Cancel</Text>
+                <Text style={[styles.modalButtonText, styles.cancelButtonText]}>{t('Cancel')}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -200,14 +204,14 @@ const SeeProductScreen = () => {
         <View style={{ flexDirection: 'row' }}>
           <NativeBaseProvider>
             <Box justifyContent={'center'} alignItems={'center'} >
-              <Heading>Favorites</Heading>
+              <Heading>{t('Favorites')}</Heading>
               <Menu w="190" trigger={triggerProps => {
                 return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
                   <HamburgerIcon />
                 </Pressable>;
               }}>
-                <Menu.Item onPress={assignAllFavorites}>Favorite All Products</Menu.Item>
-                <Menu.Item onPress={unFavoriteAll}>Unfavorite All Products</Menu.Item>
+                <Menu.Item onPress={assignAllFavorites}>{t('Favorite All Products')}</Menu.Item>
+                <Menu.Item onPress={unFavoriteAll}>{t('Unfavorite All Products')}</Menu.Item>
               </Menu>
             </Box>
           </NativeBaseProvider>
@@ -229,7 +233,7 @@ const SeeProductScreen = () => {
         )}
        
         <TouchableOpacity onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange',marginTop:'auto' }}>
-          <Text style={{ color: 'white', padding: 10, textAlign: 'center', fontWeight: 'bold' }}>Close</Text>
+          <Text style={{ color: 'white', padding: 10, textAlign: 'center', fontWeight: 'bold' }}>{t('Close')}</Text>
         </TouchableOpacity>
       </View>
     </Modal>

@@ -3,15 +3,17 @@ import { View, StyleSheet } from 'react-native';
 import CustomText from '../functions/CustomText';
 import OnlineStatusContext from '../context/OnlineStatusContext';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useTranslation } from 'react-i18next';
 
 const OnlineStatusInformer = () => {
     const { isOnline } = useContext(OnlineStatusContext);
-
+    const { t } = useTranslation();
+   
     return (
         <View style={styles.container}>
             <View>
             <CustomText style={{ color: isOnline ? 'green' : 'red', }}>
-                Store {isOnline ? 'Online' : 'Offline'}
+            {t('store')} {isOnline ? 'Online' : 'Offline'}
             </CustomText>
             </View>
             {isOnline ? (

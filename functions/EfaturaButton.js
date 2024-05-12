@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Modal, VStack, FormControl, Input, Button, NativeBaseProvider, } from 'native-base';
 import { Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
+
 const FaturaButton = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [email, setEmail] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(true);
-    const [submitted, setSubmitted] = useState(false);
+    const { t } = useTranslation();
 
     const validateEmail = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,9 +30,9 @@ const FaturaButton = () => {
         setEmail('');
         setIsValidEmail(true);
     };
-
+    
     const showAlert = () => {
-        Alert.alert("Success", "Your invoice will be sent as soon as possible.");
+        Alert.alert(t('Success'),t('Your invoice will be sent as soon as possible.'));
     };
 
     return (
@@ -38,29 +40,29 @@ const FaturaButton = () => {
             <Modal isOpen={modalVisible} onClose={closeModal} avoidKeyboard justifyContent="center" bottom="4" size="lg">
                 <Modal.Content>
                     <Modal.CloseButton />
-                    <Modal.Header>Enter Your E-mail</Modal.Header>
+                    <Modal.Header>{t('Enter Your E-mail')}</Modal.Header>
                     <Modal.Body>
-                        Enter email address and we'll send the bill to your e-mail.
+                    {t('Enter email address and we ll send the bill to your e-mail.')}
                         <FormControl mt="3" isInvalid={!isValidEmail}>
                             <FormControl.Label>Email</FormControl.Label>
                             <Input onChangeText={(value) => setEmail(value)} />
                             {!isValidEmail && (
                                 <FormControl.HelperText mt={1} mb={2} color="red.500">
-                                    Please enter a valid email.
+                               {t('Please enter a valid email.')}
                                 </FormControl.HelperText>
                             )}
                         </FormControl>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button flex="1" onPress={handleEnter}>
-                            Proceed
+                        {t('Proceed')}
                         </Button>
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
             <VStack space={8} alignItems="center">
                 <Button style={{backgroundColor:'#bf7700',borderRadius:15,marginTop:20}} onPress={() => setModalVisible(!modalVisible)}>
-                    E-Document
+                {t('E-Document')} 
                 </Button>
               
             </VStack>

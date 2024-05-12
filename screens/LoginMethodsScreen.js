@@ -4,21 +4,25 @@ import { useNavigation } from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useTranslation } from 'react-i18next';
 import CustomText from '../functions/CustomText'; // CustomText bileşenini import ediyoruz.
+
 const { width, height } = Dimensions.get('window');
 const itemWidth = width / 5 * 4;
 const itemHeight = height / 3 * 2;
 const padding = (width - itemWidth) / 2;
 const offset = itemWidth;
 
-const data = [
-    { color: 'purple', route: 'Finger', icon: 'fingerprint', text: 'TouchID', description: 'TouchID offers fingerprint-based authentication' },
-    { color: 'red', route: 'Face', icon: 'user', text: 'FaceID', description: 'FaceID provides facial recognition authentication' },
-    { color: 'orange', route: 'Menu', icon: 'barcode', text: 'Barcode', description: 'Barcode scanning allows quick retrieval of encoded information using a devices camera' },
-    { color: 'yellow', route: 'nfc', icon: 'cellphone-nfc', text: 'NFC', description: 'NFC enables contactless data exchange and transactions between devices.' }
-];
+
 
 const Swiper5 = () => {
+    const { t } = useTranslation();
+    const data = [
+        { color: 'purple', route: 'Finger', icon: 'fingerprint', text: 'TouchID', description: t('TouchID offers fingerprint-based authentication') },
+        { color: 'red', route: 'Face', icon: 'user', text: 'FaceID', description: t('FaceID provides facial recognition authentication') },
+        { color: 'orange', route: 'Menu', icon: 'barcode', text: 'Barcode', description: t('Barcode scanning allows quick retrieval of encoded information using a devices camera') },
+        { color: 'yellow', route: 'nfc', icon: 'cellphone-nfc', text: 'NFC', description: t('NFC enables contactless data exchange and transactions between devices.') }
+    ];
     const [activeIndex, setActiveIndex] = useState({ current: 0, previous: null })
     const scale = useRef(new Animated.Value(0)).current;
     const scrollX = useRef(new Animated.Value(0)).current;
@@ -72,7 +76,7 @@ const Swiper5 = () => {
                 ))}
             </View>
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Home')}>
-                <Text style={styles.backButtonText}>Back</Text>
+                <Text style={styles.backButtonText}>{t('Back')}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -111,7 +115,6 @@ const Item = ({ i, data, scrollX, navigation }) => {
     return (
         <Animated.View style={[styles.item, { transform: [{ scale }] }]}>
             <TouchableOpacity onPress={handlePress} style={styles.button}>
-                {/* CustomText bileşenini text için kullanıyoruz */}
                 <CustomText style={styles.iconText}>{data.text}</CustomText>
                 {iconComponent}
                 <CustomText style={styles.descriptionText}>{data.description}</CustomText>

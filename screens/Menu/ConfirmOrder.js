@@ -8,6 +8,7 @@ import loadUserProfile from '../../functions/LoadUserProfile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingIndicator from '../../functions/LoadingIndicator';
 import OnlineStatusContext from '../../context/OnlineStatusContext';
+import { useTranslation } from 'react-i18next';
 
 const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmOrder, change, receivedAmount, productData, paymentType }) => {
   const today = new Date();
@@ -22,6 +23,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
   const [userProfile, setUserProfile] = useState(null); 
   const [loading, setLoading] = useState(false); // Loading state for print operation
   const [salesNo, setSalesNo] = useState(0); // Sales number state
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -119,7 +121,6 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
     
       const existingInvoice = invoicesArray.find(invoice => invoice.salesNo === salesNo);
       if (existingInvoice) {
-        console.log(`Invoice with sales number ${salesNo} already exists. Skipping saving.`);
         return;
       }
   
@@ -169,10 +170,10 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
 
   const confirmOrder = () => {
     if (allTotal === 0) {
-      Alert.alert("No products!", "There are no products in the list. Please add products before confirming the order.");
+      Alert.alert(t('No products'),t('There are no products in the list. Please add products before confirming the order.'));
       Vibration.vibrate();
     } else if (!paymentSuccess) {
-      Alert.alert("Payment Not Completed", "Please complete the payment before confirming the order.");
+      Alert.alert(t('Payment Not Completed'), t('Please complete the payment before confirming the order.'));
       Vibration.vibrate();
     } else {
       // Update sales number on successful payment
@@ -193,22 +194,22 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
         <TouchableOpacity onPress={() => confirmOrder()} style={styles.confirmButton}>
           <View style={{ flexDirection: 'row' }}>
             <Entypo name="check" size={36} color="white" style={styles.inputIcon} />
-            <Text style={[styles.cancelButtonText]}>Confirm{"\n"}Order</Text>
+            <Text style={[styles.cancelButtonText]}>{t('Confirm')}{"\n"}{t('Order')}</Text>
           </View>
         </TouchableOpacity>
 
         <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
           <Modal.Content maxWidth="400px">
             <Modal.CloseButton />
-            <Modal.Header>Invoice</Modal.Header>
+            <Modal.Header>{t('Invoice')}</Modal.Header>
             <Modal.Body>
               <VStack style={styles.modalContainer} space={4} alignItems="center">
                 {loading ? ( 
                   <LoadingIndicator/>
                 ) : (
                   <>
-                    <Button onPress={print}>Print</Button>
-                    <Button onPress={printToFile}>Share the Invoice file</Button>
+                    <Button onPress={print}>{t('Print')}</Button>
+                    <Button onPress={printToFile}>{t('Share the Invoice file')}</Button>
                     {Platform.OS === 'ios' && (
                       <>
                         <Button title="Select printer" onPress={selectPrinter} />
@@ -224,7 +225,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
             <Modal.Footer>
               <Button.Group space={2}>
                 <Button onPress={() => handleCloseModal()} variant="ghost" colorScheme="blueGray">
-                  Cancel
+                  {t('Cancel')}
                 </Button>
               </Button.Group>
             </Modal.Footer>

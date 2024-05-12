@@ -14,6 +14,7 @@ import CampaignScreen from './CampaignScreen';
 import ConfirmOrder from './ConfirmOrder';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingIndicator from '../../functions/LoadingIndicator';
+import { useTranslation } from 'react-i18next';
 const Application = () => {
   const route = useRoute();
   const { favoriteItem } = route.params || {}; 
@@ -33,6 +34,7 @@ const Application = () => {
   const [receivedAmount, setReceivedAmount] = useState(false);
   const [change, setChange] = useState(false);
   const [paymentType, setPaymentType] = useState('');
+  const { t } = useTranslation();
 
   const getValueFromConfirmOrder = (data) => {
     setGetValueFromConfirm(getValueFromConfirm+data)
@@ -80,7 +82,7 @@ const Application = () => {
       setIsLoading(false);
     }
   } else {
-    Alert.alert("Actions Disabled", "You cannot add products after the payment is done /Any campaign is applied.");
+    Alert.alert(t('Actions Disabled'), t('You cannot add products after the payment is done /Any campaign is applied.'));
   }
 };
 
@@ -112,7 +114,7 @@ const Application = () => {
       setSubTotal(SubTotal - price);
     } else {
       
-      Alert.alert("Actions Disabled", "You cannot remove products after the payment is done /Any campaign is applied.");
+      Alert.alert(t('Actions Disabled'), t('You cannot remove products after the payment is done /Any campaign is applied.'));
     }
   };
 
@@ -120,17 +122,17 @@ const Application = () => {
   const cancelOrder = () => {
     if (paymentSuccess) {
       Alert.alert(
-        "Cannot Cancel Order",
-        "The order has been successfully completed.You cannot cancel it.Create new order to continue",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+        t('Cannot Cancel Order'),
+        t('The order has been successfully completed.You cannot cancel it.Create new order to continue'),
+        [{ text: "OK"}]
       );
     } else {
-      Alert.alert(
-        "Are you sure?",
-        "Do you really want to cancel the order?",
+      Alert.alert( 
+      t('Are you sure?'),
+      t('Do you really want to cancel the order?'),
         [
           {
-            text: "Yes",
+            text: t('Yes'),
             onPress: () => {
               setProductData([]);
               setSubTotal(0);
@@ -138,7 +140,7 @@ const Application = () => {
               setcampaignCounter(campaignCounter+1);
             }
           },
-          { text: "No", style: "cancel" }
+          { text: t('No'), style: "cancel" }
         ]
       );
     }
@@ -171,7 +173,7 @@ const Application = () => {
     setSubTotal(SubTotal + product.price);
   } else {
       
-    Alert.alert("Actions Disabled", "You cannot remove products after the payment is done /Any campaign is applied.");
+    Alert.alert(t('Actions Disabled'), t('You cannot remove products after the payment is done /Any campaign is applied.'));
   }
   };
   
@@ -190,7 +192,7 @@ const Application = () => {
           <AntDesign name="search1" size={24} color="black" />
           <TextInput
             style={{ marginLeft: 10, flex: 1 }}
-            placeholder="Enter ID"
+            placeholder='Enter ID'
             onChangeText={onProductIdChange}
             value={productId}
           />
@@ -201,7 +203,7 @@ const Application = () => {
             style={[styles.getPriceButton, isLoading && { backgroundColor: '#ccc' }]} // Disable button style when loading
             onPress={getPrice}
             disabled={isLoading}>
-            <Text style={styles.enterButton}>Enter </Text>
+            <Text style={styles.enterButton}>{t('Enter')}</Text>
           </TouchableOpacity>
           <CampaignScreen allTotal={allTotal}
                           onDataReceived={onDataReceived}
@@ -216,14 +218,14 @@ const Application = () => {
      <ScrollView ref={scrollViewRef} style={styles.productPricesList}>
   {productData.length === 0 && !isLoading && (
     <View style={{ alignSelf: 'center' }}>
-      <Text style={styles.emptyText}>Empty </Text>
+      <Text style={styles.emptyText}>{t('empty')}</Text>
       <MaterialCommunityIcons name={"lock-question"} size={36} color={"gray"} />
     </View>
   )}
   {productData.map((product, index) => (
     <Swipeable key={index} renderRightActions={() => (
       <TouchableOpacity onPress={() => removeProduct(index, product.price)} style={styles.deleteButton}>
-        <Text style={styles.deleteButtonText}>Delete</Text>
+        <Text style={styles.deleteButtonText}>{t('delete')}</Text>
       </TouchableOpacity>
     )}
     renderLeftActions={() => (
@@ -237,7 +239,7 @@ const Application = () => {
         <View style={styles.productPrice}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.productId}>{product.id}</Text>
-            <Text style={styles.productTax}>1 PCS </Text>
+            <Text style={styles.productTax}>1 {t('pcs')} </Text>
             <Text style={styles.productTax}>KDV %{product.kdv} </Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -256,11 +258,11 @@ const Application = () => {
   {paymentSuccess && (
     <View style={{ alignItems: 'center', marginBottom: 20 }}>
       <Entypo name="check" size={36} color="#008b38" style={styles.inputIcon} />
-      <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#008b38' }}>Payment Successful</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#008b38' }}>{t('payment Successful')}</Text>
       <TouchableOpacity onPress={createNewOrder} style={{ backgroundColor: '#3e66ae', borderRadius: 10, margin: 10 }}>
         <View style={{ flexDirection: 'row', margin: 5 }}>
           <MaterialCommunityIcons name={"autorenew"} size={24} color={"white"} style={{ marginTop: 1 }} />
-          <Text style={{ color: 'white', padding: 5, fontWeight: 'bold' }}>Create new order</Text>
+          <Text style={{ color: 'white', padding: 5, fontWeight: 'bold' }}>{t('Create new order')}</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -269,9 +271,9 @@ const Application = () => {
      
       <View style={styles.separator} />
       <View style={styles.subTotalContainer}>
-        <Text style={styles.subTotal}>Sub Total: {SubTotal} $</Text>
+        <Text style={styles.subTotal}>{t('subtotal')}: {SubTotal} $</Text>
         <View style={styles.separator} />
-        <Text style={styles.subTotal}>All Total: {allTotal} $</Text>
+        <Text style={styles.subTotal}>{t('alltotal')}: {allTotal} $</Text>
       </View>
       <Animatable.View animation="fadeInUp" delay={250} useNativeDriver>
         <View style={{ flexDirection: 'row', marginTop: 'auto' }}>
@@ -286,7 +288,7 @@ const Application = () => {
             <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
               <View style={{ flexDirection: 'row' }}>
                 <Entypo name={"cross"} size={36} color={"white"} style={styles.inputIcon} />
-                <Text style={styles.cancelButtonText}>Cancel Order</Text>
+                <Text style={styles.cancelButtonText}>{t('cancelorder')}</Text>
               </View>
             </TouchableOpacity>
             <ConfirmOrder
@@ -302,26 +304,26 @@ const Application = () => {
           <TouchableOpacity onPress={() => {
               setDisableActions();
   if (paymentSuccess) {
-    Alert.alert("The order is completed", "The order is already succesfuly completed");
+    Alert.alert(t('The order is completed'), t('The order is already succesfuly completed'));
   } else {
     setexampleValue(exampleValue + 1);
   }
 }} style={styles.cashButton}>
   <View style={{ flexDirection: 'row' }}>
     <MaterialCommunityIcons name={"cash"} size={24} color={"white"} style={styles.inputIcon} />
-    <Text style={styles.cancelButtonText}>Cash </Text>
+    <Text style={styles.cancelButtonText}>{t('cash')}</Text>
   </View>
 </TouchableOpacity>
 <TouchableOpacity onPress={() => {
   if (paymentSuccess) {
-    Alert.alert("The order is completed", "The order is already succesfuly competed");
+    Alert.alert(t('The order is completed'), t('The order is already succesfuly completed'));
   } else {
     setexampleValueCredit(exampleValueCredit + 1);
   }
 }} style={styles.creditButton}>
   <View style={{ flexDirection: 'row' }}>
     <AntDesign name={"creditcard"} size={24} color={"white"} style={styles.inputIcon} />
-    <Text style={styles.cancelButtonText}>Credit </Text>
+    <Text style={styles.cancelButtonText}>{t('credit')}</Text>
   </View>
 </TouchableOpacity>
           </View>

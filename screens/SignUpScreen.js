@@ -3,10 +3,12 @@ import { View, StyleSheet, Alert, TouchableOpacity, Text, Image, TextInput } fro
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useTranslation } from 'react-i18next';
 import * as Animatable from 'react-native-animatable';
 import CustomText from '../functions/CustomText';
+
 const SignUpScreen = ({ navigation }) => {
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -15,36 +17,36 @@ const SignUpScreen = ({ navigation }) => {
   const handleRegister = async () => {
     // Username validation
     if (username.trim() === '') {
-      Alert.alert('Error', 'Please enter a username');
+      Alert.alert(t('Error'), t('Please enter a username'));
       return;
     }
     // Password validation
     if (password.trim() === '') {
-      Alert.alert('Error', 'Please enter a password');
+      Alert.alert(t('Error'), t('Please enter a password'));
       return;
     }
     if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters long');
+      Alert.alert(t('Error'), t('Password must be at least 6 characters long'));
       return;
     }
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%+*?&])[A-Za-z\d@$!%+*?&]{6,}$/;
     if (!passwordRegex.test(password)) {
-      Alert.alert('Error', 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+      Alert.alert(t('Error'), t('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'));
       return;
     }
     // Confirm password validation
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
+      Alert.alert(t('Error'), t('Passwords do not match'));
       return;
     }
     // Email validation
     if (email.trim() === '') {
-      Alert.alert('Error', 'Please enter an email address');
+      Alert.alert(t('Error'), t('Please enter an email address'));
       return;
     }
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(email)) {
-      Alert.alert('Error', 'Please enter a valid email address');
+      Alert.alert(t('Error'), t('Please enter a valid email address'));
       return;
     }
 
@@ -52,22 +54,22 @@ const SignUpScreen = ({ navigation }) => {
       // Check if the username already exists
       const existingUser = await AsyncStorage.getItem(username);
       if (existingUser !== null) {
-        Alert.alert('Error', 'Username already exists');
+        Alert.alert(t('Error'), t('Username already exists'));
         return;
       }
       // Check if the email already exists
       const existingEmail = await AsyncStorage.getItem(email);
       if (existingEmail !== null) {
-        Alert.alert('Error', 'Email already exists');
+        Alert.alert(t('Error'), t('Email already exists'));
         return;
       }
       // Save new user data
       await AsyncStorage.setItem(username, JSON.stringify({ password, email,username }));
-      Alert.alert('Success', 'Account created successfully');
+      Alert.alert(t('Success'), t('Account created successfully'));
       navigation.navigate('Home');
     } catch (error) {
       console.error('Error registering:', error);
-      Alert.alert('Error', 'An error occurred while registering');
+      Alert.alert(t('Error'), t('An error occurred while registering'));
     }
   };
 
@@ -83,24 +85,24 @@ const SignUpScreen = ({ navigation }) => {
       </View>
       
       <View style={styles.CreateContainer}>
-      <CustomText style={styles.signInText} >Create an Account</CustomText>
+      <CustomText style={styles.signInText} >{t('Create an Account')}</CustomText>
       </View>
 
       <View style={styles.inputContainer}>
         <FontAwesome name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
-        <TextInput style={styles.textInput} placeholder=' Username' value={username}
+        <TextInput style={styles.textInput} placeholder={t('Username')} value={username}
           onChangeText={text => setUsername(text)} />
       </View>
 
       <View style={styles.inputContainer}>
         <FontAwesome name={"lock"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
-        <TextInput style={styles.textInput} placeholder='Password' secureTextEntry value={password}
+        <TextInput style={styles.textInput} placeholder={t('Password')} secureTextEntry value={password}
           onChangeText={text => setPassword(text)} />
       </View>
 
       <View style={styles.inputContainer}>
         <FontAwesome name={"lock"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
-        <TextInput style={styles.textInput} placeholder='Confirm Password' secureTextEntry value={confirmPassword}
+        <TextInput style={styles.textInput} placeholder={t('Confirm Password')} secureTextEntry value={confirmPassword}
           onChangeText={text => setConfirmPassword(text)} />
       </View>
 
@@ -110,12 +112,12 @@ const SignUpScreen = ({ navigation }) => {
           onChangeText={text => setEmail(text)} />
       </View>
        
-      <TouchableOpacity style={styles.infoButton} onPress={() => Alert.alert('Information', 'Password field cannot be empty\n- Password must be at least 6 characters long\n- Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character')}>
+      <TouchableOpacity style={styles.infoButton} onPress={() => Alert.alert(t('Information'), t('Password field cannot be empty\n- Password must be at least 6 characters long\n- Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'))}>
   <Antdesign name={"infocirlceo"} size={28} color={"gray"} />
 </TouchableOpacity>
 
       <View style={styles.signInButtonContainer}>
-        <Text style={styles.signIn}>Submit</Text>
+        <Text style={styles.signIn}>{t('Submit')}</Text>{}
         <TouchableOpacity style={styles.signInButton} onPress={handleRegister}>
           <Antdesign name={"arrowright"} size={36} color={"white"} />
         </TouchableOpacity>
