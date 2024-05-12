@@ -10,9 +10,14 @@ const Spain = require('../assets/spain (1).png');
 const UnitedKingdom = require('../assets/united-kingdom.png');
 const France = require('../assets/france.png');
 const Germany = require('../assets/germany.png');
+const Azerbaijan = require('../assets/azerbaijan.png');
+const Russia = require('../assets/russia.png');
+const China = require('../assets/china.png');
+const Arabia = require('../assets/saudi-arabia.png');
+const Greece = require('../assets/greece.png');
 
 const LanguageComponent = ({ onPress, image }) => (
-  <TouchableOpacity style={{marginHorizontal:5}} onPress={onPress}>
+  <TouchableOpacity style={{marginHorizontal:10}} onPress={onPress}>
     <Image source={image} style={{ width: 50, height: 50 }} />
   </TouchableOpacity>
 );
@@ -32,6 +37,11 @@ const SettingsScreen = () => {
     { lang: 'tr', image: Turkey },
     { lang: 'en', image: UnitedKingdom },
     { lang: 'es', image: Spain },
+    { lang: 'ar', image: Arabia },
+    { lang: 'zh', image: China },
+    { lang: 'az', image: Azerbaijan },
+    { lang: 'ru', image: Russia },
+    { lang: 'el', image: Greece },
   ];
 
   return (
@@ -40,25 +50,34 @@ const SettingsScreen = () => {
         <TouchableOpacity onPress={() => setShowModal(true)}>
           <Image source={buttonImage} style={{ width: 50, height: 50 }} />
         </TouchableOpacity>
-        <Modal isOpen={showModal} onClose={() => setShowModal(false)} _backdrop={{ _dark: { bg: "coolGray.800" }, bg: "warmGray.50" }}>
-          <Modal.Content maxWidth="350" maxH="212">
-            <Modal.CloseButton />
-            <Modal.Header>{t('languages')}</Modal.Header>
-            <Box flexDirection={'row'} marginY={3}>
-              {languages.map(({ lang, image }) => (
-                <LanguageComponent key={lang} onPress={() => handleChangeLanguage(lang)} image={image} />
-              ))}
-            </Box>
-            <Modal.Footer>
-              <Button.Group space={2}>
-                <Button  colorScheme="red" onPress={() => setShowModal(false)}>
-                {t('Close')}
-                </Button>
-               
-              </Button.Group>
-            </Modal.Footer>
-          </Modal.Content>
-        </Modal>
+        <Modal
+  isOpen={showModal}
+  onClose={() => setShowModal(false)}
+  size="full"
+  _backdrop={{ _dark: { bg: "coolGray.800" }, bg: "warmGray.50" }}
+>
+  <Modal.Content maxWidth="350" maxH="212">
+    <Modal.CloseButton />
+    <Modal.Header>{t('languages')}</Modal.Header>
+    <Box flexDirection={'column'} marginY={0}>
+      {[...Array(Math.ceil(languages.length / 5))].map((_, rowIndex) => (
+        <Box key={rowIndex} flexDirection={'row'}>
+          {languages.slice(rowIndex * 5, (rowIndex + 1) * 5).map(({ lang, image }) => (
+            <LanguageComponent key={lang} onPress={() => handleChangeLanguage(lang)} image={image} />
+          ))}
+        </Box>
+      ))}
+    </Box>
+    <Modal.Footer>
+      <Button.Group space={2}>
+        <Button colorScheme="red" onPress={() => setShowModal(false)}>
+          {t('Close')}
+        </Button>
+      </Button.Group>
+    </Modal.Footer>
+  </Modal.Content>
+</Modal>
+
       </Center>
     </NativeBaseProvider>
   );
