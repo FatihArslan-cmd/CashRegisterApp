@@ -6,6 +6,7 @@ import ShareEg from '../functions/ShareButton';
 import ContactMe from '../functions/ContactButton'; 
 import { Box,NativeBaseProvider } from 'native-base';
 import OnlineStatusToggle from '../functions/OnlineStatusToggle';
+import DarkThemeButton from '../functions/DarkThemeButton';
 const SettingsScreen = () => {
   return (
     <NativeBaseProvider>
@@ -14,6 +15,7 @@ const SettingsScreen = () => {
     <LanguageButton/>
     <ContactMe/>
     <OnlineStatusToggle/>
+    <DarkThemeButton/>
     </Box>
     </NativeBaseProvider>
   );

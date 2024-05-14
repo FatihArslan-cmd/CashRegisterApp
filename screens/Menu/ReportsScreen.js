@@ -124,7 +124,7 @@ const ReportsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t('price')}</Text>
+      <Text style={styles.title}>{t('Reports')}</Text>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.searchBar}

@@ -186,7 +186,8 @@ const SeeProductScreen = () => {
         <View style={styles.productsListContainer}>
           <FlatList
             data={filteredProducts}
-            renderItem={renderItem}
+            renderItem={memoizedRenderItem}
+            removeClippedSubviews={true}
             keyExtractor={(item) => item.id.toString()}
             refreshControl={
               <RefreshControl

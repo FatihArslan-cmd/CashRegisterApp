@@ -1,14 +1,15 @@
-import {React} from 'react';
+import {React,useContext} from 'react';
 import { View, TouchableOpacity, StyleSheet, Linking,Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomText from '../functions/CustomText'; // Burada CustomText bileşenini import ediyoruz.
 import * as Animatable from 'react-native-animatable';
 import { useTranslation } from 'react-i18next';
-
+import { ThemeContext } from '../context/ThemeContext';
 
 
 const MenuScreen = () => {
+  const { isDarkMode } = useContext(ThemeContext); 
 
   const { t } = useTranslation();
 const menuItems = [
@@ -35,7 +36,7 @@ const menuItems = [
   
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: isDarkMode ? 'black' : 'white' }]}>
     <Animatable.View
      animation="fadeInUp"
      delay={250} 
