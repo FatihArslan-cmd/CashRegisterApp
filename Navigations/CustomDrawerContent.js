@@ -42,6 +42,7 @@ const CustomDrawerContent = ({ navigation }) => {
         const userProfileJSON = await AsyncStorage.getItem(username);
         const userProfile = JSON.parse(userProfileJSON);
         setUserProfile(userProfile);
+        
       } catch (error) {
         console.error('Error fetching user profile:', error);
         Alert.alert(t('Error'), 'An error occurred while fetching user profile');

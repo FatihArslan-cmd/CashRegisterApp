@@ -1,10 +1,27 @@
-import React from 'react';
-import { Share, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { Share, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useTranslation } from 'react-i18next';
+import { NativeBaseProvider, Box, Icon, Text } from 'native-base';
 
 const ShareEg = () => {
     const { t } = useTranslation();
+    const [scaleValue] = useState(new Animated.Value(1));
+
+    const startScaleAnimation = () => {
+        Animated.sequence([
+            Animated.timing(scaleValue, {
+                toValue: 0.95,
+                duration: 150,
+                useNativeDriver: true,
+            }),
+            Animated.timing(scaleValue, {
+                toValue: 1,
+                duration: 150,
+                useNativeDriver: true,
+            }),
+        ]).start();
+    };
 
     const onShare = async () => {
         try {
@@ -26,38 +43,42 @@ const ShareEg = () => {
     };
 
     return (
-        <View style={styles.container}>
-         
-           <TouchableOpacity style={styles.shareButton} onPress={onShare}>
-           <View style={styles.shareContainer}>
-            <Fontisto name={"share"} size={24} color={"white"} style={styles.inputIcon} />
-            <Text style={styles.shareText}>{t('Share')}</Text>
-            </View>
-           </TouchableOpacity>
-          
-        </View>
+        <NativeBaseProvider>
+            <Box alignItems="center" style={styles.shareContainer}>
+                <TouchableOpacity
+                    onPress={() => {
+                        startScaleAnimation();
+                        onShare();
+                    }}
+                    activeOpacity={0.8}
+                >
+                    <Animated.View style={[styles.shareButton, { transform: [{ scale: scaleValue }] }]}>
+                        <Icon as={Fontisto} name="share" size="xl" color="white" />
+                        <Text style={styles.shareText}>{t('Share')}</Text>
+                    </Animated.View>
+                </TouchableOpacity>
+            </Box>
+        </NativeBaseProvider>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex:1,
-    },
-    inputIcon:{
-       marginRight:5
-    },
-    shareContainer:{
-       flexDirection:'row'
+    shareContainer: {
+        flexDirection: 'row',
     },
     shareButton: {
-        backgroundColor: '#00668b',  
-        borderRadius: 20,
-        padding:13
+        backgroundColor: '#00668b',
+        borderRadius: 15,
+        padding: 13,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     shareText: {
         color: 'white',
-        fontSize: 18,
+        fontSize: 21,
         fontWeight: 'bold',
+        marginLeft: 5,
     },
 });
 

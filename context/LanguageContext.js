@@ -4,16 +4,16 @@ import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 // Import dil dosyalarınızı
-import en from './en.json';
-import tr from './tr.json';
-import ar from './ar.json';
-import az from './az.json';
-import de from './de.json';
-import el from './el.json';
-import es from './es.json';
-import fr from './fr.json';
-import ru from './ru.json';
-import zh from './zh.json';
+import en from '../assets/lang/en.json';
+import tr from '../assets/lang/tr.json';
+import ar from '../assets/lang/ar.json';
+import az from '../assets/lang/az.json';
+import de from '../assets/lang/de.json';
+import el from '../assets/lang/el.json';
+import es from '../assets/lang/es.json';
+import fr from '../assets/lang/fr.json';
+import ru from '../assets/lang/ru.json';
+import zh from '../assets/lang/zh.json';
 
 // Dil dosyalarınızı i18next'e yükleme
 i18next
