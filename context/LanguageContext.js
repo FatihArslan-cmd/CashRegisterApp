@@ -1,9 +1,9 @@
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState, createContext, useContext, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage from React Native
 import * as Localization from 'expo-localization';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-// Import dil dosyalarınızı
 import en from '../assets/lang/en.json';
 import tr from '../assets/lang/tr.json';
 import ar from '../assets/lang/ar.json';
@@ -15,12 +15,12 @@ import fr from '../assets/lang/fr.json';
 import ru from '../assets/lang/ru.json';
 import zh from '../assets/lang/zh.json';
 
-// Dil dosyalarınızı i18next'e yükleme
+// Load language files into i18next
 i18next
   .use(initReactI18next)
   .init({
     compatibilityJSON: 'v3',
-    // Kullanılabilir diller
+    // Available languages
     resources: {
       en: { translation: en },
       tr: { translation: tr },
@@ -33,33 +33,55 @@ i18next
       ru: { translation: ru },
       zh: { translation: zh }
     },
-    // Başlangıç dilini ayarlama
+    // Set the default language
     lng: Localization.locale || 'en',
-    // Fallback mekanizmasını etkinleştirme
+    // Enable fallback mechanism
     fallbackLng: 'en',
-    // debug modunu etkinleştirme (isteğe bağlı)
+    // Enable debug mode (optional)
     debug: true,
-    // Fallback dilinde belirtilen anahtarlar kullanılırken uyarı mesajlarını engellemek için
+    // Prevent warning messages when using keys in fallback language
     keySeparator: false,
-    // Dil dosyası yükleme yöntemini belirleme (isteğe bağlı)
+    // Set interpolation method (optional)
     interpolation: {
-      escapeValue: false // HTML öğelerini kapatmak için
+      escapeValue: false // To escape HTML entities
     }
   });
 
-// Dil context'i oluşturma
+// Create language context
 const LanguageContext = createContext();
 
-// Dil değiştirme fonksiyonunu içeren bir bileşen oluşturma
+// Create a component containing the function to change language
 export const LanguageProvider = ({ children }) => {
   const [currentLanguage, setCurrentLanguage] = useState(Localization.locale);
 
-  const changeLanguage = (lang) => {
+  useEffect(() => {
+    // Async function to fetch the selected language from local storage
+    const fetchSelectedLanguage = async () => {
+      try {
+        const selectedLanguage = await AsyncStorage.getItem('selectedLanguage');
+        if (selectedLanguage) {
+          setCurrentLanguage(selectedLanguage);
+          i18next.changeLanguage(selectedLanguage);
+        }
+      } catch (error) {
+        console.error('Error fetching selected language:', error);
+      }
+    };
+
+    fetchSelectedLanguage();
+  }, []);
+
+  const changeLanguage = async (lang) => {
     if (lang === currentLanguage) {
       return;
     }
-    i18next.changeLanguage(lang);
-    setCurrentLanguage(lang);
+    try {
+      await AsyncStorage.setItem('selectedLanguage', lang);
+      i18next.changeLanguage(lang);
+      setCurrentLanguage(lang);
+    } catch (error) {
+      console.error('Error setting selected language:', error);
+    }
   };
 
   return (
