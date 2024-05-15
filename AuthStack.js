@@ -10,6 +10,7 @@ import Application from './screens/Menu/SalesScreen';
 import SeeProductsScreen from './screens/Menu/SeeProductsScreen';
 import FavoriteProductsScreen from './screens/Menu/DirectProductEntryScreen';
 import CalculatorApp from './functions/NumberButtons';
+import CollectionsScreen from './screens/CollectionsScreen';
 import ReportsScreen from './screens/Menu/ReportsScreen';
 const Stack = createStackNavigator();
 
@@ -41,6 +42,11 @@ const AuthStack = () => {
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
+        options={{ headerShown: false }}
+      />
+       <Stack.Screen
+        name="Collections"
+        component={CollectionsScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

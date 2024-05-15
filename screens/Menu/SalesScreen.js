@@ -123,13 +123,13 @@ const Application = () => {
     if (paymentSuccess) {
       Alert.alert(
         t('Cannot Cancel Order'),
-        t('The order has been successfully completed.You cannot cancel it.Create new order to continue'),
+        t('The order has been successfully completed. You cannot cancel it. Create a new order to continue.'),
         [{ text: "OK"}]
       );
-    } else {
+    } else if (allTotal > 0) { 
       Alert.alert( 
-      t('Are you sure?'),
-      t('Do you really want to cancel the order?'),
+        t('Are you sure?'),
+        t('Do you really want to cancel the order?'),
         [
           {
             text: t('Yes'),
@@ -143,8 +143,16 @@ const Application = () => {
           { text: t('No'), style: "cancel" }
         ]
       );
+    } else {
+      // Display a message indicating that the order cannot be canceled because the total amount is zero
+      Alert.alert(
+        t('No products'),
+        t('There are no products in the list. Please add products before confirming the order.'),
+        [{ text: "OK"}]
+      );
     }
   };
+  
 
 
   useEffect(() => {
