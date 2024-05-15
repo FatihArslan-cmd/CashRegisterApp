@@ -16,6 +16,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
   const hour = today.getHours() + 3;
   const minute = today.getMinutes();
   const second = today.getSeconds();
+
   const { isOnline} = useContext(OnlineStatusContext);
   const [selectedPrinter, setSelectedPrinter] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -23,8 +24,36 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
   const [userProfile, setUserProfile] = useState(null); 
   const [loading, setLoading] = useState(false); // Loading state for print operation
   const [salesNo, setSalesNo] = useState(0); // Sales number state
-  const { t } = useTranslation();
+  const [everTotal, setEverTotal] = useState(0); // Sales number state
 
+  const { t } = useTranslation();
+  useEffect(() => {
+    const loadEverTotal = async () => {
+      try {
+        const savedEverTotal = await AsyncStorage.getItem('everTotal');
+        if (savedEverTotal !== null) {
+          setEverTotal(parseFloat(savedEverTotal));
+        }
+      } catch (error) {
+        console.error('Error loading everTotal:', error);
+      }
+    };
+
+    loadEverTotal();
+  }, []);
+
+  // Save evertotal value to local storage whenever it changes
+  useEffect(() => {
+    const saveEverTotal = async () => {
+      try {
+        await AsyncStorage.setItem('everTotal', everTotal.toString());
+      } catch (error) {
+        console.error('Error saving everTotal:', error);
+      }
+    };
+
+    saveEverTotal();
+  }, [everTotal]);
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -128,13 +157,12 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
         salesNo,
         html,
         date: new Date().toLocaleString(),
-  
-        online: isOnline 
+        online: isOnline,
+       everTotal,
       };
   
       invoicesArray.push(invoiceWithDate);
       await AsyncStorage.setItem('invoices', JSON.stringify(invoicesArray));
-  
       console.log(`Invoice saved ${isOnline ? 'online' : 'offline'} successfully.`);
     } catch (error) {
       console.error('Error saving invoice:', error);
@@ -146,6 +174,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
   
   const print = async () => {
     setLoading(true); 
+    setEverTotal(everTotal+allTotal)
     await saveInvoiceHTML(html); 
     await Print.printAsync({
       html,

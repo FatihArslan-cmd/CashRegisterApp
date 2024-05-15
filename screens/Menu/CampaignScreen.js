@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSuccess,campaignCounter }) => {
     const [showModal, setShowModal] = useState(false);
     const [discountApplied, setDiscountApplied] = useState(false);
+    const [campaignCounterdb, setCampaignCounterdb] = useState(0); // State to hold campaign counter
 
     const { t } = useTranslation();
 
@@ -34,15 +35,41 @@ const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSu
         }
         return true;
     };
-
+    const saveDiscountAmount = async (amount) => {
+        try {
+            let discountAmounts = await AsyncStorage.getItem('discountAmounts');
+            
+            if (!discountAmounts) {
+                discountAmounts = [];
+            } else {
+                discountAmounts = JSON.parse(discountAmounts);
+            }
+            discountAmounts.push(amount);
+            await AsyncStorage.setItem('discountAmounts', JSON.stringify(discountAmounts));
+         
+        } catch (error) {
+            console.error('Error saving discount amount: ', error);
+        }
+    };
+    const updateCampaignCounter = async () => {
+        try {
+            let campaignCounterdbb = await AsyncStorage.getItem('campaignCounterdb');
+            campaignCounterdbb = parseInt(campaignCounterdbb || 0) + 1; // Increment the counter
+            await AsyncStorage.setItem('campaignCounterdb', JSON.stringify(campaignCounterdbb));
+            setCampaignCounterdb(campaignCounterdbb);
+        } catch (error) {
+            console.error('Error updating campaign counter: ', error);
+        }
+    };
+    
     const applyDiscount = () => {
         if (!canApplyDiscount()) {
             return allTotal;
         }
-
+    
         if (!discountApplied) {
             const discountedAllTotal = (allTotal * 0.8).toFixed(2);
-
+            saveDiscountAmount(allTotal - discountedAllTotal); // Save the discount amount
             Alert.alert(
                 t('Success'),
                 t('Discount applied successfully'),
@@ -50,6 +77,7 @@ const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSu
                     { text: "OK"}
                 ]
             );
+            updateCampaignCounter(); // Call the function to update the counter
             return discountedAllTotal;
         } else {
             Alert.alert(
