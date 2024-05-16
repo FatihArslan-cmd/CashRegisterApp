@@ -89,7 +89,7 @@ const CalculatorApp = ({ receiveReceivedAndChange, allTotal, exampleValue, examp
             text: `${t('Pay the rest by')} ${oppositePaymentType}`,
             onPress: () => {
               const paymentMethod = 'Cash' ? 'credit' : 'cash';
-              Alert.alert(t('Payment Successful'), `${t('The remaining balance has been paid by')} ${paymentMethod}.`);
+              Alert.alert(t('payment Successful'), `${t('The remaining balance has been paid by')} ${paymentMethod}.`);
               setEnteredAmount(allTotal);
               setChange(0)
               setPaymentSuccess(true);

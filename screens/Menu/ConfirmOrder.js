@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, Platform, StyleSheet, Alert, Vibration } from 'react-native';
 import { Heading, NativeBaseProvider, VStack, Center, Button, Modal } from 'native-base';
 import { Entypo } from '@expo/vector-icons'; 
@@ -27,6 +27,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
   const [everTotal, setEverTotal] = useState(0); // Sales number state
 
   const { t } = useTranslation();
+  
   useEffect(() => {
     const loadEverTotal = async () => {
       try {
@@ -54,6 +55,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
 
     saveEverTotal();
   }, [everTotal]);
+  
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -138,6 +140,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
     </body>
     </html>
   `;
+  
   const saveInvoiceHTML = async (html) => {
     try {
       const invoices = await AsyncStorage.getItem('invoices');
@@ -147,7 +150,6 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
         invoicesArray = JSON.parse(invoices);
       }
   
-    
       const existingInvoice = invoicesArray.find(invoice => invoice.salesNo === salesNo);
       if (existingInvoice) {
         return;
@@ -158,7 +160,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
         html,
         date: new Date().toLocaleString(),
         online: isOnline,
-       everTotal,
+        everTotal,
       };
   
       invoicesArray.push(invoiceWithDate);
@@ -169,12 +171,9 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
     }
   };
   
-  
- 
-  
   const print = async () => {
     setLoading(true); 
-    setEverTotal(everTotal+allTotal)
+    setEverTotal(everTotal + allTotal)
     await saveInvoiceHTML(html); 
     await Print.printAsync({
       html,

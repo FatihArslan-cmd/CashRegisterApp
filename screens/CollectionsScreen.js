@@ -1,101 +1,106 @@
-import { useState,useEffect } from 'react';
-import React from 'react';
-import { Text,View } from 'react-native-animatable';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Animatable from 'react-native-animatable';
+import CountUpAnimation from '../functions/AnimatedNumber';
+
+const CounterItem = ({ label, value, duration, interval, showDollarSign, backgroundColor }) => (
+  <View style={[styles.itemContainer, { backgroundColor: backgroundColor }]}>
+    <Text style={styles.text}>{label}</Text>
+    <Animatable.View animation="pulse" iterationCount="infinite" style={styles.textBackground}>
+      <CountUpAnimation targetNumber={value} duration={duration} interval={interval} style={styles.animation} showDollarSign={showDollarSign} />
+    </Animatable.View>
+  </View>
+);
+
+
 const CollectionsScreen = () => {
-    const [invoiceNumber, setInvoiceNumber] = useState(0);
-    const [everTotal, setEverTotal] = useState(0);
-    const [eInvoiceCount, setEInvoiceCount] = useState(0); // State to hold e-invoice count
-    const [totalDiscount, setTotalDiscount] = useState(0);
-    const [campaignCounterdb, setCampaignCounterdb] = useState(0); // State to hold campaign counter
+  const [invoiceNumber, setInvoiceNumber] = useState(0);
+  const [everTotal, setEverTotal] = useState(0);
+  const [eInvoiceCount, setEInvoiceCount] = useState(0);
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [campaignCounterdb, setCampaignCounterdb] = useState(0);
 
-    useEffect(() => {
-        const fetchCampaignCounter = async () => {
-            try {
-                const storedCampaignCounter = await AsyncStorage.getItem('campaignCounterdb');
-                if (storedCampaignCounter !== null) {
-                    setCampaignCounterdb(parseInt(storedCampaignCounter));
-                }
-            } catch (error) {
-                console.error('Error fetching campaign counter:', error);
-            }
-        };
-
-        fetchCampaignCounter();
-    }, []);
-    useEffect(() => {
-        const fetchTotalDiscount = async () => {
-            try {
-                const discountAmounts = await AsyncStorage.getItem('discountAmounts');
-                if (discountAmounts) {
-                    const parsedDiscountAmounts = JSON.parse(discountAmounts);
-                    const totalDiscount = parsedDiscountAmounts.reduce((acc, curr) => acc + curr, 0);
-                    setTotalDiscount(parseFloat(totalDiscount).toFixed(2)); // Format totalDiscount to show 2 decimal places
-                }
-            } catch (error) {
-                console.error('Error fetching total discount: ', error);
-            }
-        };
-
-        fetchTotalDiscount();
-    }, []);
-    useEffect(() => {
-      const loadEverTotal = async () => {
-        try {
-          const savedEverTotal = await AsyncStorage.getItem('everTotal');
-          if (savedEverTotal !== null) {
-            setEverTotal(savedEverTotal);
-          }
-        } catch (error) {
-          console.error('Error loading everTotal:', error);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch invoice number
+        const savedInvoiceNumber = await AsyncStorage.getItem('salesNo');
+        if (savedInvoiceNumber !== null) {
+          setInvoiceNumber(parseInt(savedInvoiceNumber));
         }
-      };
-  
-      loadEverTotal();
-    }, []);
-    useEffect(() => {
-        // Retrieve e-invoice count from AsyncStorage when component mounts
-        retrieveEInvoiceCount();
-    }, []);
 
-    const retrieveEInvoiceCount = async () => {
-        try {
-            const value = await AsyncStorage.getItem('eInvoiceCount');
-            if (value !== null) {
-                setEInvoiceCount(parseInt(value));
-            }
-        } catch (error) {
-            console.error('Error retrieving e-invoice count:', error);
+        // Fetch ever total
+        const savedEverTotal = await AsyncStorage.getItem('everTotal');
+        if (savedEverTotal !== null) {
+          setEverTotal(parseFloat(savedEverTotal).toFixed(2));
         }
+
+        // Fetch e-invoice count
+        const savedEInvoiceCount = await AsyncStorage.getItem('eInvoiceCount');
+        if (savedEInvoiceCount !== null) {
+          setEInvoiceCount(parseInt(savedEInvoiceCount));
+        }
+
+        // Fetch total discount
+        const discountAmounts = await AsyncStorage.getItem('discountAmounts');
+        if (discountAmounts) {
+          const parsedDiscountAmounts = JSON.parse(discountAmounts);
+          const totalDiscount = parsedDiscountAmounts.reduce((acc, curr) => acc + curr, 0);
+          setTotalDiscount(parseFloat(totalDiscount).toFixed(2));
+        }
+
+        // Fetch campaign counter
+        const storedCampaignCounter = await AsyncStorage.getItem('campaignCounterdb');
+        if (storedCampaignCounter !== null) {
+          setCampaignCounterdb(parseInt(storedCampaignCounter));
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
 
-    useEffect(() => {
-        const loadSalesNo = async () => {
-          try {
-            const savedSalesNo = await AsyncStorage.getItem('salesNo');
-            if (savedSalesNo !== null) {
-                setInvoiceNumber(parseInt(savedSalesNo)); 
-            }
-          } catch (error) {
-            console.error('Error loading sales number:', error);
-          }
-        };
-      
-        loadSalesNo();
-      }, []);
-  return (
-    <View>
-   <Text style={{textAlign:"center"}}>Invoice Number: {invoiceNumber}</Text>
-   <Text style={{textAlign:"center"}}>Earned: {everTotal}</Text>
-   <Text style={{textAlign:"center"}}>Kayıtlı kullanıcı : 1</Text>
-   <Text style={{textAlign:"center"}}>Edocument : {eInvoiceCount}</Text>
-     <Text style={{textAlign:"center"}}>Total Discount: {totalDiscount} </Text>
-     <Text style={{ textAlign: "center" }}>Campaign Counter: {campaignCounterdb}</Text>
+    fetchData();
+  }, []);
 
-   </View>
+  return (
+    <Animatable.View animation="fadeInUp" duration={1500} style={styles.container}>
+      <CounterItem label="Order Number" value={invoiceNumber} duration={2000} interval={1} showDollarSign={false} backgroundColor="rgba(0, 0, 255, 0.1)" />
+      <CounterItem label="Earned" value={everTotal} duration={100} interval={1} showDollarSign={true} backgroundColor="rgba(255, 0, 0, 0.1)" />
+      <CounterItem label="Total Discount" value={totalDiscount} duration={100} interval={1} showDollarSign={true} backgroundColor="rgba(0, 255, 0, 0.1)" />
+      <CounterItem label="Campaign applied" value={campaignCounterdb} duration={4500} interval={10} showDollarSign={false} backgroundColor="rgba(255, 255, 0, 0.1)" />
+      <CounterItem label="Kayıtlı kullanıcı" value={1} duration={4000} interval={1} showDollarSign={false} backgroundColor="rgba(255, 0, 255, 0.1)" />
+      <CounterItem label="Edocument Number" value={eInvoiceCount} duration={4000} interval={10} showDollarSign={false} backgroundColor="rgba(0, 255, 255, 0.1)" />
+    </Animatable.View>
   );
+  
 };
 
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  itemContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    width: '80%',
+  },
+  text: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color:'black',
+    borderRadius:5
+  },
+  animation: {
+    marginTop: 5,
+  },
+});
 
 export default CollectionsScreen;
