@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, Button, TextInput, Image, RefreshControl } from 'react-native';
+import React, { useState, useEffect, useCallback, memo } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, TextInput, Image, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import FilterModal from './FiltersModel';
 import * as Animatable from 'react-native-animatable';
-import { Menu,Box,NativeBaseProvider,Pressable,HamburgerIcon,Heading } from 'native-base';
+import { Menu, Box, NativeBaseProvider, Pressable, HamburgerIcon, Heading } from 'native-base';
 import axios from 'axios';
 import LoadingIndicator from '../../functions/LoadingIndicator';
 import { useTranslation } from 'react-i18next';
@@ -18,13 +18,12 @@ const SeeProductScreen = () => {
   const [showFavorites, setShowFavorites] = useState(false);
   const [showFiltersModal, setShowFiltersModal] = useState(false); 
   const [searchTerm, setSearchTerm] = useState('');
-  const [refreshing, setRefreshing] = useState(false); // Yenileme durumu
+  const [refreshing, setRefreshing] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [favoriteAllPressed, setFavoriteAllPressed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
-  const { t } = useTranslation();
 
+  const { t } = useTranslation();
 
   const fetchProducts = async () => {
     try {
@@ -34,7 +33,7 @@ const SeeProductScreen = () => {
       if (!data.products || !Array.isArray(data.products)) {
         throw new Error('Product data is not in the expected format');
       }
-     
+
       const productsWithImages = data.products.map(product => ({
         ...product,
         image: product.image || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT9k_SAGieVTJrmp8-xBMsgguDKxWVv7iqpA&s' 
@@ -43,12 +42,10 @@ const SeeProductScreen = () => {
       setFilteredProducts(productsWithImages);
     } catch (error) {
       console.error('Error fetching products:', error);
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchProducts();
@@ -73,8 +70,7 @@ const SeeProductScreen = () => {
       console.error('Error saving favorites:', error);
     }
   };
-  
-  
+
   const loadFavorites = async () => {
     try {
       const storedFavorites = await AsyncStorage.getItem('favorites');
@@ -85,6 +81,7 @@ const SeeProductScreen = () => {
       console.error('Error loading favorites:', error);
     }
   };
+
   const assignAllFavorites = () => {
     if (!favoriteAllPressed) {
       setFavorites([...favorites, ...products]);
@@ -92,13 +89,13 @@ const SeeProductScreen = () => {
       setShowAssignModal(false);
     }
   };
-  
+
   const unFavoriteAll = () => {
     setFavorites([]);
     setShowAssignModal(false);
     setFavoriteAllPressed(false); 
   };
-  
+
   const toggleFavorite = (id) => {
     const index = favorites.findIndex((item) => item.id === id);
     if (index === -1) {
@@ -110,14 +107,13 @@ const SeeProductScreen = () => {
       setFavorites(updatedFavorites);
     }
   };
-  
 
   const memoizedIsFavorite = useCallback(
     (id) => favorites.some((item) => item.id === id),
     [favorites]
   );
 
-  const renderItem = useCallback(({ item }) => {
+  const RenderItem = memo(({ item }) => {
     const isFavorite = memoizedIsFavorite(item.id);
     return (
       <Animatable.View
@@ -141,8 +137,8 @@ const SeeProductScreen = () => {
         </View>
       </Animatable.View>
     );
-  }, [favorites, toggleFavorite, memoizedIsFavorite]);
-  
+  });
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchProducts();
@@ -151,102 +147,101 @@ const SeeProductScreen = () => {
 
   return (
     <View style={styles.container}>
-    <Animatable.View
-      animation="fadeInDown"
-      delay={300} 
-      useNativeDriver
-    >
-      <View style={styles.filterContainer}>
-        <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}> 
-          <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.searchInput}
-          placeholder={t('Search products')}
-          onChangeText={text => setSearchTerm(text)}
-          value={searchTerm}
-        />
-        <TouchableOpacity onPress={() => setShowFiltersModal(true)}>
-          <MaterialCommunityIcons style={styles.searchIcons} name={"filter-variant"} size={30} color={"black"} />
-        </TouchableOpacity>
-        <Modal visible={showAssignModal} animationType="slide" transparent>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setShowAssignModal(false)}>
-                <Text style={[styles.modalButtonText, styles.cancelButtonText]}>{t('Cancel')}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-      </View>
-    
-      {isLoading ? (
-        <LoadingIndicator />
-      ) : (
-        <View style={styles.productsListContainer}>
-          <FlatList
-            data={filteredProducts}
-            renderItem={renderItem}
-            removeClippedSubviews={true}
-            keyExtractor={(item) => item.id.toString()}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              />
-            }
+      <Animatable.View
+        animation="fadeInDown"
+        delay={300} 
+        useNativeDriver
+      >
+        <View style={styles.filterContainer}>
+          <TouchableOpacity style={styles.filterButton} onPress={() => setShowFavorites(true)}> 
+            <Antdesign style={styles.favoriteIcon} name={"star"} size={28} color={"white"} />
+          </TouchableOpacity>
+          <TextInput
+            style={styles.searchInput}
+            placeholder={t('Search products')}
+            onChangeText={text => setSearchTerm(text)}
+            value={searchTerm}
           />
+          <TouchableOpacity onPress={() => setShowFiltersModal(true)}>
+            <MaterialCommunityIcons style={styles.searchIcons} name={"filter-variant"} size={30} color={"black"} />
+          </TouchableOpacity>
+          <Modal visible={showAssignModal} animationType="slide" transparent>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setShowAssignModal(false)}>
+                  <Text style={[styles.modalButtonText, styles.cancelButtonText]}>{t('Cancel')}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </View>
-      )}
-    </Animatable.View>
-  
-    <Modal visible={showFavorites} animationType="slide">
-      <View style={styles.favoritesContainer}>
-        <View style={{ flexDirection: 'row' }}>
-          <NativeBaseProvider>
-            <Box justifyContent={'center'} alignItems={'center'} >
-              <Heading>{t('Favorites')}</Heading>
-              <Menu w="190" trigger={triggerProps => {
-                return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
-                  <HamburgerIcon />
-                </Pressable>;
-              }}>
-                <Menu.Item onPress={assignAllFavorites}>{t('Favorite All Products')}</Menu.Item>
-                <Menu.Item onPress={unFavoriteAll}>{t('Unfavorite All Products')}</Menu.Item>
-              </Menu>
-            </Box>
-          </NativeBaseProvider>
-        </View>
-        
-        {favorites.length === 0 ? (
-          <View style={styles.emptyContainer}>
-            <Image
-              source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
-              style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }} 
+
+        {isLoading ? (
+          <LoadingIndicator />
+        ) : (
+          <View style={styles.productsListContainer}>
+            <FlatList
+              data={filteredProducts}
+              renderItem={({ item }) => <RenderItem item={item} />}
+              removeClippedSubviews={true}
+              keyExtractor={(item) => item.id.toString()}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+              }
             />
           </View>
-        ) : (
-          <FlatList
-            data={favorites}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-          />
         )}
-       
-        <TouchableOpacity onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange',marginTop:'auto' }}>
-          <Text style={{ color: 'white', padding: 10, textAlign: 'center', fontWeight: 'bold' }}>{t('Close')}</Text>
-        </TouchableOpacity>
-      </View>
-    </Modal>
-  
-    <FilterModal
-      showFiltersModal={showFiltersModal}
-      setShowFiltersModal={setShowFiltersModal}
-      filteredProducts={filteredProducts}
-      setFilteredProducts={setFilteredProducts}
-    />
-  </View>
-  
+      </Animatable.View>
+
+      <Modal visible={showFavorites} animationType="slide">
+        <View style={styles.favoritesContainer}>
+          <View style={{ flexDirection: 'row' }}>
+            <NativeBaseProvider>
+              <Box justifyContent={'center'} alignItems={'center'} >
+                <Heading>{t('Favorites')}</Heading>
+                <Menu w="190" trigger={triggerProps => {
+                  return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
+                    <HamburgerIcon />
+                  </Pressable>;
+                }}>
+                  <Menu.Item onPress={assignAllFavorites}>{t('Favorite All Products')}</Menu.Item>
+                  <Menu.Item onPress={unFavoriteAll}>{t('Unfavorite All Products')}</Menu.Item>
+                </Menu>
+              </Box>
+            </NativeBaseProvider>
+          </View>
+          
+          {favorites.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <Image
+                source={{ uri: 'https://bwmachinery.com.au/wp-content/uploads/2019/08/no-product-500x500.png' }}
+                style={{ width: 200, height: 200, alignSelf: 'center', alignItems: 'center' }} 
+              />
+            </View>
+          ) : (
+            <FlatList
+              data={favorites}
+              renderItem={({ item }) => <RenderItem item={item} />}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          )}
+         
+          <TouchableOpacity onPress={() => setShowFavorites(false)} style={{ backgroundColor: 'orange', marginTop: 'auto' }}>
+            <Text style={{ color: 'white', padding: 10, textAlign: 'center', fontWeight: 'bold' }}>{t('Close')}</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+
+      <FilterModal
+        showFiltersModal={showFiltersModal}
+        setShowFiltersModal={setShowFiltersModal}
+        filteredProducts={filteredProducts}
+        setFilteredProducts={setFilteredProducts}
+      />
+    </View>
   );
 };
 
@@ -259,29 +254,28 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom:20,
-    marginTop:20,
+    marginBottom: 20,
+    marginTop: 20,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 20,
-    padding:10
+    padding: 10
   },
-  
   searchInput: {
     flex: 1,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 15,
     paddingHorizontal: 10,
-    margin:5,
-    padding:5
+    margin: 5,
+    padding: 5
   },
-  searchIcons:{
-    marginTop:12,
-    marginRight:20
+  searchIcons: {
+    marginTop: 12,
+    marginRight: 20
   },
-  favoriteIcon:{
-    padding:4,
+  favoriteIcon: {
+    padding: 4,
   },
   filterButton: {
     padding: 4,
@@ -296,8 +290,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 20,
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   productName: {
     fontSize: 18,
@@ -334,7 +328,6 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: 'red',
   },
-
   productPrice: {
     fontSize: 16,
     marginTop: 5,
@@ -357,7 +350,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 5,
     marginBottom: 10,
-   
   },
   favoritesContainer: {
     flex: 1,

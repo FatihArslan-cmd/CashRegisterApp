@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import getAppVersion from '../functions/getAppVersion';
 import GetIP from '../functions/GetIp';
 import OnlineStatusInformer from '../functions/OnlineStatusInformer';
 import { useTranslation } from 'react-i18next';
+import { useFocusEffect } from '@react-navigation/native';
 
 const InformationRow = ({ label, value, iconName, iconColor, style }) => (
   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
@@ -17,42 +18,34 @@ const InformationRow = ({ label, value, iconName, iconColor, style }) => (
 
 const CustomDrawerContent = ({ navigation }) => {
   const { t } = useTranslation();
-  const [userProfile, setUserProfile] = useState(null); // State to hold user profile
+  const [userProfile, setUserProfile] = useState(null);
   const [username, setUsername] = useState('');
 
-  useEffect(() => {
-    // Function to fetch username from AsyncStorage
-    const fetchUsername = async () => {
-      try {
-        const storedUsername = await AsyncStorage.getItem('username');
-        setUsername(storedUsername);
-      } catch (error) {
-        console.error('Error fetching username:', error);
-        Alert.alert(t('Error'), t('An error occurred while fetching username'));
+  const fetchUserProfile = async () => {
+    try {
+      const storedUsername = await AsyncStorage.getItem('username');
+      if (!storedUsername) {
+        throw new Error('No username found');
       }
-    };
-
-    fetchUsername(); 
-  }, []);
-
-  useEffect(() => {
-    // Function to fetch user profile from AsyncStorage
-    const fetchUserProfile = async () => {
-      try {
-        const userProfileJSON = await AsyncStorage.getItem(username);
+      setUsername(storedUsername);
+      const userProfileJSON = await AsyncStorage.getItem(storedUsername);
+      if (userProfileJSON) {
         const userProfile = JSON.parse(userProfileJSON);
         setUserProfile(userProfile);
-        
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-        Alert.alert(t('Error'), 'An error occurred while fetching user profile');
+      } else {
+        throw new Error('User profile not found');
       }
-    };
-
-    if (username) {
-      fetchUserProfile(); // Call the function to fetch user profile
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      Alert.alert(t('Error'), 'An error occurred while fetching user profile');
     }
-  }, [username]);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserProfile();
+    }, [])
+  );
 
   const currentDate = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
@@ -66,7 +59,6 @@ const CustomDrawerContent = ({ navigation }) => {
   const ipAddress = GetIP();
   const version = getAppVersion();
 
-  // Function to handle leaving the account
   const handleLeaveAccount = () => {
     Alert.alert(
       t('Are you sure?'),
@@ -75,7 +67,7 @@ const CustomDrawerContent = ({ navigation }) => {
         {
           text: t('Yes'),
           onPress: () => {
-            navigation.navigate('Home'); // Navigates to the home screen.
+            navigation.navigate('Home');
           },
         },
         {
@@ -97,17 +89,14 @@ const CustomDrawerContent = ({ navigation }) => {
 
       <View style={{ flex: 1, marginTop: 5, paddingHorizontal: 16, borderStyle: 'solid', borderColor: 'lightgray', borderWidth: 1 }}>
         <View style={{ paddingBottom: 10 }}>
-
-        
-            <View>
-              <InformationRow label={t('email')} value={userProfile ? userProfile.email : ''} iconName="mail" iconColor="gray" />
-              <InformationRow label={t('Store No')} value={storeNo} iconName="shoppingcart" iconColor="gray" />
-              <InformationRow label={t('Cash Register No')} value={cashRegisterNo} iconName="barcode" iconColor="gray" />
-              <InformationRow label={t('Cash Register IP')} value={ipAddress} iconName="wifi" iconColor="gray" />
-              <InformationRow label={t('Version')} value={version} iconName="info" iconColor="gray" />
-              <InformationRow label={t('Date')} value={currentDate} iconName="calendar" iconColor="gray" />
-            </View>
-         
+          <View>
+            <InformationRow label={t('email')} value={userProfile ? userProfile.email : ''} iconName="mail" iconColor="gray" />
+            <InformationRow label={t('Store No')} value={storeNo} iconName="shoppingcart" iconColor="gray" />
+            <InformationRow label={t('Cash Register No')} value={cashRegisterNo} iconName="barcode" iconColor="gray" />
+            <InformationRow label={t('Cash Register IP')} value={ipAddress} iconName="wifi" iconColor="gray" />
+            <InformationRow label={t('Version')} value={version} iconName="info" iconColor="gray" />
+            <InformationRow label={t('Date')} value={currentDate} iconName="calendar" iconColor="gray" />
+          </View>
         </View>
       </View>
 
@@ -115,17 +104,12 @@ const CustomDrawerContent = ({ navigation }) => {
         <DrawerItem
           label={t('Menu')}
           icon={({ color, size }) => <AntDesign name="menu-fold" size={size} color={color} />}
-          onPress={() => {
-            navigation.navigate(t('Menu'));
-          }}
+          onPress={() => navigation.navigate(t('Menu'))}
         />
         <DrawerItem
           label={t('Settings')}
           icon={({ color, size }) => <AntDesign name="setting" size={size} color={color} />}
-          onPress={() => {
-            // Navigate to Settings screen
-            navigation.navigate(t('Settings'));
-          }}
+          onPress={() => navigation.navigate(t('Settings'))}
         />
       </View>
 
