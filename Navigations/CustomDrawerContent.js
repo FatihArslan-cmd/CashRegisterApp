@@ -23,9 +23,12 @@ const CustomDrawerContent = ({ navigation }) => {
 
   const fetchUserProfile = async () => {
     try {
-      const storedUsername = await AsyncStorage.getItem('username');
+      let storedUsername = await AsyncStorage.getItem('username');
       if (!storedUsername) {
-        throw new Error('No username found');
+        storedUsername = 'test';
+        await AsyncStorage.setItem('username', storedUsername);
+        const testProfile = { email: 'test@test.com' };
+        await AsyncStorage.setItem(storedUsername, JSON.stringify(testProfile));
       }
       setUsername(storedUsername);
       const userProfileJSON = await AsyncStorage.getItem(storedUsername);

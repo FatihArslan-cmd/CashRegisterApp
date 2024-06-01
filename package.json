@@ -64,7 +64,8 @@
     "react-native-vector-icons": "^10.0.3",
     "react-native-vision-camera": "^3.9.2",
     "react-native-webview": "13.6.4",
-    "victory-native": "^40.2.0"
+    "victory-native": "^40.2.0",
+    "expo-barcode-scanner": "~12.9.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

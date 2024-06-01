@@ -12,6 +12,7 @@ import FavoriteProductsScreen from './screens/Menu/DirectProductEntryScreen';
 import CalculatorApp from './functions/NumberButtons';
 import CollectionsScreen from './screens/CollectionsScreen';
 import ReportsScreen from './screens/Menu/ReportsScreen';
+import Barcode from './screens/BarCode';
 const Stack = createStackNavigator();
 
 
@@ -47,6 +48,11 @@ const AuthStack = () => {
        <Stack.Screen
         name="Collections"
         component={CollectionsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Barcode"
+        component={Barcode}
         options={{ headerShown: false }}
       />
       <Stack.Screen

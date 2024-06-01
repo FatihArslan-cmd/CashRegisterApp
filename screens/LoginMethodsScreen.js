@@ -20,7 +20,7 @@ const Swiper5 = () => {
     const data = [
         { color: 'purple', route: 'Finger', icon: 'fingerprint', text: 'TouchID', description: t('TouchID offers fingerprint-based authentication') },
         { color: 'red', route: 'Face', icon: 'user', text: 'FaceID', description: t('FaceID provides facial recognition authentication') },
-        { color: 'orange', route: 'Menu', icon: 'barcode', text: 'Barcode', description: t('Barcode scanning allows quick retrieval of encoded information using a devices camera') },
+        { color: 'orange', route: 'Barcode', icon: 'barcode', text: 'Barcode', description: t('Barcode scanning allows quick retrieval of encoded information using a devices camera') },
         { color: 'yellow', route: 'nfc', icon: 'cellphone-nfc', text: 'NFC', description: t('NFC enables contactless data exchange and transactions between devices.') }
     ];
     const [activeIndex, setActiveIndex] = useState({ current: 0, previous: null })

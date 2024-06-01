@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import UserProfileViewer from '../functions/UserProfileViewer';
 import LanguageButton from '../functions/LanguageButton';
 import ShareEg from '../functions/ShareButton';
 import ContactMe from '../functions/ContactButton'; 

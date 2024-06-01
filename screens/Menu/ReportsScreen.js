@@ -134,7 +134,8 @@ const ReportsScreen = () => {
         />
         <NativeBaseProvider>
         
-          <Box w="150%" alignItems="center" flexDirection="row">
+         <Box w="100%" alignItems="center" flexDirection="row" flexWrap="wrap"  justifyContent="space-between">
+
             <Popover trigger={triggerProps => {
               return <Button {...triggerProps} colorScheme="blue">{t('Send Store')}</Button>;
             }}>
@@ -239,6 +240,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  
   },
   inputContainer: {
     flexDirection: 'row',

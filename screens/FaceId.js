@@ -1,59 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Alert ,TouchableOpacity} from 'react-native';
-import * as LocalAuthentication from 'expo-local-authentication';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+import { Camera } from 'expo-camera';
+import * as FaceDetector from 'expo-face-detector';
 
-const FaceIDScreen = () => {
-  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
+export default function App({ navigation }) {
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.front);
 
   useEffect(() => {
-    checkBiometricSupport();
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
   }, []);
 
-  const checkBiometricSupport = async () => {
-    const compatible = await LocalAuthentication.hasHardwareAsync();
-    setIsBiometricSupported(compatible);
-  };
-
-  const handleBiometricAuth = async () => {
-    const savedBiometrics = await LocalAuthentication.isEnrolledAsync();
-    if (!savedBiometrics) {
-      Alert.alert(
-        'Biometric record not found',
-        'Please verify your identity with your password',
-        [{ text: 'OK', onPress: () => fallBackToDefaultAuth() }]
-      );
-    } else {
-      const biometricAuth = await LocalAuthentication.authenticateAsync({
-        promptMessage: 'Login with Biometrics',
-        disableDeviceFallback: true,
-      });
-
-      if (biometricAuth.success) {
-        Alert.alert('Success', 'Biometric authentication successful!');
-      } else {
-        Alert.alert('Error', 'Biometric authentication failed.');
-      }
+  const handleFacesDetected = ({ faces }) => {
+    if (faces.length > 0) {
+      console.log('face');
+      navigation.navigate('MainDrawer');
     }
   };
 
-  const fallBackToDefaultAuth = () => {
-    // Fallback to default authentication method
-    console.log('Fallback to default authentication method');
-  };
-
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>
-        {isBiometricSupported
-          ? 'Your device is compatible with Biometrics'
-          : 'Face or Fingerprint scanner is available on this device'}
-      </Text>
-      <Text>Press the button below to authenticate with Biometrics:</Text>
-      <TouchableOpacity onPress={handleBiometricAuth}>
-        <Text>Authenticate with Biometrics</Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <Camera
+        style={styles.camera}
+        type={type}
+        onFacesDetected={handleFacesDetected}
+        faceDetectorSettings={{
+          mode: FaceDetector.FaceDetectorMode.fast,
+          detectLandmarks: FaceDetector.FaceDetectorLandmarks.all,
+          runClassifications: FaceDetector.FaceDetectorClassifications.all,
+          minDetectionInterval: 100,
+          tracking: true,
+        }}
+      />
     </View>
   );
-};
+}
 
-export default FaceIDScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  camera: {
+    flex: 1,
+  },
+});
