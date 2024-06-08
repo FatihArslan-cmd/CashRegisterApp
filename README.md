@@ -53,11 +53,13 @@ Key Features:<br/>
 <br/>
 ## <a id="screenshots"></a>📷 Screenshots
 
-![]()
-![]()
-![]()
-![]()
-![]()
+![Screenshot_1717866258](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/6f825df9-4069-4897-800b-7be5cb332b91)
+![loginmethods](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/7ca701b4-48df-4fab-bdcd-b64800b2c4d8)
+![allproducts](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/be53ec88-9c4a-481d-94df-03bea748b7b2)
+![Ekran görüntüsü 2024-06-08 200732](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/f58aca08-23a4-41a1-b59d-24a596c132b7)
+![Ekran görüntüsü 2024-06-08 200857](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/08dfa69d-2b47-43d3-ab19-217162938975)
+![settings](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/8592f932-b432-4433-b62e-b23553150c1d)
+
 <br/>
 <br/>
 
