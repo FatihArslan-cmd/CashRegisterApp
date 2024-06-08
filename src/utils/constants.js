@@ -10,8 +10,8 @@ export const MESSAGES = {
       unauthorized: 'Yetkisiz erişim. Lütfen giriş yapın.',
     },
     success: {
-      saved: 'Başarıyla kaydedildi.',
-      deleted: 'Başarıyla silindi.',
+      saved: 'Saved Successfully.',
+      deleted: 'Removed Succesfully.',
     },
   };
 
