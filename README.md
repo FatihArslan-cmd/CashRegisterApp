@@ -25,7 +25,7 @@
 6. [📞 Contact](#contact)
 7. [📌 Important Versions](#important-versions)
 
-## 📘 About The Project
+## <a id="about-the-project"></a>📘 About The Project
 
 The Cash Register Mobile App is designed to simplify point-of-sale processes for small businesses. This application includes features such as authentication (using Face ID, Touch ID, Barcode, and Email), product sales, detailed reporting, and online status monitoring. 
 You can use Products's ID , Favorite list , Barcode scanning to have products in the list.
@@ -38,20 +38,20 @@ Online offline status dynamically changes according to network connections you c
 You can favorite unfavorite products
 
 Key Features:
--🔐 **Authentication**: Secure login using modern methods like Face ID, Touch ID, Barcode scanning, and email.
--🛒 **Product Sales**: Easy interface for selling products and managing transactions.
--📊 **Reporting**: Comprehensive reports on sales and inventory.
--🌍 **Multi-language Support**: The application supports 10 languages.
--🔄 **Dynamic Online/Offline Status**: The app dynamically changes its status according to the network connection and allows manual status toggling in settings.
--❤️ **Favorites Management**: Users can favorite and unfavorite products.
--🛒 **Product Management**: Manage over 1000 products using product IDs, favorite lists, and barcode scanning.
--🧾 **Invoice Handling**: Print invoices and send them to customers via email.
+-🔐 **Authentication**: Secure login using modern methods like Face ID, Touch ID, Barcode scanning, and email. <br/>
+-🛒 **Product Sales**: Easy interface for selling products and managing transactions. <br/>
+-📊 **Reporting**: Comprehensive reports on sales and inventory. <br/>
+-🌍 **Multi-language Support**: The application supports 10 languages. <br/>
+-🔄 **Dynamic Online/Offline Status**: The app dynamically changes its status according to the network connection and allows manual status toggling in settings. <br/>
+-❤️ **Favorites Management**: Users can favorite and unfavorite products. <br/>
+-🛒 **Product Management**: Manage over 1000 products using product IDs, favorite lists, and barcode scanning. <br/>
+-🧾 **Invoice Handling**: Print invoices and send them to customers via email. <br/>
 
 <hr>
 
 <br/>
 <br/>
-## 📷 Screenshots
+## <a id="screenshots"></a>📷 Screenshots
 
 ![]()
 ![]()
@@ -64,11 +64,11 @@ Key Features:
 <hr>
 
 
-## 🚀 Getting Started
+## <a id="getting-started"></a>🚀 Getting Started
 
 To get a local copy up and running, follow these simple steps.
 
-### 📋 Prerequisites
+### <a id="prerequisites"></a>📋 Prerequisites
 
 Ensure you have the following software installed:
 - [Node.js](https://nodejs.org/) (v20.11.1 or later) 🟢
@@ -77,7 +77,7 @@ Ensure you have the following software installed:
 
 This project was bootstrapped with [Create React Native App](https://github.com/expo/create-react-native-app?tab=readme-ov-file).
 
-### ⚙️ Installation
+### <a id="installation"></a>⚙️ Installation
 
 1. Clone the repository:
     ```bash
@@ -104,7 +104,7 @@ If Expo gives any error, try re-running `npm install`.
 
 <hr>
 
-### 🛠️ Usage
+### <a id="usage"></a>🛠️ Usage
 
 Once the project is running:
 - Open the app on your device or emulator.
@@ -115,7 +115,7 @@ Once the project is running:
 
 <hr>
 
-## 🤝 Contributing
+## <a id="contributing"></a>🤝 Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -130,7 +130,7 @@ To contribute:
 
 <hr>
 
-### 📦 Dependencies
+## <a id="dependencies"></a>📦 Dependencies
 
  "@react-native-async-storage/async-storage": "1.21.0"
     "@react-native-community/netinfo": "11.1.0"
@@ -153,7 +153,7 @@ To contribute:
     "react-native-vector-icons": "^10.0.3"
     "react-native-webview": "13.6.4"
 
-### 📌 Important versions
+### <a id="important-versions"></a>📌 Important Versions
     "expo": "~50.0.17"
     "react-native": "0.73.6"
     "Node": v20.11.1
@@ -162,7 +162,7 @@ To contribute:
 <hr>
 
 
-## 📞 Contact
+## <a id="contact"></a>📞 Contact
 
 **Fatih Arslan** - *Software Engineering Student* - [Fatih Arslan](https://github.com/FatihArslan-cmd)
 
