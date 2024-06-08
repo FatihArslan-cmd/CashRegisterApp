@@ -37,7 +37,7 @@ Aplplication supports 10 langugaes and dark theme light theme toglle is availabe
 Online offline status dynamically changes according to network connections you can also change it on the settings
 You can favorite unfavorite products
 
-Key Features:
+Key Features:<br/>
 -🔐 **Authentication**: Secure login using modern methods like Face ID, Touch ID, Barcode scanning, and email. <br/>
 -🛒 **Product Sales**: Easy interface for selling products and managing transactions. <br/>
 -📊 **Reporting**: Comprehensive reports on sales and inventory. <br/>
