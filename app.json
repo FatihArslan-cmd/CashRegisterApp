@@ -4,10 +4,10 @@
     "slug": "project",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/image/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/image/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -23,13 +23,11 @@
         {
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
         }
-      ],
-      "react-native-vision-camera",
-      "expo-localization"
+      ]
     ],
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/image/adaptive-icon.png",
         "backgroundColor": "#ffffff",
         "permissions": [
           "USE_BIOMETRIC"
@@ -38,7 +36,7 @@
       "package": "com.fatiharslan.project"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/image/adaptive-icon.png"
     },
     "extra": {
       "eas": {
