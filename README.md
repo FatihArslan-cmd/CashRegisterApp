@@ -54,12 +54,12 @@ Key Features:<br/>
 ## <a id="screenshots"></a>📷 Screenshots
 
 ![Ekran görüntüsü 2024-06-08 202216](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/f4924977-b690-4f3e-97ee-084baec11944)
-<img src="https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/0adbd8d9-7f97-4699-8a20-e4455c810758" width="300" alt="Screenshot 1"/>
-<img src="https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/0a8752da-ff22-4ee1-9b86-3ebc89de31dc" width="300" alt="Screenshot 2"/>
-![Kayıt 2024-06-08 202514](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/0a8752da-ff22-4ee1-9b86-3ebc89de31dc)
+<img src="https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/0adbd8d9-7f97-4699-8a20-e4455c810758" width="450" alt="Screenshot 1"/>
+<img src="https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/0a8752da-ff22-4ee1-9b86-3ebc89de31dc" width="450" alt="Screenshot 2"/>
+<img src="https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/0a8752da-ff22-4ee1-9b86-3ebc89de31dc" width="450" alt="Screenshot 2"/>
 ![Ekran görüntüsü 2024-06-08 200732](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/f58aca08-23a4-41a1-b59d-24a596c132b7)
 ![Ekran görüntüsü 2024-06-08 200857](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/08dfa69d-2b47-43d3-ab19-217162938975)
-![Kayıt 2024-06-08 202825](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/0bb9272c-bee5-4851-87b6-885e060cc66c)
+<img src="https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/0bb9272c-bee5-4851-87b6-885e060cc66c" width="450" alt="Screenshot 2"/>
 
 <br/>
 <br/>
