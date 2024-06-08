@@ -1,31 +1,31 @@
 <p align="center">
-<h3 align="center">Cash Register Mobile App</h3>
-<h5 align="center">--- 32Bit 2023-2024 Competition ---</h5>
-<p align="center">
+  <h3 align="center">💰 Cash Register Mobile App</h3>
+  <h5 align="center">--- 🚀 32Bit 2023-2024 Competition ---</h5>
+  <p align="center">
     Building a Cash Register Mobile App using modern web technologies. The app features authentication (Face ID, Touch ID, Barcode, Email), product sales, reporting, and online status monitoring. The application is developed with React Native. Updates coming soon!
     <br/><br/>
-    <a href="https://github.com/FatihArslan-cmd/CashRegisterApp"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/FatihArslan-cmd/CashRegisterApp"><strong>🌟 Explore the docs »</strong></a>
     <br/><br/>
-    <a href="https://github.com/FatihArslan-cmd/CashRegisterApp/issues">Report Bug</a>
+    <a href="https://github.com/FatihArslan-cmd/CashRegisterApp/issues">🐛 Report Bug</a>
     .
-    <a href="https://github.com/FatihArslan-cmd/CashRegisterApp/issues">Request Feature</a>
+    <a href="https://github.com/FatihArslan-cmd/CashRegisterApp/issues">✨ Request Feature</a>
+  </p>
 </p>
-</p>
 
-## Table of Contents
+## 📖 Table of Contents
 
-1. [About The Project](#about-the-project)
-2. [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Usage](#usage)
-3. [Screenshots](#screenshots)
-4. [Dependencies](#dependencies)
-5. [Contributing](#contributing)
-6. [Contact](#contact)
-7. [Important Versions](#important-versions)
+1. [📘 About The Project](#about-the-project)
+2. [🚀 Getting Started](#getting-started)
+    - [📋 Prerequisites](#prerequisites)
+    - [⚙️ Installation](#installation)
+    - [🛠️ Usage](#usage)
+3. [📷 Screenshots](#screenshots)
+4. [📦 Dependencies](#dependencies)
+5. [🤝 Contributing](#contributing)
+6. [📞 Contact](#contact)
+7. [📌 Important Versions](#important-versions)
 
-## About The Project
+## 📘 About The Project
 
 The Cash Register Mobile App is designed to simplify point-of-sale processes for small businesses. This application includes features such as authentication (using Face ID, Touch ID, Barcode, and Email), product sales, detailed reporting, and online status monitoring. 
 You can use Products's ID , Favorite list , Barcode scanning to have products in the list.
@@ -38,20 +38,20 @@ Online offline status dynamically changes according to network connections you c
 You can favorite unfavorite products
 
 Key Features:
-- **Authentication**: Secure login using modern methods like Face ID, Touch ID, Barcode scanning, and email.
-- **Product Sales**: Easy interface for selling products and managing transactions.
-- **Reporting**: Comprehensive reports on sales and inventory.
-- **Multi-language Support**: The application supports 10 languages.
-- **Dynamic Online/Offline Status**: The app dynamically changes its status according to the network connection and allows manual status toggling in settings.
-- **Favorites Management**: Users can favorite and unfavorite products.
-- **Product Management**: Manage over 1000 products using product IDs, favorite lists, and barcode scanning.
-- **Invoice Handling**: Print invoices and send them to customers via email.
+-🔐 **Authentication**: Secure login using modern methods like Face ID, Touch ID, Barcode scanning, and email.
+-🛒 **Product Sales**: Easy interface for selling products and managing transactions.
+-📊 **Reporting**: Comprehensive reports on sales and inventory.
+-🌍 **Multi-language Support**: The application supports 10 languages.
+-🔄 **Dynamic Online/Offline Status**: The app dynamically changes its status according to the network connection and allows manual status toggling in settings.
+-❤️ **Favorites Management**: Users can favorite and unfavorite products.
+-🛒 **Product Management**: Manage over 1000 products using product IDs, favorite lists, and barcode scanning.
+-🧾 **Invoice Handling**: Print invoices and send them to customers via email.
 
 <hr>
 
 <br/>
 <br/>
-## Screenshots
+## 📷 Screenshots
 
 ![]()
 ![]()
@@ -64,20 +64,20 @@ Key Features:
 <hr>
 
 
-# Getting Started
+## 🚀 Getting Started
 
 To get a local copy up and running, follow these simple steps.
 
-### Prerequisites
+### 📋 Prerequisites
 
 Ensure you have the following software installed:
-- [Node.js](https://nodejs.org/) (v20.11.1 or later)
-- npm (v10.2.4 or later) or Yarn
+- [Node.js](https://nodejs.org/) (v20.11.1 or later) 🟢
+- npm (v10.2.4 or later) or Yarn 🧶
 - [Expo CLI](https://docs.expo.dev/get-started/installation/)
 
 This project was bootstrapped with [Create React Native App](https://github.com/expo/create-react-native-app?tab=readme-ov-file).
 
-### Installation
+### ⚙️ Installation
 
 1. Clone the repository:
     ```bash
@@ -104,7 +104,7 @@ If Expo gives any error, try re-running `npm install`.
 
 <hr>
 
-### Usage
+### 🛠️ Usage
 
 Once the project is running:
 - Open the app on your device or emulator.
@@ -115,7 +115,7 @@ Once the project is running:
 
 <hr>
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -130,7 +130,7 @@ To contribute:
 
 <hr>
 
-### Dependencies
+### 📦 Dependencies
 
  "@react-native-async-storage/async-storage": "1.21.0"
     "@react-native-community/netinfo": "11.1.0"
@@ -153,7 +153,7 @@ To contribute:
     "react-native-vector-icons": "^10.0.3"
     "react-native-webview": "13.6.4"
 
-### Important versions
+### 📌 Important versions
     "expo": "~50.0.17"
     "react-native": "0.73.6"
     "Node": v20.11.1
@@ -162,7 +162,7 @@ To contribute:
 <hr>
 
 
-## Contact
+## 📞 Contact
 
 **Fatih Arslan** - *Software Engineering Student* - [Fatih Arslan](https://github.com/FatihArslan-cmd)
 
