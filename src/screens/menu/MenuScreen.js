@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Linking,BackHandler } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomText from '../../components/CustomText';
@@ -22,7 +22,9 @@ const MenuScreen = () => {
     { icon: 'external-link', color: 'black', label: 'www', url: 'https://32bit.com.tr/' },
   ];
   const navigation = useNavigation();
-
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    return true;
+  });
   const handle32bit = (item) => {
     if (item.url) {
       Linking.openURL(item.url);
