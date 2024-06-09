@@ -7,7 +7,7 @@ import SignUpScreen from '../screens/SignUpScreen';
 import Swiper5 from '../screens/LoginMethodsScreen';
 import MainDrawer from './DrawerNavigation';
 import Application from '../screens/menu/SalesScreen';
-import SeeProductsScreen from '../screens/menu/SeeProductsScreen';
+import SeeProductScreen from '../screens/menu/SeeProductsScreen/SeeProductsScreen';
 import FavoriteProductsScreen from '../screens/menu/DirectProductEntryScreen';
 import CalculatorApp from '../components/NumberButtons';
 import CollectionsScreen from '../screens/menu/CollectionsScreen';
@@ -83,7 +83,7 @@ const AuthStack = () => {
       />
       <Stack.Screen
         name="SeeProducts"
-        component={SeeProductsScreen}
+        component={SeeProductScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

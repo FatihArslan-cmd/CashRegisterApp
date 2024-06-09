@@ -1,131 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage from the correct package
 import { useTranslation } from 'react-i18next';
-import { ThemeContext } from '../context/ThemeContext'; // Update the path as necessary
+import { ThemeContext } from '../context/ThemeContext';
+import useCalculator from '../hooks/useCalculator';
 
 const CalculatorApp = ({ receiveReceivedAndChange, allTotal, exampleValue, exampleValueCredit, paymentSuccessReceive, counter }) => {
-  const [inputValue, setInputValue] = useState('');
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [change, setChange] = useState(0); // State to store the change
-  const [enteredAmount, setEnteredAmount] = useState(0); // State to store the entered amount
-  const [paymentType, setPaymentType] = useState('');
   const { t } = useTranslation();
-  const { isDarkMode } = useContext(ThemeContext); // Use ThemeContext
-
-  useEffect(() => {
-    if (exampleValue > 0) {
-      handleCalculate();
-    }
-    return () => {};
-  }, [exampleValue]);
-
-  useEffect(() => {
-    if (counter > 0) {
-      setPaymentSuccess(false);
-      console.log(paymentSuccess);
-    }
-    return () => {};
-  }, [counter]);
-
-  useEffect(() => {
-    if (exampleValueCredit > 0) {
-      handleCalculateCredit();
-    }
-    return () => {};
-  }, [exampleValueCredit]);
-
-  useEffect(() => {
-    paymentSuccessReceive(paymentSuccess);
-  }, [paymentSuccess, paymentSuccessReceive]);
-
-  const handleButtonPress = (value) => {
-    if (value === 'sil') {
-      setInputValue('');
-    } else if (value === '=') {
-      handleCalculate();
-    } else {
-      setInputValue((prevValue) => prevValue + value.toString());
-    }
-  };
-
-  const handleCalculatePayment = (paymentType, oppositePaymentType) => {
-    if (inputValue === '') {
-      Alert.alert(t('Please Enter a Number'), t('Please enter an amount before calculating.'));
-      return;
-    }
-
-    if (allTotal === 0) {
-      Alert.alert(t('No Items in the List'), t('There are no items in the list.'));
-      return;
-    }
-
-    const amount = parseFloat(inputValue);
-    const changeAmount = amount - allTotal;
-    const requiredAmount = allTotal - amount;
-    
-    if (amount > allTotal) {
-      Alert.alert(t('Success'), `${t('Your change is')} $${changeAmount.toFixed(2)}`);
-
-      setChange(changeAmount); // Update the state with change
-      setInputValue('');
-      setPaymentSuccess(true);
-      setPaymentType(paymentType); 
-    } else if (changeAmount === 0) {
-      Alert.alert(t('The order is completed'), t('All the due has been paid'));
-      setPaymentSuccess(true);
-      setPaymentType(paymentType);
-    } else {
-      Alert.alert(
-        t('Insufficient Balance'),
-        t('The customer must give') + ' $' + requiredAmount.toFixed(2),
-        [
-          {
-            text: t('Cancel'),
-            onPress: () => console.log('Payment canceled'),
-            style: 'cancel',
-          },
-          {
-            text: `${t('Pay the rest by')} ${oppositePaymentType}`,
-            onPress: () => {
-              const paymentMethod = 'Cash' ? 'credit' : 'cash';
-              Alert.alert(t('payment Successful'), `${t('The remaining balance has been paid by')} ${paymentMethod}.`);
-              setEnteredAmount(allTotal);
-              setChange(0)
-              setPaymentSuccess(true);
-              setPaymentType('Cash and Credit'); // Set payment type as 'Both'
-            },
-          },
-        ]
-      );
-    }
-
-    setEnteredAmount(amount); 
-  };
-
-  const handleCalculate = () => {
-    handleCalculatePayment('Cash', 'credit');
-  };
-
-  const handleCalculateCredit = () => {
-    handleCalculatePayment('Card', 'cash');
-  };
-
-  useEffect(() => {
-    if (paymentSuccess) {
-      receiveReceivedAndChange(change, enteredAmount, paymentType);
-    }
-  }, [paymentSuccess]);
-  
-
-  const renderButtons = (numbers) => {
-    return numbers.map((number) => (
-      <TouchableOpacity key={number} style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress(number)}>
-        <Text style={[styles.buttonText]}>{number}</Text>
-      </TouchableOpacity>
-    ));
-  };
+  const { isDarkMode } = useContext(ThemeContext);
+  const { inputValue, handleButtonPress} = useCalculator({ allTotal, exampleValue, exampleValueCredit, receiveReceivedAndChange, paymentSuccessReceive, counter });
 
   return (
     <View style={[styles.container, { borderColor: isDarkMode ? '#444' : '#ccc', backgroundColor: isDarkMode ? '#333' : '#d9e0e8' }]}>
@@ -137,28 +20,56 @@ const CalculatorApp = ({ receiveReceivedAndChange, allTotal, exampleValue, examp
         placeholder={t('Enter Amount of money')}
         placeholderTextColor={isDarkMode ? '#aaa' : '#ccc'}
       />
-
       <View style={styles.row}>
         <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('00')}>
-          <Text style={[styles.buttonText ]}>00</Text>
+          <Text style={styles.buttonText}>00 </Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('000')}>
-          <Text style={[styles.buttonText]}>000</Text>
+          <Text style={styles.buttonText}>000 </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('sil')}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('clear')}>
           <FontAwesome name={'remove'} size={24} color={isDarkMode ? 'black' : 'white'} style={styles.inputIcon} />
         </TouchableOpacity>
       </View>
-      <View style={styles.row}>{renderButtons([7, 8, 9])}</View>
-      <View style={styles.row}>{renderButtons([4, 5, 6])}</View>
-      <View style={styles.row}>{renderButtons([1, 2, 3])}</View>
-
+      <View style={styles.row}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('7')}>
+          <Text style={styles.buttonText}>7</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('8')}>
+          <Text style={styles.buttonText}>8</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('9')}>
+          <Text style={styles.buttonText}>9</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.row}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('4')}>
+          <Text style={styles.buttonText}>4</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('5')}>
+          <Text style={styles.buttonText}>5</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('6')}>
+          <Text style={styles.buttonText}>6</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.row}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('1')}>
+          <Text style={styles.buttonText}>1</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('2')}>
+          <Text style={styles.buttonText}>2</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('3')}>
+          <Text style={styles.buttonText}>3</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.row}>
         <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('0')}>
-          <Text style={[styles.buttonText]}>0</Text>
+          <Text style={styles.buttonText}>0</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('.')}>
-          <Text style={[styles.buttonText]}>.</Text>
+          <Text style={styles.buttonText}>.</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -200,11 +111,6 @@ const styles = StyleSheet.create({
   },
   inputIcon: {
     marginRight: 5,
-  },
-  paymentSuccessMessage: {
-    marginTop: 10,
-    color: 'green',
-    fontWeight: 'bold',
   },
 });
 
