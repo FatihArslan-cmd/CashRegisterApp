@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
 import CountUpAnimation from '../../components/AnimatedNumber';
 import { ThemeContext } from '../../context/ThemeContext';
-
+import { useTranslation } from 'react-i18next';
 const CounterItem = ({ label, value, duration, interval, showDollarSign, backgroundColor, isDarkMode }) => (
   <View style={[styles.itemContainer, isDarkMode && styles.darkItemContainer, { backgroundColor: isDarkMode ? '#333' : backgroundColor }]}>
     <Text style={[styles.text, isDarkMode && styles.darkText]}>{label}</Text>
@@ -16,7 +16,7 @@ const CounterItem = ({ label, value, duration, interval, showDollarSign, backgro
 
 const CollectionsScreen = () => {
   const { isDarkMode } = useContext(ThemeContext);
-
+  const { t } = useTranslation();
   const [invoiceNumber, setInvoiceNumber] = useState(0);
   const [everTotal, setEverTotal] = useState(0);
   const [eInvoiceCount, setEInvoiceCount] = useState(0);
@@ -62,12 +62,12 @@ const CollectionsScreen = () => {
 
   return (
     <Animatable.View animation="fadeInUp" duration={1500} style={[styles.container, isDarkMode && styles.darkContainer]}>
-      <CounterItem label="Order Number" value={invoiceNumber} duration={2000} interval={1} showDollarSign={false} backgroundColor="rgba(0, 0, 255, 0.1)" isDarkMode={isDarkMode} />
-      <CounterItem label="Earned" value={everTotal} duration={100} interval={1} showDollarSign={true} backgroundColor="rgba(255, 0, 0, 0.1)" isDarkMode={isDarkMode} />
-      <CounterItem label="Total Discount" value={totalDiscount} duration={100} interval={1} showDollarSign={true} backgroundColor="rgba(0, 255, 0, 0.1)" isDarkMode={isDarkMode} />
-      <CounterItem label="Campaign applied" value={campaignCounterdb} duration={4500} interval={10} showDollarSign={false} backgroundColor="rgba(255, 255, 0, 0.1)" isDarkMode={isDarkMode} />
-      <CounterItem label="Kayıtlı kullanıcı" value={1} duration={4000} interval={1} showDollarSign={false} backgroundColor="rgba(255, 0, 255, 0.1)" isDarkMode={isDarkMode} />
-      <CounterItem label="Edocument Number" value={eInvoiceCount} duration={4000} interval={10} showDollarSign={false} backgroundColor="rgba(0, 255, 255, 0.1)" isDarkMode={isDarkMode} />
+      <CounterItem label={t('Order Number')} value={invoiceNumber} duration={2000} interval={1} showDollarSign={false} backgroundColor="rgba(0, 0, 255, 0.1)" isDarkMode={isDarkMode} />
+      <CounterItem label={t('Earned')} value={everTotal} duration={100} interval={1} showDollarSign={true} backgroundColor="rgba(255, 0, 0, 0.1)" isDarkMode={isDarkMode} />
+      <CounterItem label={t('Total Discount')} value={totalDiscount} duration={100} interval={1} showDollarSign={true} backgroundColor="rgba(0, 255, 0, 0.1)" isDarkMode={isDarkMode} />
+      <CounterItem label={t('Campaigns Applied')} value={campaignCounterdb} duration={4500} interval={10} showDollarSign={false} backgroundColor="rgba(255, 255, 0, 0.1)" isDarkMode={isDarkMode} />
+      <CounterItem label={t('Number of Users')} value={1} duration={4000} interval={1} showDollarSign={false} backgroundColor="rgba(255, 0, 255, 0.1)" isDarkMode={isDarkMode} />
+      <CounterItem label={t('E-Document Number')} value={eInvoiceCount} duration={4000} interval={10} showDollarSign={false} backgroundColor="rgba(0, 255, 255, 0.1)" isDarkMode={isDarkMode} />
     </Animatable.View>
   );
 };

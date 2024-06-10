@@ -153,6 +153,12 @@
     "Share": "مشاركة",
     "has been added": "تمت الإضافة",
     "Invalid username or password": "اسم مستخدم أو كلمة مرور غير صالحة",
-    "Order": "الطلب"
+    "Order": "الطلب",
+    "Order Number": "رقم الطلب",
+    "Earned": "تم الكسب",
+    "Total Discount": "إجمالي الخصم",
+    "Campaigns Applied": "الحملات المطبقة",
+    "Number of Users": "عدد المستخدمين",
+    "E-Document Number": "رقم الوثيقة الإلكترونية"
   }
   

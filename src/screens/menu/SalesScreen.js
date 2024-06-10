@@ -11,7 +11,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
 import { useRoute,useNavigation } from '@react-navigation/native';
 import CampaignScreen from './CampaignScreen/CampaignScreen';
-import ConfirmOrder from './ConfirmOrder';
+import ConfirmOrder from './ConfirmOrder/ConfirmOrder';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { useTranslation } from 'react-i18next';
 import { ProductContext } from '../../context/ProductContext';

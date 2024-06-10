@@ -154,6 +154,12 @@
     "has been added": "ha sido añadido",
     "Invalid username or password": "Nombre de usuario o contraseña inválidos",
     "Filter Options": "Opciones de filtro",
-    "Order": "Pedido"
+    "Order": "Pedido",
+    "Order Number": "Número de Orden",
+    "Earned": "Ganado",
+    "Total Discount": "Descuento Total",
+    "Campaigns Applied": "Campañas Aplicadas",
+    "Number of Users": "Número de Usuarios",
+    "E-Document Number": "Número de Documento Electrónico"
   }
   

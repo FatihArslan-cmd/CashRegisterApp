@@ -153,6 +153,12 @@
     "Share":"Κοινοποίηση",
     "has been added":"προστέθηκε",
     "Invalid username or password":"Μη έγκυρο όνομα χρήστη ή κωδικός πρόσβασης",
-    "Order":"Παραγγελία"
+    "Order":"Παραγγελία",
+    "Order Number": "Αριθμός Παραγγελίας",
+    "Earned": "Κερδισμένα",
+    "Total Discount": "Συνολική Έκπτωση",
+    "Campaigns Applied": "Εφαρμοσμένες Καμπάνιες",
+    "Number of Users": "Αριθμός Χρηστών",
+    "E-Document Number": "Αριθμός Ηλεκτρονικού Εγγράφου"
   }
   

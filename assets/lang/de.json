@@ -156,6 +156,12 @@
     "Share":"Teilen",
     "has been added":"wurde hinzugefügt",
     "Invalid username or password":"Ungültiger Benutzername oder Passwort",
-    "Order":"Bestellung"
+    "Order":"Bestellung",
+    "Order Number": "Bestellnummer",
+    "Earned": "Verdient",
+    "Total Discount": "Gesamtrabatt",
+    "Campaigns Applied": "Angewandte Kampagnen",
+    "Number of Users": "Benutzeranzahl",
+    "E-Document Number": "E-Dokumentennummer"
   }
   

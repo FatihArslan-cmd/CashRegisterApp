@@ -153,6 +153,12 @@
     "has been added": "был добавлен",
     "Invalid username or password": "Неверное имя пользователя или пароль",
     "Filter Options": "Параметры фильтра",
-    "Order": "Заказ"
+    "Order": "Заказ",
+    "Order Number": "Номер Заказа",
+    "Earned": "Заработано",
+    "Total Discount": "Общая Скидка",
+    "Campaigns Applied": "Примененные Кампании",
+    "Number of Users": "Количество Пользователей",
+    "E-Document Number": "Номер Электронного Документа"
   }
   

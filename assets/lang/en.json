@@ -157,7 +157,13 @@
   "has been added":"has been added",
   "Invalid username or password":"Invalid username or password",
   "Filter Options":"Filter Options",
-  "Order":"Order"
+  "Order":"Order",
+  "Order Number":"Order Number",
+  "Earned":"Earned",
+  "Total Discount":"Total Discount",
+  "Campaigns Applied":"Campaigns Applied",
+  "Number of Users":"Number of Users",
+  "E-Document Number":"E-Document Number"
 }
 
 

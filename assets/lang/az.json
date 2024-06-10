@@ -154,6 +154,12 @@
     "Share":"Paylaş",
     "has been added":"əlavə edildi",
     "Invalid username or password":"Yanlış istifadəçi adı və ya şifrə",
-    "Order":"Sifariş"
+    "Order":"Sifariş",
+    "Order Number": "Sifariş Nömrəsi",
+    "Earned": "Qazanılmış",
+    "Total Discount": "Cəmi Endirim",
+    "Campaigns Applied": "Tətbiq Olunan Kampaniyalar",
+    "Number of Users": "İstifadəçi Sayı",
+    "E-Document Number": "E-Sənəd Nömrəsi"
   }
   

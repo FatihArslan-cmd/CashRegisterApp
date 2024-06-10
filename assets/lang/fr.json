@@ -157,6 +157,12 @@
     "has been added":"ha sido agregado",
     "Invalid username or password":"Nombre de usuario o contraseña inválidos",
     "Filter Options":"Opciones de filtro",
-    "Order":"Ordenar"
+    "Order":"Ordenar",
+    "Order Number": "Numéro de Commande",
+    "Earned": "Gagné",
+    "Total Discount": "Remise Totale",
+    "Campaigns Applied": "Campagnes Appliquées",
+    "Number of Users": "Nombre d'Utilisateurs",
+    "E-Document Number": "Numéro de Document Électronique"
   }
   

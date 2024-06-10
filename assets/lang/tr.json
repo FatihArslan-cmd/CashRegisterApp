@@ -155,5 +155,12 @@
   "has been added":"eklendi",
   "Invalid username or password":"Geçersiz kullanıcı adı veya şifre",
   "Enter Amount of money":"Verilen miktarı gir",
-  "Order":"Sipariş"
+  "Order":"Sipariş",
+  "Order Number": "Sipariş Numarası",
+  "Earned": "Kazanılan",
+  "Total Discount": "Toplam İndirim",
+  "Campaigns Applied": "Uygulanan Kampanyalar",
+  "Number of Users": "Kullanıcı Sayısı",
+  "E-Document Number": "E-Belge Numarası"
+
 }

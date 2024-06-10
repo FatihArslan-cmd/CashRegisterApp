@@ -11,7 +11,7 @@ import SeeProductScreen from '../screens/menu/SeeProductsScreen/SeeProductsScree
 import FavoriteProductsScreen from '../screens/menu/DirectProductEntryScreen';
 import CalculatorApp from '../components/NumberButtons';
 import CollectionsScreen from '../screens/menu/CollectionsScreen';
-import ReportsScreen from '../screens/menu/ReportsScreen';
+import ReportsScreen from '../screens/menu/ReportsScreen/ReportsScreen';
 import Barcode from '../screens/BarCode';
 import BarcodeScanner from '../screens/menu/BarcodeScanner';
 const Stack = createStackNavigator();
