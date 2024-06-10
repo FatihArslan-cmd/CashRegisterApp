@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, Alert, StyleSheet, Image, TouchableOpacity, Modal, RefreshControl, TextInput } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '../../context/ThemeContext';
+import useAsyncStorage from '../../hooks/useAsyncStorage'; // Import the custom hook
 
 const FavoriteProductsScreen = ({ disableActions }) => {
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useAsyncStorage('favorites', []); // Use the custom hook
   const [showFavorites, setShowFavorites] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [searchText, setSearchText] = useState('');
@@ -21,27 +21,12 @@ const FavoriteProductsScreen = ({ disableActions }) => {
   const { t } = useTranslation();
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
-  useEffect(() => {
-    const loadFavorites = async () => {
-      try {
-        const storedFavorites = await AsyncStorage.getItem('favorites');
-        if (storedFavorites !== null) {
-          setFavorites(JSON.parse(storedFavorites));
-        }
-      } catch (error) {
-        console.error('Error loading favorites:', error);
-      }
-    };
-
-    loadFavorites();
-  }, []);
-
   const onRefresh = async () => {
     setRefreshing(true);
     try {
-      const storedFavorites = await AsyncStorage.getItem('favorites');
+      const storedFavorites = await setFavorites([]);
       if (storedFavorites !== null) {
-        setFavorites(JSON.parse(storedFavorites));
+        setFavorites(storedFavorites); // Use the setter from the hook
       }
     } catch (error) {
       console.error('Error loading favorites:', error);

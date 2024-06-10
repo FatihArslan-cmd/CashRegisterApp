@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WebView } from 'react-native-webview';
 import { Ionicons } from '@expo/vector-icons';
 import { Box, Popover, Button, NativeBaseProvider } from 'native-base';
@@ -9,30 +8,16 @@ import OnlineStatusContext from '../../context/OnlineStatusContext';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '../../context/ThemeContext';
+import useAsyncStorage from '../../hooks/useAsyncStorage'; // Import the custom hook
 
 const ReportsScreen = () => {
   const { isDarkMode } = useContext(ThemeContext);
-  const [invoices, setInvoices] = useState([]);
+  const [invoices, setInvoices] = useAsyncStorage('invoices', []); // Use the custom hook
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const { isOnline } = useContext(OnlineStatusContext);
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
-
-  useEffect(() => {
-    const getInvoices = async () => {
-      try {
-        const storedInvoices = await AsyncStorage.getItem('invoices');
-        if (storedInvoices !== null) {
-          setInvoices(JSON.parse(storedInvoices));
-        }
-      } catch (error) {
-        console.error('Error retrieving invoices:', error);
-      }
-    };
-
-    getInvoices();
-  }, []);
 
   const sendRequestToStore = async () => {
     return new Promise(resolve => {
@@ -40,7 +25,7 @@ const ReportsScreen = () => {
         resolve({ success: true });
       }, 2000);
 
-      setTimeout(() => {
+      setTimeout(async () => {
         if (invoices.length > 0) {
           const updatedInvoices = invoices.map(invoice => {
             if (!invoice.online) {
@@ -48,8 +33,7 @@ const ReportsScreen = () => {
             }
             return invoice;
           });
-          AsyncStorage.setItem('invoices', JSON.stringify(updatedInvoices));
-          setInvoices(updatedInvoices);
+          await setInvoices(updatedInvoices); // Use the setter from the hook
         }
       }, 4000);
     });
@@ -66,8 +50,7 @@ const ReportsScreen = () => {
           }
           return invoice;
         });
-        await AsyncStorage.setItem('invoices', JSON.stringify(updatedInvoices));
-        setInvoices(updatedInvoices);
+        await setInvoices(updatedInvoices); // Use the setter from the hook
       }
     } catch (error) {
       console.error('Error confirming send store:', error);
@@ -88,8 +71,7 @@ const ReportsScreen = () => {
     try {
       const updatedInvoices = [...invoices];
       updatedInvoices.splice(index, 1);
-      await AsyncStorage.setItem('invoices', JSON.stringify(updatedInvoices));
-      setInvoices(updatedInvoices);
+      await setInvoices(updatedInvoices); // Use the setter from the hook
     } catch (error) {
       console.error('Error deleting invoice:', error);
     }
@@ -100,8 +82,7 @@ const ReportsScreen = () => {
       handleDeleteAllAlert();
     } else {
       try {
-        await AsyncStorage.removeItem('invoices');
-        setInvoices([]);
+        await setInvoices([]); // Use the setter from the hook to clear invoices
       } catch (error) {
         console.error('Error deleting all invoices:', error);
       }
@@ -133,8 +114,7 @@ const ReportsScreen = () => {
           onChangeText={setSearchTerm}
         />
         <NativeBaseProvider>
-         
-        <Box w="100%" alignItems="center" flexDirection="row" flexWrap="wrap"  justifyContent="space-between">
+          <Box w="100%" alignItems="center" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
             <Popover trigger={triggerProps => {
               return <Button {...triggerProps} colorScheme="blue">{t('Send Store')}</Button>;
             }}>
@@ -258,7 +238,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,    padding: 10,
+    borderRadius: 5,
+    padding: 10,
     marginRight: 10,
     color: 'black',
     backgroundColor: 'white',
@@ -330,4 +311,3 @@ const styles = StyleSheet.create({
 });
 
 export default ReportsScreen;
-

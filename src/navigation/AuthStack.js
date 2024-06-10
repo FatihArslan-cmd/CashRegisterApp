@@ -19,7 +19,6 @@ const Stack = createStackNavigator();
 
 const AuthStack = () => {
   return (
-    
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="Home"
