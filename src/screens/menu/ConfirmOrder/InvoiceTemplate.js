@@ -1,5 +1,5 @@
 
-const getInvoiceHTML = ({ formattedDateTime, salesNo, userProfile, productData, receivedAmount, change, subTotal, allTotal, paymentType }) => {
+const getInvoiceHTML = ({ formattedDateTime, salesNo, userProfile, productData, change, SubTotal, allTotal, paymentType }) => {
     return `
       <html>
       <head>
@@ -39,9 +39,9 @@ const getInvoiceHTML = ({ formattedDateTime, salesNo, userProfile, productData, 
            
         </h2>
         <hr/>
-        <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Received Money :${receivedAmount}$ <br/>Change :${change}$</h2>
+        <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Received Money :${allTotal+change}$ <br/>Change :${change}$</h2>
         <hr/>
-        <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Subtotal :${subTotal}$ <br/>AllTotal :${allTotal}$</h2>
+        <h2 style="font-size: 24px; font-family: Courier New; font-weight: normal;">Subtotal :${SubTotal}$ <br/>AllTotal :${allTotal}$</h2>
         <hr/>
         
       </body>

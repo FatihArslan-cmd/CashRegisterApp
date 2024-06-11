@@ -7,6 +7,12 @@ export const ProductProvider = ({ children }) => {
   const [SubTotal, setSubTotal] = useState(0);
   const [allTotal, setAllTotal] = useState(0);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [disableActions, setDisableActions] = useState(false); // State to disable actions
+  const [discountApplied, setDiscountApplied] = useState(false); // State to disable actions
+  const [change, setChange] = useState(0);
+  const [enteredAmount, setEnteredAmount] = useState(0);
+  const [paymentType, setPaymentType] = useState('');
+  const [inputValue, setInputValue] = useState('');
 
   const value = {
     productData,
@@ -17,6 +23,18 @@ export const ProductProvider = ({ children }) => {
     setAllTotal,
     paymentSuccess,
     setPaymentSuccess,
+    disableActions,
+    setDisableActions,
+    discountApplied,
+    setDiscountApplied,
+    change,
+    enteredAmount,
+    paymentType,
+    setPaymentType,
+    setEnteredAmount,
+    setChange,
+    inputValue,
+    setInputValue
   };
 
   return (

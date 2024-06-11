@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { NativeBaseProvider, Center } from 'native-base';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from 'react-i18next';
 import CampaignModal from './CampaignModal';
 import DiscountUtils from './DiscountUtils';
-
-const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSuccess, campaignCounter }) => {
+import { ProductContext } from '../../../context/ProductContext';
+const CampaignScreen = ({  }) => {
     const [showModal, setShowModal] = useState(false);
-    const [discountApplied, setDiscountApplied] = useState(false);
     const { t } = useTranslation();
+    const { paymentSuccess,allTotal,setAllTotal,discountApplied,setDiscountApplied,setDisableActions } = useContext(ProductContext);
 
     useEffect(() => {
-        if (campaignCounter > 0) {
-            setDiscountApplied(false);
-        }
-    }, [campaignCounter]);
-
+        if (discountApplied) {
+          setDisableActions(true);
+        } 
+      }, [discountApplied]);
     const applyDiscount = async () => {
         if (DiscountUtils.canApplyDiscount(allTotal, t)) {
             if (!discountApplied) {
@@ -43,8 +42,7 @@ const CampaignScreen = ({ allTotal, onDataReceived, ondiscountApplied, paymentSu
         }
         if (DiscountUtils.canApplyDiscount(allTotal, t)) {
             const updatedTotal = await applyDiscount();
-            onDataReceived(updatedTotal);
-            ondiscountApplied(false);
+            setAllTotal(updatedTotal)
         }
     };
 

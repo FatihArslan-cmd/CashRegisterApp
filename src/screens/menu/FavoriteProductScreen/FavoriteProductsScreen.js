@@ -1,13 +1,14 @@
 import React, { useState, useContext } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet,Alert } from 'react-native';
 import Antdesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '../../../context/ThemeContext';
 import useAsyncStorage from '../../../hooks/useAsyncStorage';
 import FavoritesModal from './FavoritesModal';
+import { ProductContext } from '../../../context/ProductContext';
 
-const FavoriteProductsScreen = ({ disableActions }) => {
+const FavoriteProductsScreen = () => {
   const [favorites, setFavorites] = useAsyncStorage('favorites', []);
   const [showFavorites, setShowFavorites] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -15,7 +16,7 @@ const FavoriteProductsScreen = ({ disableActions }) => {
   const [showToast, setShowToast] = useState(false);
   const [showToastItem, setShowToastItem] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { disableActions } = useContext(ProductContext);
   const navigation = useNavigation();
   const { t } = useTranslation();
   const { isDarkMode } = useContext(ThemeContext);

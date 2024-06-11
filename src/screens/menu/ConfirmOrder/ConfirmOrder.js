@@ -10,15 +10,22 @@ import { formatDateTime } from '../../../utils/helpers';
 import getInvoiceHTML from './InvoiceTemplate';
 import ConfirmButton from './ConfirmButton'; // Yeni eklenen component
 import InvoiceModal from './InvoiceModal'; // Yeni eklenen component
-
-const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmOrder, change, receivedAmount, productData, paymentType }) => {
+import { ProductContext } from '../../../context/ProductContext';
+const ConfirmOrder = () => {
   const today = new Date();
   const formattedDateTime = formatDateTime(today);
-
+  const { 
+    allTotal,
+     SubTotal,
+      paymentSuccess,
+      change,
+      inputValue,
+      productData,
+      paymentType
+      } = useContext(ProductContext);
   const { isOnline } = useContext(OnlineStatusContext);
   const [selectedPrinter, setSelectedPrinter] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [confirmedValue, setConfirmedValue] = useState(0);
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [salesNo, setSalesNo] = useState(0);
@@ -89,7 +96,7 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
     }
   }, [paymentSuccess]);
 
-  const html = getInvoiceHTML({ formattedDateTime, salesNo, userProfile, productData, receivedAmount, change, subTotal, allTotal, paymentType });
+  const html = getInvoiceHTML({ formattedDateTime, salesNo, userProfile, productData, inputValue, change, SubTotal, allTotal, paymentType });
 
   const saveInvoiceHTML = async (html) => {
     try {
@@ -171,8 +178,6 @@ const ConfirmOrder = ({ subTotal, allTotal, paymentSuccess, getValueFromConfirmO
   };
 
   const handleCloseModal = () => {
-    setConfirmedValue(confirmedValue + 1);
-    getValueFromConfirmOrder();
     setShowModal(false);
   };
 

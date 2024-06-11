@@ -14,7 +14,7 @@ const ActionsMenu = ({ isOnline, falseInvoicesCount, isLoading, handleConfirmSen
         <Popover.Content accessibilityLabel="Confirm" w="56">
           <Popover.Arrow />
           <Popover.CloseButton />
-          <Popover.Header>{isOnline ? t('Send Orders') : t('Offline')}</Popover.Header>
+          <Popover.Header>{isOnline ? t('Send Orders') : 'Offline'}</Popover.Header>
           <Popover.Body>
             {isOnline ?
               (falseInvoicesCount === 0 ?

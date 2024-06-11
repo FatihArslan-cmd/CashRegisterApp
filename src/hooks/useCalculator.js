@@ -1,39 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useContext } from 'react';
 import { Alert } from 'react-native';
-const useCalculator = ({ exampleValue, exampleValueCredit, allTotal, receiveReceivedAndChange, paymentSuccessReceive, counter }) => {
-  const [inputValue, setInputValue] = useState('');
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [change, setChange] = useState(0);
-  const [enteredAmount, setEnteredAmount] = useState(0);
-  const [paymentType, setPaymentType] = useState('');
-
-  useEffect(() => {
-    if (exampleValue > 0) {
-      handleCalculate();
-    }
-  }, [exampleValue]);
-
-  useEffect(() => {
-    if (counter > 0) {
-      setPaymentSuccess(false);
-    }
-  }, [counter]);
-
-  useEffect(() => {
-    if (exampleValueCredit > 0) {
-      handleCalculateCredit();
-    }
-  }, [exampleValueCredit]);
-
-  useEffect(() => {
-    paymentSuccessReceive(paymentSuccess);
-  }, [paymentSuccess]);
-
-  useEffect(() => {
-    if (paymentSuccess) {
-      receiveReceivedAndChange(change, enteredAmount, paymentType);
-    }
-  }, [paymentSuccess]);
+import { ProductContext } from '../context/ProductContext';
+const useCalculator = () => {
+  const { inputValue,setInputValue } = useContext(ProductContext);
+  const {allTotal,
+    setPaymentSuccess,
+    setChange,
+    setEnteredAmount,
+    setPaymentType } = useContext(ProductContext);
 
   const handleButtonPress = (value) => {
     if (value === 'clear') {
@@ -57,7 +31,7 @@ const useCalculator = ({ exampleValue, exampleValueCredit, allTotal, receiveRece
     const amount = parseFloat(inputValue);
     const changeAmount = amount - allTotal;
     const requiredAmount = allTotal - amount;
-
+    
     if (amount >= allTotal) {
       const successMessage = changeAmount === 0 ? 'The order is completed. All the due has been paid.' : `Your change is $${changeAmount.toFixed(2)}`;
       Alert.alert('Success', successMessage);

@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '../context/ThemeContext';
 import useCalculator from '../hooks/useCalculator';
-
-const CalculatorApp = ({ receiveReceivedAndChange, allTotal, exampleValue, exampleValueCredit, paymentSuccessReceive, counter }) => {
+import { ProductContext } from '../context/ProductContext';
+const CalculatorApp = () => {
   const { t } = useTranslation();
   const { isDarkMode } = useContext(ThemeContext);
-  const { inputValue, handleButtonPress} = useCalculator({ allTotal, exampleValue, exampleValueCredit, receiveReceivedAndChange, paymentSuccessReceive, counter });
+  const { handleButtonPress} = useCalculator();
+  const { inputValue } = useContext(ProductContext);
 
   return (
     <View style={[styles.container, { borderColor: isDarkMode ? '#444' : '#ccc', backgroundColor: isDarkMode ? '#333' : '#d9e0e8' }]}>

@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Camera } from 'expo-camera';
 import axios from 'axios';
 import { ProductContext } from '../../../context/ProductContext';
-import useSound from '../../../components/SoundManager';// SoundManager dosyasını ekliyoruz
+import useSound from '../../../hooks/SoundManager';// SoundManager dosyasını ekliyoruz
 
 export default function BarcodeScanner() {
   const [hasPermission, setHasPermission] = useState(null);
