@@ -1,7 +1,7 @@
 
 import React, { useContext } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { ThemeContext } from '../context/ThemeContext';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const DarkThemeButton = () => {
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);

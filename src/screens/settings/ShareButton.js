@@ -3,7 +3,7 @@ import { Share, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useTranslation } from 'react-i18next';
 import { NativeBaseProvider, Box, Icon, Text } from 'native-base';
-import { ThemeContext } from '../context/ThemeContext';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const ShareEg = () => {
     const { isDarkMode } = useContext(ThemeContext);

@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Modal, Pressable, StyleSheet, Text, View, TouchableOpacity, Image, Linking } from "react-native";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { ThemeContext } from '../context/ThemeContext';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const ContactMe = () => {
     const { isDarkMode } = useContext(ThemeContext);
@@ -37,7 +37,7 @@ const ContactMe = () => {
                                 <AntDesign name={"linkedin-square"} size={48} color={"#0A78B5"} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handlePressGmail}>
-                                <Image source={require('../../assets/image/new.png')} style={styles.contactIcon} />
+                                <Image source={require('../../../assets/image/new.png')} style={styles.contactIcon} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handlePressGithub}>
                                 <AntDesign name={"github"} size={42} color={"black"} marginLeft={10} />

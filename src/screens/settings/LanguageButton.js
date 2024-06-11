@@ -1,19 +1,19 @@
 import React, { useContext, useState } from 'react';
 import {TouchableOpacity, Image } from 'react-native';
-import LanguageContext from '../context/LanguageContext'; // Import LanguageContext
+import LanguageContext from '../../context/LanguageContext'; // Import LanguageContext
 import { useTranslation } from 'react-i18next';
 import { NativeBaseProvider, Center, Modal, Button, Box } from 'native-base'; // Import required NativeBase components
-const buttonImage = require('../../assets/image/planet-earth_921490.png');
-const Turkey = require('../../assets/image/turkey.png');
-const Spain = require('../../assets/image/spain (1).png');
-const UnitedKingdom = require('../../assets/image/united-kingdom.png');
-const France = require('../../assets/image/france.png');
-const Germany = require('../../assets/image/germany.png');
-const Azerbaijan = require('../../assets/image/azerbaijan.png');
-const Russia = require('../../assets/image/russia.png');
-const China = require('../../assets/image/china.png');
-const Arabia = require('../../assets/image/saudi-arabia.png');
-const Greece = require('../../assets/image/greece.png');
+const buttonImage = require('../../../assets/image/planet-earth_921490.png');
+const Turkey = require('../../../assets/image/turkey.png');
+const Spain = require('../../../assets/image/spain (1).png');
+const UnitedKingdom = require('../../../assets/image/united-kingdom.png');
+const France = require('../../../assets/image/france.png');
+const Germany = require('../../../assets/image/germany.png');
+const Azerbaijan = require('../../../assets/image/azerbaijan.png');
+const Russia = require('../../../assets/image/russia.png');
+const China = require('../../../assets/image/china.png');
+const Arabia = require('../../../assets/image/saudi-arabia.png');
+const Greece = require('../../../assets/image/greece.png');
 
 const LanguageComponent = ({ onPress, image }) => (
   <TouchableOpacity style={{marginHorizontal:10}} onPress={onPress}>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next'; // For language translation
-import MenuScreen from '../screens/menu/MenuScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import CustomDrawerContent from '../screens/menu/CustomDrawerContent';
+import MenuScreen from '../screens/menu/MenuScreen/MenuScreen';
+import SettingsScreen from '../screens/settings/SettingsScreen';
+import CustomDrawerContent from '../screens/menu/CustomDrawer/CustomDrawerContent';
 import { useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 const Drawer = createDrawerNavigator();

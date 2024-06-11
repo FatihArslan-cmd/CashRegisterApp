@@ -3,7 +3,7 @@ import { View, Modal, Text, Pressable, StyleSheet } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useTranslation } from 'react-i18next';
-import { ThemeContext } from '../../context/ThemeContext'; // Update the path as necessary
+import { ThemeContext } from '../../../context/ThemeContext'; // Update the path as necessary
 
 const SortButton = ({ onPress, text, iconName, iconType, isDarkMode }) => (
   <Pressable style={[styles.sortButton, { backgroundColor: isDarkMode ? '#555' : '#3e66ae' }]} onPress={onPress}>

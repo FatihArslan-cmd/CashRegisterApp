@@ -2,14 +2,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Camera } from 'expo-camera';
 import axios from 'axios';
-import { ProductContext } from '../../context/ProductContext';
-import useSound from '../../components/SoundManager';// SoundManager dosyasını ekliyoruz
+import { ProductContext } from '../../../context/ProductContext';
+import useSound from '../../../components/SoundManager';// SoundManager dosyasını ekliyoruz
 
 export default function BarcodeScanner() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const { productData, setProductData, SubTotal, setSubTotal } = useContext(ProductContext);
-  const { playSound } = useSound(require('../../../assets/sound/positive_beeps-85504.mp3'));
+  const { playSound } = useSound(require('../../../../assets/sound/positive_beeps-85504.mp3'));
 
   useEffect(() => {
     (async () => {

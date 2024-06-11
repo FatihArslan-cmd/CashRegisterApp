@@ -6,14 +6,13 @@ import FaceIDScreen from '../screens/FaceId';
 import SignUpScreen from '../screens/SignUpScreen';
 import Swiper5 from '../screens/LoginMethodsScreen';
 import MainDrawer from './DrawerNavigation';
-import Application from '../screens/menu/SalesScreen';
+import Application from '../screens/menu/SalesScreen/SalesScreen';
 import SeeProductScreen from '../screens/menu/SeeProductsScreen/SeeProductsScreen';
-import FavoriteProductsScreen from '../screens/menu/DirectProductEntryScreen';
 import CalculatorApp from '../components/NumberButtons';
-import CollectionsScreen from '../screens/menu/CollectionsScreen';
+import CollectionsScreen from '../screens/menu/CollectionsScreen/CollectionsScreen';
 import ReportsScreen from '../screens/menu/ReportsScreen/ReportsScreen';
 import Barcode from '../screens/BarCode';
-import BarcodeScanner from '../screens/menu/BarcodeScanner';
+import BarcodeScanner from '../screens/menu/SalesScreen/BarcodeScanner';
 const Stack = createStackNavigator();
 
 
@@ -73,11 +72,6 @@ const AuthStack = () => {
       <Stack.Screen
         name="CalculatorApp"
         component={CalculatorApp}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="DirectProductEntry"
-        component={FavoriteProductsScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

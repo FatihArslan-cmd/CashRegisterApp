@@ -9,7 +9,7 @@ import LoadingIndicator from '../../../components/LoadingIndicator';
 import ProductItem from './ProductItem';
 import SearchBar from './SearchBar';
 import FavoritesModal from './FavoritesModal';
-import FilterModal from '../FiltersModel'; // Adjust the path if needed
+import FilterModal from './FiltersModel'; // Adjust the path if needed
 
 const SeeProductScreen = () => {
   const [products, setProducts] = useState([]);
