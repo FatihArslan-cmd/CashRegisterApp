@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { AntDesign } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { formatDateTime } from '../../../utils/helpers';
 import getAppVersion from '../../../components/getAppVersion';

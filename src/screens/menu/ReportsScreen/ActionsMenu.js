@@ -1,8 +1,6 @@
-// ActionsMenu.js
 import React from 'react';
-import { Box, Button, Popover, StyleSheet,NativeBaseProvider } from 'native-base';
+import { Box, Button, Popover,NativeBaseProvider } from 'native-base';
 import LoadingIndicator from '../../../components/LoadingIndicator';
-import { useTranslation } from 'react-i18next';
 
 const ActionsMenu = ({ isOnline, falseInvoicesCount, isLoading, handleConfirmSendStore, handleDeleteAllInvoices, t }) => {
   return (

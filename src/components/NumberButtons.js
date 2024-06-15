@@ -29,7 +29,7 @@ const CalculatorApp = () => {
           <Text style={styles.buttonText}>000 </Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]} onPress={() => handleButtonPress('clear')}>
-          <FontAwesome name={'remove'} size={24} color={isDarkMode ? 'black' : 'white'} style={styles.inputIcon} />
+          <FontAwesome name={'remove'} size={24} style={styles.inputIcon} />
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   },
   inputIcon: {
     marginRight: 5,
+    color:'white'
   },
 });
 

@@ -1,4 +1,3 @@
-// ReportsScreen.js
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert,TouchableOpacity } from 'react-native';
 import WebView from 'react-native-webview';
@@ -147,6 +146,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  darkText:{
+    color:'white'
   },
   darkContainer: {
     backgroundColor: '#1E1E1E',

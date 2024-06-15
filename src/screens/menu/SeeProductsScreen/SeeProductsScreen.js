@@ -10,7 +10,7 @@ import ProductItem from './ProductItem';
 import SearchBar from './SearchBar';
 import FavoritesModal from './FavoritesModal';
 import FilterModal from './FiltersModel'; // Adjust the path if needed
-
+import { API_BASE_URL } from '../../../utils/constants';
 const SeeProductScreen = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -27,7 +27,7 @@ const SeeProductScreen = () => {
   const fetchProducts = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('https://fatiharslan-cmd.github.io/mockjson/db.json');
+      const response = await axios.get(API_BASE_URL);
       const data = response.data;
       if (!data.products || !Array.isArray(data.products)) {
         throw new Error('Product data is not in the expected format');

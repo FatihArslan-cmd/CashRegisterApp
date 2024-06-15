@@ -28,7 +28,7 @@ const OrderControls = ({ styles }) => {
     if (paymentSuccess) {
       Alert.alert(
         t('Cannot Cancel Order'),
-        t('The order has been successfully completed. You cannot cancel it. Create a new order to continue.'),
+        t('The order has been successfully completed.You cannot cancel it.Create new order to continue'),
         [{ text: "OK"}]
       );
     } else if (allTotal > 0) { 
@@ -66,20 +66,20 @@ const OrderControls = ({ styles }) => {
           <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
             <View style={{ flexDirection: 'row' }}>
               <Entypo name="cross" size={36} color="white" style={styles.inputIcon} />
-              <Text style={styles.cancelButtonText}>Cancel Order</Text>
+              <Text style={styles.cancelButtonText}>{t('cancelorder')}</Text>
             </View>
           </TouchableOpacity>
           <ConfirmOrder />
           <TouchableOpacity onPress={handleCashButtonClick} style={styles.cashButton}>
             <View style={{ flexDirection: 'row' }}>
               <MaterialCommunityIcons name="cash" size={24} color="white" style={styles.inputIcon} />
-              <Text style={styles.cancelButtonText}>Cash</Text>
+              <Text style={styles.cancelButtonText}>{t('cash')}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleCreditButtonClick} style={styles.creditButton}>
             <View style={{ flexDirection: 'row' }}>
               <AntDesign name="creditcard" size={24} color="white" style={styles.inputIcon} />
-              <Text style={styles.cancelButtonText}>Credit</Text>
+              <Text style={styles.cancelButtonText}>{t('credit')}</Text>
             </View>
           </TouchableOpacity>
         </View>

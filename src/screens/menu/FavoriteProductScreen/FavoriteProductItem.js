@@ -9,10 +9,10 @@ const FavoriteProductItem = ({ item, onPress, isDarkMode, isLoading }) => {
   return (
     <TouchableOpacity onPress={onPress} disabled={isLoading}>
       <View style={styles.productContainer}>
-        <Text style={styles.productName}>{item.name}</Text>
-        <Text style={styles.productID}>ID: {item.id}</Text>
-        <Text style={styles.productPrice}>{t('price')}: ${item.price}</Text>
-        <Text style={styles.productPrice}>KDV %{item.kdv}</Text>
+        <Text style={styles.productName}>{item.name} </Text>
+        <Text style={styles.productID}>ID: {item.id} </Text>
+        <Text style={styles.productPrice}>{t('price')}: ${item.price} </Text>
+        <Text style={styles.productPrice}>KDV %{item.kdv} </Text>
         <Image source={{ uri: item.image }} style={styles.productImage} />
       </View>
     </TouchableOpacity>

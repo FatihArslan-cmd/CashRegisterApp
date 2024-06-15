@@ -1,8 +1,8 @@
 import axios from 'axios';
-
+import { API_BASE_URL } from '../utils/constants';
 export const getProductPrice = async (productId, productData, setProductData, subTotal, setSubTotal) => {
   try {
-    const response = await axios.get('https://fatiharslan-cmd.github.io/mockjson/db.json');
+    const response = await axios.get(API_BASE_URL);
     const data = response.data;
 
     if (!data.products || !Array.isArray(data.products)) {

@@ -1,14 +1,16 @@
 import {React,useContext,useEffect,useRef} from 'react';
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity,Alert } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import { ProductContext } from '../../../context/ProductContext';
+import { useTranslation } from 'react-i18next';
 const ProductListSection = ({
   styles,
   isLoading,
 }) => {
+  const { t } = useTranslation();
     const { productData, setProductData, SubTotal, setSubTotal,allTotal,paymentSuccess,setAllTotal,setDisableActions,disableActions,setDiscountApplied,setPaymentSuccess } = useContext(ProductContext);
     useEffect(() => {
         setDisableActions(paymentSuccess);
@@ -21,7 +23,7 @@ const ProductListSection = ({
           setSubTotal(SubTotal - price);
         } else {
           
-          Alert.alert(t('Actions Disabled'), t('You cannot remove products after the payment is done /Any campaign is applied.'));
+          Alert.alert(t('Actions Disabled'), t('You cannot remove/add products after the discount is applied/Payment is done.'));
         }
       };
       const createNewOrder = () => {
@@ -48,7 +50,7 @@ const ProductListSection = ({
         
       } else {
           
-        Alert.alert(t('Actions Disabled'), t('You cannot remove products after the payment is done /Any campaign is applied.'));
+        Alert.alert(t('Actions Disabled'), t('You cannot remove/add products after the discount is applied/Payment is done.'));
       }
       };
   return (
@@ -56,8 +58,8 @@ const ProductListSection = ({
       <ScrollView ref={scrollViewRef} style={styles.productPricesList}>
         {productData.length === 0 && !isLoading && (
           <View style={{ alignSelf: 'center' }}>
-            <Text style={styles.emptyText}>No Products Found</Text>
-            <MaterialCommunityIcons style={{ marginLeft: 45 }} name="lock-question" size={36} color="gray" />
+            <Text style={styles.emptyText}>{t('No products')} </Text>
+            <MaterialCommunityIcons style={{ marginLeft: 15 }} name="lock-question" size={36} color="gray" />
           </View>
         )}
         {productData.map((product, index) => (
@@ -65,7 +67,7 @@ const ProductListSection = ({
             key={index}
             renderRightActions={() => (
               <TouchableOpacity onPress={() => removeProduct(index, product.price)} style={styles.deleteButton}>
-                <Text style={styles.deleteButtonText}>Delete</Text>
+                <Text style={styles.deleteButtonText}>{t('Delete')}</Text>
               </TouchableOpacity>
             )}
             renderLeftActions={() => (
@@ -83,7 +85,7 @@ const ProductListSection = ({
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={styles.productName}>{product.name}:</Text>
-                  <Text style={[styles.productPriceValue, { marginLeft: 'auto' }]}> {product.price} $</Text>
+                  <Text style={[styles.productPriceValue, { marginLeft: 'auto' }]}> {product.price} $ </Text>
                 </View>
               </View>
             </View>
@@ -97,11 +99,11 @@ const ProductListSection = ({
         {paymentSuccess && (
           <View style={{ alignItems: 'center', marginBottom: 20 }}>
             <Entypo name="check" size={36} color="#008b38" style={styles.inputIcon} />
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#008b38' }}>Payment Successful</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#008b38' }}>{t('payment Successful')}</Text>
             <TouchableOpacity onPress={createNewOrder} style={{ backgroundColor: '#3e66ae', borderRadius: 10, margin: 10 }}>
               <View style={{ flexDirection: 'row', margin: 5 }}>
                 <MaterialCommunityIcons name="autorenew" size={24} color="white" style={{ marginTop: 1 }} />
-                <Text style={{ color: 'white', padding: 5, fontWeight: 'bold' }}>Create new order</Text>
+                <Text style={{ color: 'white', padding: 5, fontWeight: 'bold' }}>{t('Create new order')}</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -110,9 +112,9 @@ const ProductListSection = ({
 
       <View style={styles.separator} />
       <View style={styles.subTotalContainer}>
-        <Text style={styles.subTotal}>Subtotal: {SubTotal} $</Text>
+        <Text style={styles.subTotal}>{t('subtotal')}: {SubTotal} $</Text>
         <View style={styles.separator} />
-        <Text style={styles.subTotal}>Total: {allTotal} $</Text>
+        <Text style={styles.subTotal}>{t('alltotal')}: {allTotal} $</Text>
       </View>
     </>
   );

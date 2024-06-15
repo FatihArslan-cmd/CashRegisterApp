@@ -1,8 +1,5 @@
 
-
 export const API_BASE_URL = 'https://fatiharslan-cmd.github.io/mockjson/db.json';
-
-
 
 export const MESSAGES = {
     error: {

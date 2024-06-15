@@ -1,4 +1,3 @@
-// InvoiceList.js
 import React from 'react';
 import { FlatList, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -44,6 +43,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'space-between',
     backgroundColor: 'white',
+  },
+  darkText:{
+  color:'white'
   },
   darkInvoiceContainer: {
     backgroundColor: '#333',

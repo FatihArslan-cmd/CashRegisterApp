@@ -4,7 +4,7 @@ import { Camera } from 'expo-camera';
 import axios from 'axios';
 import { ProductContext } from '../../../context/ProductContext';
 import useSound from '../../../hooks/SoundManager';// SoundManager dosyasını ekliyoruz
-
+import { API_BASE_URL } from '../../../utils/constants';
 export default function BarcodeScanner() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -30,7 +30,7 @@ export default function BarcodeScanner() {
 
   const getProductPrice = async (productId) => {
     try {
-      const response = await axios.get('https://fatiharslan-cmd.github.io/mockjson/db.json');
+      const response = await axios.get(API_BASE_URL);
       const data = response.data;
 
       if (!data.products || !Array.isArray(data.products)) {

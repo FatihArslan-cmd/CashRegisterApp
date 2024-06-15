@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 
