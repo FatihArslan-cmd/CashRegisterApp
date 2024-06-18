@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-const FavoriteProductItem = ({ item, onPress, isDarkMode, isLoading }) => {
+const FavoriteProductItem = React.memo(({ item, onPress, isDarkMode, isLoading }) => {
   const { t } = useTranslation();
   const styles = isDarkMode ? darkStyles : lightStyles;
 
@@ -17,8 +17,9 @@ const FavoriteProductItem = ({ item, onPress, isDarkMode, isLoading }) => {
       </View>
     </TouchableOpacity>
   );
-};
-
+}, (prevProps, nextProps) => {
+  return prevProps.isLoading === nextProps.isLoading;
+});
 const lightStyles = StyleSheet.create({
   productContainer: {
     marginBottom: 20,

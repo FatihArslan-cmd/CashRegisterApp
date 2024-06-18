@@ -82,8 +82,10 @@ const SeeProductScreen = () => {
   };
 
   const assignAllFavorites = () => {
-    setFavorites([...favorites, ...products]);
-  };
+    setFavorites([]);
+  
+    // Then, assign all products to favorites after clearing the list
+    setFavorites(products);  };
 
   const unFavoriteAll = () => {
     setFavorites([]);

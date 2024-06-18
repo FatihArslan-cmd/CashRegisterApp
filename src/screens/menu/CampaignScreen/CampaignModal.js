@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Heading, Modal, VStack, Button } from 'native-base';
+import { StyleSheet } from 'react-native';
+import { Modal, VStack, Button, HStack, Text, Pressable, Heading } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from 'react-i18next';
 
@@ -12,19 +12,23 @@ const CampaignModal = ({ isOpen, onClose, sendDataToParent, blackFridayDiscount 
             <Modal.Content maxWidth="400px">
                 <Modal.CloseButton />
                 <Modal.Body>
-                    <VStack style={styles.modalContainer} space={1} alignItems="center">
+                    <VStack style={styles.modalContainer} space={4} alignItems="center">
                         <Heading>{t('Campaigns')}</Heading>
                         <Heading size="sm">{t('Choose the one that you want to use')}</Heading>
                         
-                        <TouchableOpacity onPress={sendDataToParent}>
-                            <MaterialIcons name={"discount"} size={24} color={"red"} style={styles.inputIcon} />
-                            <Text>{t('20% discount for all products')} </Text>
-                        </TouchableOpacity>
+                        <Pressable onPress={sendDataToParent} style={styles.pressable}>
+                            <HStack space={2} alignItems="center">
+                                <MaterialIcons name="discount" size={24} color="red" />
+                                <Text>{t('20% discount for all products')}</Text>
+                            </HStack>
+                        </Pressable>
                         
-                        <TouchableOpacity onPress={blackFridayDiscount}>
-                            <MaterialIcons name={"discount"} size={24} color={"green"} style={styles.inputIcon} />
-                            <Text>{t('Black Friday %70 discount')}</Text>
-                        </TouchableOpacity>
+                        <Pressable onPress={blackFridayDiscount} style={styles.pressable}>
+                            <HStack space={2} alignItems="center">
+                                <MaterialIcons name="discount" size={24} color="green" />
+                                <Text>{t('Black Friday %70 discount')}</Text>
+                            </HStack>
+                        </Pressable>
                     </VStack>
                 </Modal.Body>
                 <Modal.Footer>
@@ -43,10 +47,13 @@ const styles = StyleSheet.create({
     modalContainer: {
         flexGrow: 1,
         backgroundColor: '#fff',
-        height: 200,
+        paddingVertical: 20,
     },
-    inputIcon: {
-        padding: 8,
+    pressable: {
+        width: '100%',
+        paddingVertical: 10,
+        justifyContent: 'center',
+        paddingHorizontal:10
     },
 });
 

@@ -35,7 +35,6 @@ const FavoritesModal = ({
               onChangeText={onSearch}
               isDarkMode={isDarkMode}
             />
-            {isLoading && <LoadingIndicator />}
           </Animatable.View>
           {filteredFavorites.length === 0 ? (
             <View style={styles.emptyContainer}>
@@ -46,9 +45,6 @@ const FavoritesModal = ({
             </View>
           ) : (
             <Animatable.View animation="fadeInUp" delay={500} useNativeDriver>
-              <Animatable.Text style={styles.tapToAddText} animation="slideInUp" iterationCount={3} direction="alternate">
-                {t('Tap to add!')}
-              </Animatable.Text>
               <FlatList
                 data={filteredFavorites}
                 renderItem={({ item }) => (
@@ -67,32 +63,38 @@ const FavoritesModal = ({
                   />
                 }
               />
-              {showToast && (
-                <ToastMessage
-                  message={`${showToastItem.name} ${t('has been added')}`}
-                  isDarkMode={isDarkMode}
-                />
+              {isLoading && (
+                <View style={styles.loadingContainer}>
+                  <LoadingIndicator />
+                </View>
               )}
             </Animatable.View>
           )}
         </View>
+        {showToast && (
+          <Animatable.View animation="fadeInUp" duration={600} useNativeDriver>
+            <ToastMessage
+              message={`${showToastItem.name} ${t(' has been added ')} `}
+              isDarkMode={isDarkMode}
+            />
+          </Animatable.View>
+        )}
         <TouchableOpacity onPress={() => setShowFavorites(false)} style={styles.closeButton}>
           <Text style={styles.closeButtonText}>{t('Close')}</Text>
         </TouchableOpacity>
+        
       </View>
     </Modal>
   );
 };
 
-const lightStyles = StyleSheet.create({
+const baseStyles = StyleSheet.create({
   modalContainer: {
     flexGrow: 1,
-    backgroundColor: '#fff',
   },
   favoritesContainer: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
   },
   sectionTitle: {
     fontSize: 24,
@@ -100,7 +102,6 @@ const lightStyles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 10,
     textAlign: 'center',
-    color: '#000',
   },
   emptyContainer: {
     flex: 1,
@@ -123,53 +124,51 @@ const lightStyles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
+  loadingContainer: {
+    position: 'absolute',
+    top: '30%',
+    left: '50%',
+    transform: [{ translateX: -25 }, { translateY: -25 }],
+    zIndex: 999,
+  },
+});
+
+const lightStyles = StyleSheet.create({
+  ...baseStyles,
+  modalContainer: {
+    ...baseStyles.modalContainer,
+    backgroundColor: '#fff',
+  },
+  favoritesContainer: {
+    ...baseStyles.favoritesContainer,
+    backgroundColor: '#fff',
+  },
+  sectionTitle: {
+    ...baseStyles.sectionTitle,
+    color: '#000',
+  },
   tapToAddText: {
-    textAlign: 'center',
+    ...baseStyles.tapToAddText,
     color: '#000',
   },
 });
 
 const darkStyles = StyleSheet.create({
+  ...baseStyles,
   modalContainer: {
-    flexGrow: 1,
+    ...baseStyles.modalContainer,
     backgroundColor: '#121212',
   },
   favoritesContainer: {
-    flex: 1,
-    padding: 20,
+    ...baseStyles.favoritesContainer,
     backgroundColor: '#121212',
   },
   sectionTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 5,
-    marginBottom: 10,
-    textAlign: 'center',
+    ...baseStyles.sectionTitle,
     color: '#fff',
   },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  emptyImage: {
-    width: 150,
-    height: 150,
-  },
-  closeButton: {
-    backgroundColor: 'orange',
-    marginTop: 10,
-    padding: 10,
-    borderRadius: 20,
-    alignSelf: 'center',
-  },
-  closeButtonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
   tapToAddText: {
-    textAlign: 'center',
+    ...baseStyles.tapToAddText,
     color: '#fff',
   },
 });

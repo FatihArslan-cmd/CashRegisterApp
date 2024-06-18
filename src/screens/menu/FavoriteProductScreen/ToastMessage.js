@@ -6,7 +6,7 @@ const ToastMessage = ({ message, isDarkMode }) => {
 
   return (
     <View style={styles.toast}>
-      <Text style={styles.toastText}>{message}</Text>
+      <Text style={styles.toastText}> {message} </Text>
     </View>
   );
 };
