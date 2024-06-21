@@ -3,12 +3,15 @@ import { View, StyleSheet, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '../../../context/ThemeContext';
-import MenuList from './MenuList'; // MenuList bileşeninin yolu
+import MenuList from './MenuList'; 
+import useDisableBackButton from '../../../hooks/useDisableBackButton'; // Yeni hook'un yolu
 
 const MenuScreen = () => {
   const { isDarkMode } = useContext(ThemeContext);
   const { t } = useTranslation();
   const navigation = useNavigation();
+
+  useDisableBackButton();
 
   const menuItems = [
     { icon: 'shopping-cart', color: 'black', label: t('sales'), navigation: 'Application' },

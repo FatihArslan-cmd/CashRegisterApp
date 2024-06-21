@@ -127,7 +127,7 @@ const ReportsScreen = () => {
             style={{ flex: 1 }}
           />
           <TouchableOpacity style={styles.closeButton} onPress={handleCloseWebView}>
-            <Text style={styles.closeButtonText}>{t('Close')}</Text>
+            <Text style={styles.closeButtonText}>{t('Close')} </Text>
           </TouchableOpacity>
         </View>
       ) : (

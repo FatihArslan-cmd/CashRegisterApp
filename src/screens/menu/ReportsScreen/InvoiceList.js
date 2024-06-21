@@ -19,7 +19,7 @@ const InvoiceList = ({ invoices, isDarkMode, handleInvoicePress, handleDeleteInv
           />
           <Text style={[styles.salesNoText, isDarkMode && styles.darkText]}>{t('Sales No')} {item.salesNo}</Text>
           <TouchableOpacity style={styles.accessButton} onPress={() => handleInvoicePress(item)}>
-            <Text style={styles.accessButtonText}>{item.date}</Text>
+            <Text style={styles.accessButtonText}>{item.date} </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteInvoice(index)}>
             <Ionicons name="trash-outline" size={24} color="red" />

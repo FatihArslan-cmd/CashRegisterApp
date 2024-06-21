@@ -32,8 +32,8 @@ const CalculatorApp = () => {
         placeholderTextColor={isDarkMode ? '#aaa' : '#ccc'}
       />
       <View style={styles.row}>
-        <CalculatorButton label="00" onPress={() => handleButtonPress('00')} isDarkMode={isDarkMode} />
-        <CalculatorButton label="000" onPress={() => handleButtonPress('000')} isDarkMode={isDarkMode} />
+        <CalculatorButton label="00 " onPress={() => handleButtonPress('00')} isDarkMode={isDarkMode} />
+        <CalculatorButton label="000 " onPress={() => handleButtonPress('000')} isDarkMode={isDarkMode} />
         <CalculatorButton icon="remove" onPress={() => handleButtonPress('clear')} isDarkMode={isDarkMode} />
       </View>
       <View style={styles.row}>
