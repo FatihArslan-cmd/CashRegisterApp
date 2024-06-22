@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet,Image } from 'react-native';
 import LanguageButton from './LanguageButton';
 import ShareEg from './ShareButton';
 import ContactMe from './ContactButton';
@@ -25,7 +25,15 @@ const SettingsScreen = () => {
         </View>
         <OnlineStatusToggle />
         <OnlineStatusInformer />
+
+      <View style={styles.ImageContainer}>
+      <Image
+        style={styles.image}
+        source={require("../../../assets/image/ayı.png")}
+      />
       </View>
+      </View>
+
     </NativeBaseProvider>
   );
 };
@@ -33,12 +41,20 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
     paddingHorizontal: 20,
     paddingTop: 30,
   },
   darkContainer: {
     backgroundColor: '#1E1E1E',
+  },
+  ImageContainer: {
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+  },
+  image: {
+    width: 200,
+    height: 300,
   },
   row: {
     flexDirection: 'row',
