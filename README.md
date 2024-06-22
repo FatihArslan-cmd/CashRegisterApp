@@ -37,6 +37,8 @@ Aplplication supports 10 langugaes and dark theme light theme toglle is availabe
 Online offline status dynamically changes according to network connections you can also change it on the settings
 You can favorite unfavorite products
 
+<a href="https://github.com/FatihArslan-cmd/mockjson/blob/main/db.json">**✨ Mock Json**</a>
+
 Key Features:<br/>
 -🔐 **Authentication**: Secure login using modern methods like Face ID, Touch ID, Barcode scanning, and email. <br/>
 -🛒 **Product Sales**: Easy interface for selling products and managing transactions. <br/>
@@ -161,7 +163,7 @@ To contribute:
     "react-native": "0.73.6"
     "Node": v20.11.1
     "Npm": 10.2.4
-
+    "JDK": 17.0.10
 <hr>
 
 
