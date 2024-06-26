@@ -53,7 +53,7 @@ Key Features:<br/>
 
 <br/>
 <br/>
-### <a id="screenshots"></a>📷 Screenshots
+### <a id="screenshots">📷 Screenshots</a>
 <br/>
 <br/>
 
