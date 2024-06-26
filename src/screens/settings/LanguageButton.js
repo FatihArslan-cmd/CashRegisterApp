@@ -2,7 +2,9 @@ import React, { useContext, useState } from 'react';
 import {TouchableOpacity, Image } from 'react-native';
 import LanguageContext from '../../context/LanguageContext'; // Import LanguageContext
 import { useTranslation } from 'react-i18next';
-import { NativeBaseProvider, Center, Modal, Button, Box } from 'native-base'; // Import required NativeBase components
+import { NativeBaseProvider, Center, Modal, Button, Box } from 'native-base';
+import * as Animatable from 'react-native-animatable';
+ // Import required NativeBase components
 const buttonImage = require('../../../assets/image/planet-earth_921490.png');
 const Turkey = require('../../../assets/image/turkey.png');
 const Spain = require('../../../assets/image/spain (1).png');
@@ -16,9 +18,15 @@ const Arabia = require('../../../assets/image/saudi-arabia.png');
 const Greece = require('../../../assets/image/greece.png');
 
 const LanguageComponent = ({ onPress, image }) => (
+  <Animatable.View
+  animation="zoomInLeft"
+  delay={250}
+  useNativeDriver
+>
   <TouchableOpacity style={{marginHorizontal:10}} onPress={onPress}>
     <Image source={image} style={{ width: 50, height: 50 }} />
   </TouchableOpacity>
+  </Animatable.View>
 );
 
 const LanguageButton = () => {
@@ -46,9 +54,11 @@ const LanguageButton = () => {
   return (
     <NativeBaseProvider>
       <Center>
+     
         <TouchableOpacity onPress={() => setShowModal(true)}>
           <Image source={buttonImage} style={{ width: 50, height: 50 }} />
         </TouchableOpacity>
+       
         <Modal
   isOpen={showModal}
   onClose={() => setShowModal(false)}

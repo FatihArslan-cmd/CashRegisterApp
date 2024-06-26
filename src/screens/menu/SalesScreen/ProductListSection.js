@@ -95,11 +95,12 @@ const ProductListSection = ({ styles, isLoading }) => {
         data={productData}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
+        removeClippedSubviews={true}
         ListEmptyComponent={
           !isLoading && (
-            <View style={{ alignSelf: 'center' }}>
-              <Text style={styles.emptyText}>{t('No products')}</Text>
-              <MaterialCommunityIcons style={{ marginLeft: 15 }} name="lock-question" size={36} color="gray" />
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>{t('No products')} </Text>
+              <MaterialCommunityIcons name="lock-question" size={36} color="gray" />
             </View>
           )
         }

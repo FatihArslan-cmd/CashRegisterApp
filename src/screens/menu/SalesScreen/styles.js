@@ -156,12 +156,14 @@ export const lightStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   emptyText: {
-    textAlign: 'center',
-    marginTop: 20,
     fontSize: 16,
     color: 'gray',
-    marginBottom: 20,
+
   },
+  emptyContainer:{
+    justifyContent:'center',
+    alignItems:'center'
+  }
 });
 
 export const darkStyles = StyleSheet.create({
@@ -172,6 +174,10 @@ export const darkStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#333',
     justifyContent: 'center',
+  },
+  emptyContainer:{
+    justifyContent:'center',
+    alignItems:'center'
   },
   separator: {
     height: 1,

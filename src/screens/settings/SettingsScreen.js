@@ -1,39 +1,61 @@
-import React, { useContext } from 'react';
-import { View, StyleSheet,Image } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, StyleSheet, Image,Text } from 'react-native';
 import LanguageButton from './LanguageButton';
 import ShareEg from './ShareButton';
 import ContactMe from './ContactButton';
-import {  NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider } from 'native-base';
 import OnlineStatusToggle from './OnlineStatusToggle';
 import DarkThemeButton from './DarkThemeButton';
 import OnlineStatusInformer from '../../components/OnlineStatusInformer';
 import { ThemeContext } from '../../context/ThemeContext';
+import * as Animatable from 'react-native-animatable';
+import { useFocusEffect } from '@react-navigation/native';
 
 const SettingsScreen = () => {
   const { isDarkMode } = useContext(ThemeContext);
+  const [animationKey, setAnimationKey] = useState(0);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setAnimationKey(prevKey => prevKey + 1);
+    }, [])
+  );
 
   return (
     <NativeBaseProvider>
       <View style={[styles.container, isDarkMode && styles.darkContainer]}>
-        <View style={styles.row}>
-          <DarkThemeButton />
-          <ContactMe />
-        </View>
-        <View style={styles.row}>
-          <ShareEg />
-          <LanguageButton />
-        </View>
-        <OnlineStatusToggle />
-        <OnlineStatusInformer />
+        <Animatable.View
+          key={`animatable-view-1-${animationKey}`}
+          animation="fadeInDownBig"
+          delay={250}
+          useNativeDriver
+        >
+          <View style={styles.row}>
+            <DarkThemeButton />
+            <ContactMe />
+          </View>
+          <View style={styles.row}>
+            <ShareEg />
+            <LanguageButton />
+          </View>
+        </Animatable.View>
+        <Animatable.View
+          key={`animatable-view-2-${animationKey}`}
+          animation="fadeInUpBig"
+          delay={250}
+          useNativeDriver
+          style={styles.ImageContainer}
+        >
+            <OnlineStatusToggle />
+            <OnlineStatusInformer />
+          <Image
+            style={styles.image}
+            source={require("../../../assets/image/ayı.png")}
+          />
+        <Text>© 2024 Fatih Arslan </Text>
 
-      <View style={styles.ImageContainer}>
-      <Image
-        style={styles.image}
-        source={require("../../../assets/image/ayı.png")}
-      />
+        </Animatable.View>
       </View>
-      </View>
-
     </NativeBaseProvider>
   );
 };
@@ -48,9 +70,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E1E1E',
   },
   ImageContainer: {
-    flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     width: 200,
