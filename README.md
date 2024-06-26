@@ -53,7 +53,9 @@ Key Features:<br/>
 
 <br/>
 <br/>
-## <a id="screenshots"></a>📷 Screenshots
+### <a id="screenshots"></a>📷 Screenshots
+<br/>
+<br/>
 
 ![Ekran görüntüsü 2024-06-08 202216](https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/f4924977-b690-4f3e-97ee-084baec11944)
 <img src="https://github.com/FatihArslan-cmd/CashRegisterApp/assets/122049858/0adbd8d9-7f97-4699-8a20-e4455c810758" width="300" alt="Screenshot 1"/>
