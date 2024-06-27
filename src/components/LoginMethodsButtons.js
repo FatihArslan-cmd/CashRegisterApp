@@ -5,12 +5,14 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { ThemeContext } from "../context/ThemeContext"; // Update the path as necessary
+import { ThemeContext } from "../context/ThemeContext"; 
+
+//A button consiste of 4 icons navigating to LoginMethodsScreen
 
 const LoginMethodsButtons = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
-  const { isDarkMode } = useContext(ThemeContext); // Use ThemeContext
+  const { isDarkMode } = useContext(ThemeContext);
 
   const styles = getStyles(isDarkMode);
 

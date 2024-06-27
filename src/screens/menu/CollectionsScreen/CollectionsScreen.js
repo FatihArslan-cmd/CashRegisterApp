@@ -15,6 +15,9 @@ const CollectionsScreen = () => {
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [campaignCounterdb, setCampaignCounterdb] = useState(0);
 
+   //here we get the things which have been saved in ConfirmOrder into local storage
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {

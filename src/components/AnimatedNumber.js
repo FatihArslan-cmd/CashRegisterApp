@@ -2,8 +2,12 @@ import React, { useRef, useEffect, useState,useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { ThemeContext } from '../context/ThemeContext';
+
+
+//I use this component in Collection screen
+//It is basically when enter the page it start from 0 to real number animatedly
+
 const CountUpAnimation = ({ targetNumber, duration = 3000, interval = 30, style, showDollarSign}) => {
-  const animationRef = useRef(null);
   const [currentNumber, setCurrentNumber] = useState(0);
   const step = Math.ceil(targetNumber / (duration / interval)); // Step amount
   const { isDarkMode } = useContext(ThemeContext);

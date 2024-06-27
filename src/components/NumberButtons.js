@@ -6,6 +6,8 @@ import { ThemeContext } from '../context/ThemeContext';
 import useCalculator from '../hooks/useCalculator';
 import { ProductContext } from '../context/ProductContext';
 
+//the keybord that are used in sales screen
+
 const CalculatorButton = ({ label, onPress, isDarkMode, icon }) => (
   <TouchableOpacity
     style={[styles.button, { backgroundColor: isDarkMode ? '#555' : '#1e445e' }]}

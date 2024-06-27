@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 const DrawerNavigationItems = ({ navigation, isDarkMode }) => {
   const { t } = useTranslation();
 
+//style of menu setting buttons in drawer
+
   return (
     <View style={isDarkMode ? styles.darkDrawerSection : styles.drawerSection}>
       <DrawerItem

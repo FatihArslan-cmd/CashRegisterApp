@@ -8,7 +8,9 @@ import { ThemeProvider } from './src/context/ThemeContext';
 import { ProductProvider } from './src/context/ProductContext';
 import { LogBox } from 'react-native';
 export default function App() {
+  
   const userLoggedIn = false;
+
   LogBox.ignoreAllLogs();
 
   return (

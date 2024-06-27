@@ -4,6 +4,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { ThemeContext } from '../../context/ThemeContext';
 
+//shows founder's gmail,github,linkedn
+
 const ContactMe = () => {
     const { isDarkMode } = useContext(ThemeContext);
     const [modalVisible, setModalVisible] = useState(false);

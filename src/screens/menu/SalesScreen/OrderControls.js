@@ -16,6 +16,7 @@ const OrderControls = ({ styles }) => {
   const { paymentSuccess, setProductData, setSubTotal, allTotal, setDisableActions, setDiscountApplied } = useContext(ProductContext);
   const { handleCalculate, handleCalculateCredit } = useCalculator();  // use the correct function names
 
+  //when  chosen cash/card it will be proceed accordingly
   const handleCashButtonClick = () => {
     handleCalculate(); // now correctly calling the function for Cash payment
   };

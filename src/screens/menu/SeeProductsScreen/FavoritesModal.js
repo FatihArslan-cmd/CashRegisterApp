@@ -9,6 +9,8 @@ const FavoritesModal = ({ showFavorites, setShowFavorites, favorites, assignAllF
   const { t } = useTranslation();
   const { isDarkMode } = useContext(ThemeContext);
 
+//Favorites part.User can get all product favorited or one by one
+
   return (
     <Modal visible={showFavorites} animationType="slide">
       <View style={isDarkMode ? darkStyles.favoritesContainer : lightStyles.favoritesContainer}>

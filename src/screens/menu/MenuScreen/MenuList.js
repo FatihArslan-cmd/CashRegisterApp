@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import MenuButton from './MenuButton'; // MenuButton bileşeninin yolu
+import MenuButton from './MenuButton'; 
 
 const MenuList = ({ menuItems, handleItemPress, isDarkMode }) => {
   return (

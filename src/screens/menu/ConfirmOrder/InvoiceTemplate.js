@@ -1,4 +1,6 @@
 
+//Invoice template consist of HTML
+//Datas are given via props
 const getInvoiceHTML = ({ formattedDateTime, salesNo, userProfile, productData, change, SubTotal, allTotal, paymentType }) => {
     return `
       <html>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useContext, useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { FlatList, View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -6,6 +6,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import { ProductContext } from '../../../context/ProductContext';
 import { useTranslation } from 'react-i18next';
+import QuantityInputModal from './QuantityInputModal'; // Make sure to import your modal component
 
 const ProductListSection = ({ styles, isLoading }) => {
   const { t } = useTranslation();
@@ -14,6 +15,9 @@ const ProductListSection = ({ styles, isLoading }) => {
     allTotal, paymentSuccess, setAllTotal, setDisableActions, 
     disableActions, setDiscountApplied, setPaymentSuccess 
   } = useContext(ProductContext);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     setDisableActions(paymentSuccess);
@@ -48,13 +52,22 @@ const ProductListSection = ({ styles, isLoading }) => {
     }
   }, [productData, paymentSuccess, isLoading]);
 
-  const addProductToList = (product) => {
-    if (!disableActions && !paymentSuccess) { 
-      setProductData([...productData, product]);
-      setSubTotal(SubTotal + product.price);
+  const addProductToList = (product, quantity = 1) => {
+    if (!disableActions && !paymentSuccess) {
+      const updatedProducts = [...productData];
+      for (let i = 0; i < quantity; i++) {
+        updatedProducts.push(product);
+      }
+      setProductData(updatedProducts);
+      setSubTotal(SubTotal + (product.price * quantity));
     } else {
       Alert.alert(t('Actions Disabled'), t('You cannot remove/add products after the discount is applied/Payment is done.'));
     }
+  };
+
+  const handleAddMultiple = (product) => {
+    setSelectedProduct(product);
+    setIsModalVisible(true);
   };
 
   const renderItem = useCallback(({ item, index }) => (
@@ -65,9 +78,11 @@ const ProductListSection = ({ styles, isLoading }) => {
         </TouchableOpacity>
       )}
       renderLeftActions={() => (
-        <TouchableOpacity onPress={() => addProductToList(item)} style={styles.addMultipleProducts}>
-          <Text style={styles.deleteButtonText}>+</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity onPress={() => handleAddMultiple(item)} style={styles.addMultipleProducts}>
+            <Text style={styles.deleteButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
       )}
     >
       <View style={styles.productContainer}>
@@ -84,7 +99,8 @@ const ProductListSection = ({ styles, isLoading }) => {
         </View>
       </View>
     </Swipeable>
-  ), [removeProduct, addProductToList, styles, t]);
+  ), [removeProduct, handleAddMultiple, styles, t]);
+
   const keyExtractor = useCallback((item, index) => index.toString(), []);
 
   return (
@@ -129,6 +145,13 @@ const ProductListSection = ({ styles, isLoading }) => {
         <View style={styles.separator} />
         <Text style={styles.subTotal}>{t('alltotal')}: {allTotal} $</Text>
       </View>
+      {selectedProduct && (
+        <QuantityInputModal
+          visible={isModalVisible}
+          onClose={() => setIsModalVisible(false)}
+          onAdd={(quantity) => addProductToList(selectedProduct, quantity)}
+        />
+      )}
     </>
   );
 };

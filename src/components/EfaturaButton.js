@@ -3,6 +3,10 @@ import { Modal, VStack, FormControl, Input, Button, NativeBaseProvider } from 'n
 import { Alert} from 'react-native'; // Import AsyncStorage
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//Fatura button is basically pop up user enter the email 
+//checks if it is a valid mail or not
+
 const FaturaButton = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [email, setEmail] = useState('');

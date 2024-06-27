@@ -7,13 +7,17 @@ import useSound from '../../../hooks/SoundManager'; // SoundManager dosyasını 
 import { API_BASE_URL } from '../../../utils/constants';
 import ToastMessage from '../FavoriteProductScreen/ToastMessage';
 
+//Unlike the favorite screen, in order to pass the products without using a route, they were transferred with the CONTEXT API instead.
+
 export default function BarcodeScanner() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [showToast, setShowToast] = useState(false); // Toast göstermek için state ekliyoruz
-  const [toastMessage, setToastMessage] = useState(''); // Toast mesajı için state ekliyoruz
+  const [showToast, setShowToast] = useState(false); 
+  const [toastMessage, setToastMessage] = useState(''); 
   const { productData, setProductData, SubTotal, setSubTotal } = useContext(ProductContext);
   const { playSound } = useSound(require('../../../../assets/sound/positive_beeps-85504.mp3'));
+
+//Checks if there is permission or not
 
   useEffect(() => {
     (async () => {
@@ -21,6 +25,8 @@ export default function BarcodeScanner() {
       setHasPermission(status === 'granted');
     })();
   }, []);
+
+//when barcode scanned it scans its ID in my mock Api
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
@@ -54,14 +60,12 @@ export default function BarcodeScanner() {
       const newSubTotal = SubTotal + product.price;
       setSubTotal(newSubTotal);
 
-      // Toast mesajını ayarlama ve gösterme
-      setToastMessage(`${product.name} has been added`);
+      setToastMessage(`${product.name} has been added `) ;
       setShowToast(true);
       
-      // Toast mesajını belirli bir süre sonra gizle
       setTimeout(() => {
         setShowToast(false);
-      }, 1500); // 1.5 saniye sonra gizlenir
+      }, 1500); 
     } catch (error) {
       console.error('Error:', error);
       Alert.alert(error.message || 'An error occurred while fetching product data');
@@ -93,7 +97,6 @@ export default function BarcodeScanner() {
         <Text style={styles.subTotalText}>Subtotal: ${SubTotal.toFixed(2)}</Text>
       </View>
 
-      {/* ToastMessage bileşenini ekliyoruz */}
     </View>
   );
 }
@@ -101,7 +104,7 @@ export default function BarcodeScanner() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-end', // Subtotal görünümünü en alta taşır
+    justifyContent: 'flex-end', 
     alignItems: 'center',
   },
   subTotalContainer: {
@@ -110,7 +113,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#ccc',
     backgroundColor: '#f9f9f9',
-    alignItems: 'center', // Subtotal metnini ortalar
+    alignItems: 'center', 
   },
   subTotalText: {
     fontSize: 18,

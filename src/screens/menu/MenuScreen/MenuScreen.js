@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '../../../context/ThemeContext';
 import MenuList from './MenuList'; 
-import useDisableBackButton from '../../../hooks/useDisableBackButton'; // Yeni hook'un yolu
+import useDisableBackButton from '../../../hooks/useDisableBackButton'; 
 
 const MenuScreen = () => {
   const { isDarkMode } = useContext(ThemeContext);

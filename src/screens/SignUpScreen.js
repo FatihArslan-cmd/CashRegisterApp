@@ -5,7 +5,7 @@ import Antdesign from 'react-native-vector-icons/AntDesign';
 import { useTranslation } from 'react-i18next';
 import * as Animatable from 'react-native-animatable';
 import CustomText from '../components/CustomText';
-import { ThemeContext } from '../context/ThemeContext'; // Update the path as necessary
+import { ThemeContext } from '../context/ThemeContext'; 
 import { getItem,setItem } from '../utils/storage';
 const SignUpScreen = ({ navigation }) => {
   const { t } = useTranslation();

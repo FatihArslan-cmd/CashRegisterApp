@@ -1,88 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { View, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import InformationRow from './InformationRow';
 
 const UserProfile = ({ isDarkMode, storeNo, cashRegisterNo, ipAddress, version, currentDate }) => {
   const { t } = useTranslation();
-  const [userProfile, setUserProfile] = useState(null);
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchEmail = async () => {
       try {
-        let storedUsername = await AsyncStorage.getItem('username');
-        if (!storedUsername) {
-          storedUsername = 'test';
-          await AsyncStorage.setItem('username', storedUsername);
-          const testProfile = { email: 'test@test.com' };
-          await AsyncStorage.setItem(storedUsername, JSON.stringify(testProfile));
-        }
-        setUsername(storedUsername);
-        const userProfileJSON = await AsyncStorage.getItem(storedUsername);
-        if (userProfileJSON) {
-          const userProfile = JSON.parse(userProfileJSON);
-          setUserProfile(userProfile);
-        } else {
-          throw new Error('User profile not found');
+        const username = await AsyncStorage.getItem('username');
+        if (username) {
+          const user = JSON.parse(await AsyncStorage.getItem(username));
+          if (user && user.email) {
+            setEmail(user.email);
+          }
         }
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        console.error('Error fetching email:', error);
       }
     };
 
-    fetchUserProfile();
+    fetchEmail();
   }, []);
 
   return (
     <View style={[styles.infoContainer, isDarkMode && styles.darkInfoContainer]}>
       <View style={{ paddingBottom: 10 }}>
-        <View>
-          <InformationRow
-            label={t('email')}
-            value={userProfile ? userProfile.email : ''}
-            iconName="mail"
-            iconColor={isDarkMode ? 'white' : 'gray'}
-            style={isDarkMode && styles.darkText}
-          />
-          <InformationRow
-            label={t('Store No')}
-            value={storeNo}
-            iconName="shoppingcart"
-            iconColor={isDarkMode ? 'white' : 'gray'}
-            style={isDarkMode && styles.darkText}
-          />
-          <InformationRow
-            label={t('Cash Register No')}
-            value={cashRegisterNo}
-            iconName="barcode"
-            iconColor={isDarkMode ? 'white' : 'gray'}
-            style={isDarkMode && styles.darkText}
-          />
-          <InformationRow
-            label={t('Cash Register IP')}
-            value={ipAddress}
-            iconName="wifi"
-            iconColor={isDarkMode ? 'white' : 'gray'}
-            style={isDarkMode && styles.darkText}
-          />
-          <InformationRow
-            label={t('Version')}
-            value={version}
-            iconName="info"
-            iconColor={isDarkMode ? 'white' : 'gray'}
-            style={isDarkMode && styles.darkText}
-          />
-          <InformationRow
-            label={t('Date')}
-            value={currentDate}
-            iconName="calendar"
-            iconColor={isDarkMode ? 'white' : 'gray'}
-            style={isDarkMode && styles.darkText}
-          />
-        </View>
+        <InformationRow
+          label={t('email')}
+          value={email}
+          iconName="mail"
+          iconColor={isDarkMode ? 'white' : 'gray'}
+          style={isDarkMode && styles.darkText}
+        />
+        <InformationRow
+          label={t('Store No')}
+          value={storeNo}
+          iconName="shoppingcart"
+          iconColor={isDarkMode ? 'white' : 'gray'}
+          style={isDarkMode && styles.darkText}
+        />
+        <InformationRow
+          label={t('Cash Register No')}
+          value={cashRegisterNo}
+          iconName="barcode"
+          iconColor={isDarkMode ? 'white' : 'gray'}
+          style={isDarkMode && styles.darkText}
+        />
+        <InformationRow
+          label={t('Cash Register IP')}
+          value={ipAddress}
+          iconName="wifi"
+          iconColor={isDarkMode ? 'white' : 'gray'}
+          style={isDarkMode && styles.darkText}
+        />
+        <InformationRow
+          label={t('Version')}
+          value={version}
+          iconName="info"
+          iconColor={isDarkMode ? 'white' : 'gray'}
+          style={isDarkMode && styles.darkText}
+        />
+        <InformationRow
+          label={t('Date')}
+          value={currentDate}
+          iconName="calendar"
+          iconColor={isDarkMode ? 'white' : 'gray'}
+          style={isDarkMode && styles.darkText}
+        />
       </View>
     </View>
   );

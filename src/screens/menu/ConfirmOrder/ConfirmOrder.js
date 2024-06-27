@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Alert, Vibration,Share } from 'react-native';
+import { Alert, Vibration,Share } from 'react-native';
 import { NativeBaseProvider, Center } from 'native-base';
 import * as Print from 'expo-print';
 import loadUserProfile from '../../../components/LoadUserProfile';
@@ -8,8 +8,8 @@ import OnlineStatusContext from '../../../context/OnlineStatusContext';
 import { useTranslation } from 'react-i18next';
 import { formatDateTime } from '../../../utils/helpers';
 import getInvoiceHTML from './InvoiceTemplate';
-import ConfirmButton from './ConfirmButton'; // Yeni eklenen component
-import InvoiceModal from './InvoiceModal'; // Yeni eklenen component
+import ConfirmButton from './ConfirmButton'; 
+import InvoiceModal from './InvoiceModal'; 
 import { ProductContext } from '../../../context/ProductContext';
 const ConfirmOrder = () => {
   const today = new Date();
@@ -32,6 +32,8 @@ const ConfirmOrder = () => {
   const [everTotal, setEverTotal] = useState(0);
 
   const { t } = useTranslation();
+
+//here datas are saved into local storage to be used in Collections Screen , Report screen
 
   useEffect(() => {
     const loadEverTotal = async () => {
@@ -153,6 +155,8 @@ const ConfirmOrder = () => {
     setSelectedPrinter(printer);
   };
 
+ //after printing we can share the invoice with friends
+  
   const shareFile = async (uri) => {
     try {
       await Share.share({

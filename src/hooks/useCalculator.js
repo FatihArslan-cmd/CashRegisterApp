@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import { Alert } from 'react-native';
-import { useTranslation } from 'react-i18next'; // useTranslation import edildi
+import { useTranslation } from 'react-i18next'; 
 import { ProductContext } from '../context/ProductContext';
 
 const useCalculator = () => {
-  const { t } = useTranslation(); // useTranslation hook'undan t fonksiyonunu alın
+  const { t } = useTranslation(); 
   const { inputValue, setInputValue } = useContext(ProductContext);
   const {
     allTotal,

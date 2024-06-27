@@ -4,7 +4,8 @@ import LanguageContext from '../../context/LanguageContext'; // Import LanguageC
 import { useTranslation } from 'react-i18next';
 import { NativeBaseProvider, Center, Modal, Button, Box } from 'native-base';
 import * as Animatable from 'react-native-animatable';
- // Import required NativeBase components
+
+
 const buttonImage = require('../../../assets/image/planet-earth_921490.png');
 const Turkey = require('../../../assets/image/turkey.png');
 const Spain = require('../../../assets/image/spain (1).png');

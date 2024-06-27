@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+
+
+//this function basiclly check if there is internet or not
 
 // NetworkContext oluştur
 export const NetworkContext = createContext();

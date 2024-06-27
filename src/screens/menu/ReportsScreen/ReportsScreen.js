@@ -17,6 +17,8 @@ const ReportsScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
 
+//Send orders done when offline to the store
+
   const sendRequestToStore = async () => {
     return new Promise(resolve => {
       setTimeout(() => {
@@ -37,6 +39,7 @@ const ReportsScreen = () => {
     });
   };
 
+  
   const handleConfirmSendStore = async () => {
     try {
       setIsLoading(true);

@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import {useState, useEffect } from 'react';
 import axios from 'axios';
+
+//Get IP of the device
 
 const GetIP = () => {
   const [ip, setIP] = useState("");
@@ -9,10 +11,8 @@ const GetIP = () => {
       const response = await axios.get("https://api.ipify.org/?format=json");
       setIP(response.data.ip);
     } catch (error) {
-      return 192.168.X;
-
-      console.error('Error fetching IP address:', error);
-    }
+      return 'Not found';
+   }
   };
 
   useEffect(() => {

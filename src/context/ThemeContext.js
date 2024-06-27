@@ -1,6 +1,9 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+//Manage dark theme light theme
+
+
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {

@@ -7,7 +7,7 @@ import LoginMethodsButtons from '../components/LoginMethodsButtons';
 import LoadingIndicator from '../components/LoadingIndicator';
 import CustomText from '../components/CustomText';
 import { useTranslation } from 'react-i18next';
-import { ThemeContext } from '../context/ThemeContext'; // Import ThemeContext
+import { ThemeContext } from '../context/ThemeContext'; 
 
 const HomeScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +15,8 @@ const HomeScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const { t } = useTranslation();
-  const { isDarkMode, toggleTheme } = useContext(ThemeContext); // Use ThemeContext
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+  
 
   useEffect(() => {
     const retrieveCredentials = async () => {
@@ -36,13 +37,15 @@ const HomeScreen = ({ navigation }) => {
     retrieveCredentials(); 
   }, []);
 
+//here user information of the logged in account is saved into the local storage
+//now they can be used inside the application
+
   const handleLogin = async () => {
     try {
       setIsLoading(true);
       const savedUser = JSON.parse(await AsyncStorage.getItem(username));
 
       if (savedUser && savedUser.password === password) {
-        navigation.navigate('MainDrawer');
         if (rememberMe) {
           try {
             await AsyncStorage.setItem('username', username);
@@ -50,7 +53,10 @@ const HomeScreen = ({ navigation }) => {
           } catch (error) {
             console.error('Error storing credentials:', error);
           }
-        } else {
+          navigation.navigate('MainDrawer');
+
+        }
+         else {
           await AsyncStorage.removeItem('username');
           await AsyncStorage.removeItem('password');
         }

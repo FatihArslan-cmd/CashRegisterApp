@@ -71,6 +71,7 @@ const FavoritesModal = ({
             </Animatable.View>
           )}
         </View>
+        
         {showToast && (
           <Animatable.View animation="fadeInUp" duration={600} useNativeDriver>
             <ToastMessage
@@ -79,6 +80,7 @@ const FavoritesModal = ({
             />
           </Animatable.View>
         )}
+
         <TouchableOpacity onPress={() => setShowFavorites(false)} style={styles.closeButton}>
           <Text style={styles.closeButtonText}>{t('Close')}</Text>
         </TouchableOpacity>

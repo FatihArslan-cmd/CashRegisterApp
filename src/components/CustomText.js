@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import * as Font from 'expo-font';
 
+
+//To manage font 
+
+
 const CustomText = ({ children, style, fontFamily }) => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -18,10 +22,10 @@ const CustomText = ({ children, style, fontFamily }) => {
   }, []);
 
   if (!fontsLoaded) {
-    return null; // Font yüklenene kadar null döndür
+    return null; 
   }
 
-  const selectedFontFamily = fontFamily || 'pop'; // Varsayılan font ailesi
+  const selectedFontFamily = fontFamily || 'pop'; 
 
   return (
     <Text style={[style, fontsLoaded && { fontFamily: selectedFontFamily }]}>

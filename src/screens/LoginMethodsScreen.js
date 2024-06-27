@@ -5,7 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTranslation } from 'react-i18next';
-import CustomText from '../components/CustomText'; // CustomText bileşenini import ediyoruz.
+import CustomText from '../components/CustomText'; 
 
 const { width, height } = Dimensions.get('window');
 const itemWidth = width / 5 * 4;

@@ -21,6 +21,8 @@ const ProductInputSection = ({
   const onProductIdChange = (text) => {
     setProductId(text);
   };
+
+
   const getPrice = async () => {
     if (!disableActions && !paymentSuccess) { 
       try {
@@ -36,6 +38,8 @@ const ProductInputSection = ({
       Alert.alert(t('Actions Disabled'), t('You cannot add products after the payment is done /Any campaign is applied.'));
     }
   };
+
+  
   const clearInput = () => {
     setProductId('');
 

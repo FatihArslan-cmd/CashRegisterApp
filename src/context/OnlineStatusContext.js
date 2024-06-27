@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect } from 'react';
 import NetInfo from '@react-native-community/netinfo'; 
 const OnlineStatusContext = createContext({ isOnline: false, toggleOnlineStatus: () => {} });
 
+//To control online offline status all over the app
+
 export const OnlineStatusProvider = ({ children }) => {
   const [isOnline, setIsOnline] = useState(false);
 

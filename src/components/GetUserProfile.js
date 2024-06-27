@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
+
 const getUserProfile = async (username) => {
   try {
     const userProfileJSON = await AsyncStorage.getItem(username);

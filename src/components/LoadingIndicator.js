@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 
+
+//Custom loading indicator style
+
 const random = () => (parseInt(Math.random() * 255));
 const randomColor = () => 'rgb(' + random() + ',' + random() + ',' + random() + ')'
 const size = 15;

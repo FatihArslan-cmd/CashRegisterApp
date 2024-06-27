@@ -5,6 +5,8 @@ import OnlineStatusContext from '../context/OnlineStatusContext';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useTranslation } from 'react-i18next';
 
+//Gets the data from OnlineStatusContext if it is online or not, accordingly it shows
+
 const OnlineStatusInformer = () => {
     const { isOnline } = useContext(OnlineStatusContext);
     const { t } = useTranslation();

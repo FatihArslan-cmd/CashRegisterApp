@@ -6,6 +6,8 @@ import CountUpAnimation from '../../../components/AnimatedNumber';
 const CounterItem = ({ label, value, duration, interval, showDollarSign, backgroundColor, isDarkMode }) => {
   const styles = isDarkMode ? darkStyles : lightStyles;
 
+//CountUpAnimation implementation
+
   return (
     <View style={[styles.itemContainer,isDarkMode && styles.darkItemContainer, { backgroundColor }]}>
       <Text style={styles.label}>{label}</Text>

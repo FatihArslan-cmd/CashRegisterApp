@@ -15,6 +15,8 @@ const SettingsScreen = () => {
   const { isDarkMode } = useContext(ThemeContext);
   const [animationKey, setAnimationKey] = useState(0);
 
+
+  //When User get in the page every time animation will be shown
   useFocusEffect(
     React.useCallback(() => {
       setAnimationKey(prevKey => prevKey + 1);

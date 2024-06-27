@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { View, Alert, TouchableOpacity,Text } from 'react-native';
+import { View, Alert, TouchableOpacity } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
-import { Entypo } from '@expo/vector-icons'; // Entypo ikonlarını ekledik
+import { Entypo } from '@expo/vector-icons';
 
 const FingerprintScreen = ({ navigation }) => {
   const handleAuthentication = async () => {
@@ -34,8 +34,8 @@ const FingerprintScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    handleAuthentication(); // Sayfa yüklendiğinde otomatik olarak parmak izi taramasını başlatır
-  }, []); // Boş bağımlılık dizisi, bunun yalnızca bir kez çalıştırılmasını sağlar.
+    handleAuthentication(); // when the page uplods it automaticlly start scan finger print
+  }, []); 
 
   return (
     <View style={{  marginTop:300,alignItems: 'center',justifyContent:'center' }}>

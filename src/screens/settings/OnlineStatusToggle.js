@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
-import OnlineStatusContext from '../../context/OnlineStatusContext'; // Context dosyasının doğru yerini belirtmelisin
+import OnlineStatusContext from '../../context/OnlineStatusContext';
 import { VStack, Switch, View } from 'native-base';
-import OnlineStatusInformer from '../../components/OnlineStatusInformer';
+
+
+//The user simply toggle the status of online/offline
 
 const OnlineStatusToggle = () => {
   const { isOnline, toggleOnlineStatus } = useContext(OnlineStatusContext);
 
   const handleToggle = () => {
-    toggleOnlineStatus(!isOnline); // Toggle the online status
+    toggleOnlineStatus(!isOnline); 
   };
 
   return (

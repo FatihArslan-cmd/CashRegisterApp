@@ -9,6 +9,7 @@ import FavoritesModal from './FavoritesModal';
 import { ProductContext } from '../../../context/ProductContext';
 
 const FavoriteProductsScreen = () => {
+  //we get the favorite products from local storage
   const [favorites, setFavorites] = useAsyncStorage('favorites', []);
   const [showFavorites, setShowFavorites] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -20,6 +21,8 @@ const FavoriteProductsScreen = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
   const { isDarkMode } = useContext(ThemeContext);
+
+
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -34,6 +37,8 @@ const FavoriteProductsScreen = () => {
     setRefreshing(false);
   };
 
+
+
   const showToastMessage = (selectedItem) => {
     setIsLoading(true);
     setShowToast(true);
@@ -45,6 +50,9 @@ const FavoriteProductsScreen = () => {
       setShowToast(false);
     }, 2000);
   };
+
+//here the chosen product in favorite screen is navigated into application screen 
+//by using useroute we get the product into the list
 
   const addToFavorites = (item) => {
     if (!disableActions) {

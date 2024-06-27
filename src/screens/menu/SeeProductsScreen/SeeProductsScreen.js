@@ -3,14 +3,15 @@ import { View, FlatList, RefreshControl } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
-import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '../../../context/ThemeContext';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import ProductItem from './ProductItem';
 import SearchBar from './SearchBar';
 import FavoritesModal from './FavoritesModal';
-import FilterModal from './FiltersModel'; // Adjust the path if needed
+import FilterModal from './FiltersModel'; 
 import { API_BASE_URL } from '../../../utils/constants';
+
+
 const SeeProductScreen = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -21,7 +22,6 @@ const SeeProductScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { t } = useTranslation();
   const { isDarkMode } = useContext(ThemeContext);
 
   const fetchProducts = async () => {
@@ -83,8 +83,6 @@ const SeeProductScreen = () => {
 
   const assignAllFavorites = () => {
     setFavorites([]);
-  
-    // Then, assign all products to favorites after clearing the list
     setFavorites(products);  };
 
   const unFavoriteAll = () => {
