@@ -75,7 +75,7 @@ const FavoritesModal = ({
         {showToast && (
           <Animatable.View animation="fadeInUp" duration={600} useNativeDriver>
             <ToastMessage
-              message={`${showToastItem.name} ${t(' has been added ')} `}
+              message={`${showToastItem.name} ${t('has been added')} `}
               isDarkMode={isDarkMode}
             />
           </Animatable.View>

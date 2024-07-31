@@ -14,7 +14,6 @@ const padding = (width - itemWidth) / 2;
 const offset = itemWidth;
 
 
-
 const Swiper5 = () => {
     const { t } = useTranslation();
     const data = [
